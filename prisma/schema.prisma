@@ -1,0 +1,415 @@
+// NAMAT — نمط
+// Unified wellness-ecosystem domain: Provider → Service → Booking,
+// with membership packages that carry per-category allowances.
+//
+// Bilingual content is stored as paired *En / *Ar columns so demo content can be
+// swapped for real partner data without touching the query layer.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum Role {
+  USER
+  PARTNER
+  ADMIN
+}
+
+/// The NAMAT service ecosystem. Drives Explore chips, package allowances and
+/// recommendation matching.
+enum Category {
+  FOOD
+  NUTRITION
+  GYM
+  FITNESS
+  PILATES
+  WELLNESS
+  PRODUCTS
+}
+
+enum ActivityLevel {
+  LOW
+  MODERATE
+  ACTIVE
+  VERY_ACTIVE
+}
+
+enum TimePreference {
+  MORNING
+  AFTERNOON
+  EVENING
+  ANY
+}
+
+enum BookingStatus {
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum MembershipStatus {
+  ACTIVE
+  PAUSED
+  EXPIRED
+  CANCELLED
+}
+
+enum NotificationKind {
+  BOOKING
+  JOURNEY
+  PACKAGE
+  RECOMMENDATION
+  OFFER
+  SYSTEM
+}
+
+// -----------------------------------------------------------------------------
+// IDENTITY
+// -----------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  phone         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(USER)
+  locale        String    @default("ar")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile       Profile?
+  accounts      Account[]
+  sessions      Session[]
+  bookings      Booking[]
+  memberships   Membership[]
+  favorites     Favorite[]
+  reviews       Review[]
+  notifications Notification[]
+}
+
+/// Everything onboarding collects. Drives the personalized feed.
+model Profile {
+  id             String         @id @default(uuid())
+  userId         String         @unique
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goals          String[]       @default([])
+  interests      Category[]     @default([])
+  activityLevel  ActivityLevel  @default(MODERATE)
+  timePreference TimePreference @default(ANY)
+  dietary        String[]       @default([])
+  womenOnly      Boolean        @default(false)
+  cityId         String?
+  city           City?          @relation(fields: [cityId], references: [id])
+  onboardedAt    DateTime?
+  updatedAt      DateTime       @updatedAt
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------------------
+// GEOGRAPHY — country-scoped so the GCC rollout needs no code change
+// -----------------------------------------------------------------------------
+
+model Country {
+  id       String  @id @default(uuid())
+  code     String  @unique // OM, AE, SA, BH, KW, QA
+  nameEn   String
+  nameAr   String
+  currency String // OMR, AED, SAR...
+  isLive   Boolean @default(false)
+  cities   City[]
+}
+
+model City {
+  id        String     @id @default(uuid())
+  slug      String     @unique
+  nameEn    String
+  nameAr    String
+  countryId String
+  country   Country    @relation(fields: [countryId], references: [id])
+  latitude  Float
+  longitude Float
+  providers Provider[]
+  profiles  Profile[]
+}
+
+// -----------------------------------------------------------------------------
+// MARKETPLACE
+// -----------------------------------------------------------------------------
+
+model Provider {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  nameEn      String
+  nameAr      String
+  category    Category
+  aboutEn     String
+  aboutAr     String
+  image       String
+  gallery     String[] @default([])
+  cityId      String
+  city        City     @relation(fields: [cityId], references: [id])
+  addressEn   String
+  addressAr   String
+  latitude    Float
+  longitude   Float
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  /// Short descriptors shown as chips: Women only, Beginner friendly...
+  tagsEn      String[] @default([])
+  tagsAr      String[] @default([])
+  womenOnly   Boolean  @default(false)
+  /// Free-form opening hours copy, e.g. Sat-Thu 6:00-22:00.
+  hoursEn     String?
+  hoursAr     String?
+  phone       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  services  Service[]
+  bookings  Booking[]
+  reviews   Review[]
+  favorites Favorite[]
+
+  @@index([category, cityId])
+}
+
+model Service {
+  id         String   @id @default(uuid())
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  nameEn     String
+  nameAr     String
+  descEn     String?
+  descAr     String?
+  category   Category
+  /// Minutes. Null for products and other non-timed items.
+  duration   Int?
+  price      Float
+  /// Slugs of the package tiers that cover this service outright.
+  includedIn String[] @default([])
+  isActive   Boolean  @default(true)
+
+  slots    Slot[]
+  bookings Booking[]
+
+  @@index([providerId])
+}
+
+/// Concrete bookable moments. Seeded forward from today; a partner portal would
+/// write these from the partner calendar.
+model Slot {
+  id        String   @id @default(uuid())
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  startsAt  DateTime
+  capacity  Int      @default(1)
+  booked    Int      @default(0)
+
+  bookings Booking[]
+
+  @@unique([serviceId, startsAt])
+  @@index([startsAt])
+}
+
+// -----------------------------------------------------------------------------
+// BOOKINGS
+// -----------------------------------------------------------------------------
+
+model Booking {
+  id         String        @id @default(uuid())
+  reference  String        @unique
+  userId     String
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceId  String
+  service    Service       @relation(fields: [serviceId], references: [id])
+  providerId String
+  provider   Provider      @relation(fields: [providerId], references: [id])
+  slotId     String?
+  slot       Slot?         @relation(fields: [slotId], references: [id])
+  startsAt   DateTime
+  status     BookingStatus @default(CONFIRMED)
+  /// What the user actually paid — 0 when the membership covered it.
+  price      Float
+  /// True when this consumed a package allowance instead of cash.
+  coveredByMembership Boolean @default(false)
+  paymentMethod       String?
+  cancelledAt         DateTime?
+  createdAt           DateTime @default(now())
+
+  @@index([userId, startsAt])
+}
+
+// -----------------------------------------------------------------------------
+// MEMBERSHIPS
+// -----------------------------------------------------------------------------
+
+model Package {
+  id         String   @id @default(uuid())
+  slug       String   @unique
+  nameEn     String
+  nameAr     String
+  /// One-line lifestyle positioning, e.g. for users building healthy habits.
+  bestForEn  String
+  bestForAr  String
+  descEn     String
+  descAr     String
+  price      Float
+  /// Billing period in days.
+  periodDays Int      @default(30)
+  /// Ordered marketing bullets.
+  benefitsEn String[] @default([])
+  benefitsAr String[] @default([])
+  featured   Boolean  @default(false)
+  sortOrder  Int      @default(0)
+
+  allowances  Allowance[]
+  memberships Membership[]
+}
+
+/// How much of each category a package grants per period.
+model Allowance {
+  id        String   @id @default(uuid())
+  packageId String
+  package   Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  category  Category
+  quantity  Int
+
+  @@unique([packageId, category])
+}
+
+model Membership {
+  id          String           @id @default(uuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  packageId   String
+  package     Package          @relation(fields: [packageId], references: [id])
+  status      MembershipStatus @default(ACTIVE)
+  startedAt   DateTime         @default(now())
+  endsAt      DateTime
+  renewsAt    DateTime?
+  pausedAt    DateTime?
+  resumesAt   DateTime?
+  cancelledAt DateTime?
+
+  usage Usage[]
+
+  @@index([userId, status])
+}
+
+/// Consumption counter per category for the current period.
+model Usage {
+  id           String     @id @default(uuid())
+  membershipId String
+  membership   Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  category     Category
+  used         Int        @default(0)
+
+  @@unique([membershipId, category])
+}
+
+// -----------------------------------------------------------------------------
+// PLATFORM
+// -----------------------------------------------------------------------------
+
+model Favorite {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, providerId])
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  rating     Int
+  bodyEn     String?
+  bodyAr     String?
+  createdAt  DateTime @default(now())
+
+  @@index([providerId])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      NotificationKind @default(SYSTEM)
+  titleEn   String
+  titleAr   String
+  bodyEn    String
+  bodyAr    String
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, createdAt])
+}
+
+/// Partner logos for the marketing partner wall.
+model Partner {
+  id       String   @id @default(uuid())
+  nameEn   String
+  nameAr   String
+  category Category
+  logo     String?
+}
+
+/// One row per code request, used only to rate-limit them.
+///
+/// Kept in the database rather than in memory because the app runs on
+/// serverless instances: an in-process counter resets on every cold start,
+/// which is exactly the window an attacker would use. Rows older than the
+/// longest window are disposable — prune them on a schedule.
+model VerificationAttempt {
+  id        String   @id @default(cuid())
+  phone     String
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([phone, createdAt])
+  @@index([ip, createdAt])
+  @@index([createdAt])
+}

@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +40,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# Local scratch space — never part of the project.
+.scratch/
+
+# Local machine config; the shared parts of .claude/ stay tracked.
+.claude/settings.local.json
+
+# Agent tooling. These hold vendored skill docs that each tool regenerates
+# locally, triplicated across three directories — not part of the app.
+# AGENTS.md and CLAUDE.md stay tracked: those are ours.
+.claude/
+.windsurf/
+.agents/
+skills-lock.json
