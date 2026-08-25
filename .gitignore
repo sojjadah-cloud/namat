@@ -1,67 +1,45 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Flutter / Dart
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/pubspec.lock
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Android
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/app/debug/
+mobile/android/app/profile/
+mobile/android/app/release/
+mobile/android/key.properties
+*.jks
+*.keystore
 
-# testing
-/coverage
+# iOS
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/Flutter.framework
+mobile/ios/Flutter/Flutter.podspec
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/flutter_export_environment.sh
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
+# Secrets. The template is the only .env that belongs in the repository.
 .env*
 !.env.example
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-/src/generated/prisma
 
 # Local scratch space — never part of the project.
 .scratch/
 
-# Local machine config; the shared parts of .claude/ stay tracked.
-.claude/settings.local.json
-
-# Agent tooling. These hold vendored skill docs that each tool regenerates
-# locally, triplicated across three directories — not part of the app.
-# AGENTS.md and CLAUDE.md stay tracked: those are ours.
+# Agent tooling: vendored skill docs each tool regenerates locally.
 .claude/
 .windsurf/
 .agents/
 skills-lock.json
 
-# Flutter
-mobile/.dart_tool/
-mobile/build/
-mobile/.flutter-plugins
-mobile/.flutter-plugins-dependencies
-mobile/ios/Pods/
-mobile/android/.gradle/
-mobile/android/local.properties
+# OS / editor
+.DS_Store
+Thumbs.db
+*.iml
+.idea/
+.vscode/

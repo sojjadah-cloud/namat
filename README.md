@@ -1,56 +1,18 @@
-# NAMAT
+# NAMAT — نمط
 
-> **Your Healthy Lifestyle**
+Live Better, Every Day.
 
-NAMAT is a premium digital health and wellness lifestyle ecosystem.
+A wellness ecosystem for Oman: healthy food, fitness, consultations and
+wellness stores, with a personal journey and peer challenges — one account,
+one place.
 
-## 0. Project Overview
-This repository contains the source code for the NAMAT platform. It integrates:
-* Professional consultations
-* Healthy meals
-* Sports and fitness activities
-* Gyms and facilities
-* Wellness products
-* Health-related products
-* Challenges
-* Social challenges
-* Personalized wellness packages
-* User progress
+Built with Flutter. Arabic-first, with full English localisation.
 
-## 1. Development Requirements
-* Node.js (v18+)
-* PostgreSQL
-* npm or yarn
-
-## 2. Installation
 ```bash
-npm install
+cd mobile
+flutter pub get
+flutter run
 ```
 
-## 3. Environment Setup
-Copy the `.env.example` file to `.env.local` and populate the values.
-```bash
-cp .env.example .env.local
-```
-
-## 4. Database Setup
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-## 5. Running the Application
-```bash
-npm run dev
-```
-
-## 6. Testing
-```bash
-npm run test
-```
-
-## 7. Documentation
-Refer to the `docs/` directory for detailed documentation:
-* `docs/PRODUCT.md` - Product overview, personas, modules, journeys.
-* `docs/DESIGN_SYSTEM.md` - Colors, typography, spacing, components.
-* `docs/ARCHITECTURE.md` - Frontend/Backend architecture, database, APIs.
+See [AGENTS.md](AGENTS.md) for project layout, conventions and the state of
+the backend.
