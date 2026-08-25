@@ -80,6 +80,12 @@
   --shadow-md: 0 10px 35px rgba(47, 79, 74, 0.08);
   --shadow-lg: 0 20px 50px rgba(47, 79, 74, 0.10);
 
+  /* --- Layout ----------------------------------------------------------- */
+  /* Height of the bottom navigation, not counting the safe-area inset it adds
+     beneath itself. Anything that has to sit above the nav offsets by this
+     plus the inset — see the `above-nav` utility. */
+  --nav-h: 71px;
+
   /* --- Motion ----------------------------------------------------------- */
   --ease-namat: cubic-bezier(0.22, 0.61, 0.36, 1);
   --dur-fast: 180ms;
@@ -215,6 +221,31 @@ html[lang="ar"] {
     flex: none;
   }
 
+  /* Park an element directly on top of the bottom navigation.
+     Paired with `position: sticky` rather than `fixed`, this lands correctly
+     in both layouts: on a phone the page is the scroll container and the bar
+     tracks the viewport, while on a desktop the device frame's <main> is the
+     scroll container and the bar tracks the frame. A fixed bar would escape
+     the frame and float at the bottom of the browser window. */
+  .above-nav {
+    bottom: calc(var(--nav-h) + max(env(safe-area-inset-bottom), 0px));
+  }
+
+  /* On a desktop the scroll container is the frame's <main>, whose own
+     bottom padding already reserves the nav's height — and a sticky offset is
+     measured from the scrollport's content edge, inside that padding. Adding
+     the nav height again would strand the bar a full nav above the nav. */
+  @media (min-width: 768px) {
+    .above-nav {
+      bottom: 0;
+    }
+  }
+
+  /* Clear the bottom navigation, which overlays the foot of every app screen. */
+  .pb-nav {
+    padding-bottom: calc(var(--nav-h) + max(env(safe-area-inset-bottom), 0px));
+  }
+
   .safe-bottom {
     padding-bottom: max(env(safe-area-inset-bottom), 0px);
   }
@@ -266,4 +297,11 @@ html[lang="ar"] {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* The indeterminate sweep under the mark on the app loading screen. Travels
+   the full track in both directions so it reads the same under RTL. */
+@keyframes loading {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
 }

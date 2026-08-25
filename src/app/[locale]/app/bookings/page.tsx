@@ -7,6 +7,7 @@ import { EmptyState } from '@/components/ui/feedback';
 import { Button } from '@/components/ui/button';
 import { getBookings, type BookingWithDetail } from '@/server/queries/bookings';
 import { pick } from '@/lib/localized';
+import { PageTitle } from '@/components/layout/AppHeader';
 
 export default async function BookingsPage() {
   const locale = await getLocale();
@@ -40,9 +41,7 @@ export default async function BookingsPage() {
 
   return (
     <div className="pb-6">
-      <header className="px-5 pt-5 pb-4">
-        <h1 className="display text-[28px] text-ink">{t('title')}</h1>
-      </header>
+      <PageTitle>{t('title')}</PageTitle>
 
       <BookingTabs
         counts={{

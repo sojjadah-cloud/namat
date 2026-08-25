@@ -17,7 +17,9 @@ import { cn } from '@/lib/utils';
 
 const ITEMS = [
   { href: '/app', icon: House, key: 'home' },
-  { href: '/app/explore', icon: Compass, key: 'explore' },
+  // Discovery starts with the question, not the catalogue: /app/use asks
+  // which field you want, and the flat list lives one level down.
+  { href: '/app/use', icon: Compass, key: 'use' },
   { href: '/app/journey', icon: Route, key: 'journey' },
   { href: '/app/bookings', icon: CalendarCheck, key: 'bookings' },
   { href: '/app/profile', icon: User, key: 'profile' },

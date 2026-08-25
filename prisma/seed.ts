@@ -12,6 +12,8 @@ import { PrismaClient, Category, MembershipStatus, BookingStatus } from '@prisma
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import bcrypt from 'bcryptjs';
+import { seedChallenges } from './challenges';
+import { seedFoodPartners } from './seed-food';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter: new PrismaPg(pool) });
@@ -650,6 +652,13 @@ async function main() {
   await prisma.user.deleteMany();
   await prisma.city.deleteMany();
   await prisma.country.deleteMany();
+  await prisma.earnedAchievement.deleteMany();
+  await prisma.achievement.deleteMany();
+  await prisma.pointsEntry.deleteMany();
+  await prisma.dayLog.deleteMany();
+  await prisma.enrollment.deleteMany();
+  await prisma.challengeTask.deleteMany();
+  await prisma.challenge.deleteMany();
   await prisma.partner.deleteMany();
 
   console.log('Geography…');
@@ -674,49 +683,18 @@ async function main() {
     await prisma.package.create({ data: { ...pkg, allowances: { create: allowances } } });
   }
 
-  console.log('Providers and services…');
-  for (const { services, citySlug, womenOnly, ...p } of PROVIDERS) {
-    const provider = await prisma.provider.create({
-      data: { ...p, womenOnly: womenOnly ?? false, cityId: cityBySlug[citySlug].id },
-    });
-
-    for (const s of services) {
-      const service = await prisma.service.create({
-        data: {
-          ...s,
-          duration: s.duration ?? null,
-          includedIn: s.includedIn ?? [],
-          providerId: provider.id,
-          category: p.category,
-        },
-      });
-
-      // Products are not booked against a calendar.
-      if (p.category === 'PRODUCTS') continue;
-
-      // Fourteen days of availability, three slots a day.
-      const slots: { serviceId: string; startsAt: Date; capacity: number; booked: number }[] = [];
-      for (let day = 0; day < 14; day++) {
-        for (const [hour, minute] of [
-          [7, 0],
-          [12, 30],
-          [18, 0],
-        ] as const) {
-          const startsAt = at(day, hour, minute);
-          if (startsAt.getTime() < Date.now()) continue;
-          const capacity = p.category === 'NUTRITION' ? 1 : 8;
-          slots.push({
-            serviceId: service.id,
-            startsAt,
-            capacity,
-            // A partly-booked calendar reads as a real business; every fifth is full.
-            booked: (day + hour) % 5 === 0 ? capacity : (day + hour) % 3,
-          });
-        }
-      }
-      await prisma.slot.createMany({ data: slots });
-    }
-  }
+  // The fictional demo catalogue is gone: the twelve invented providers, their
+  // services and their fourteen days of generated slots. What replaces them is
+  // the researched Muscat food list — real businesses, with none of the
+  // ratings, prices, photographs or availability that were never established.
+  //
+  // Consequence worth knowing: five of the seven categories (NUTRITION, GYM,
+  // FITNESS, PILATES, WELLNESS) now have no providers at all, and the package
+  // allowances that reference them have nothing to spend against. Bookings and
+  // slots go with them, since none of these partners has a bookable calendar.
+  console.log('Food partners…');
+  const seeded = await seedFoodPartners(prisma, cityBySlug['muscat'].id);
+  console.log(`  ${seeded} researched partners`);
 
   console.log('Partner wall…');
   await prisma.partner.createMany({ data: PARTNERS });
@@ -798,88 +776,13 @@ async function main() {
     })),
   });
 
-  console.log('Bookings…');
-  const pilates = await prisma.service.findFirstOrThrow({
-    where: { provider: { slug: 'reform-pilates-muscat' }, nameEn: 'Reformer class' },
-  });
-  const nutrition = await prisma.service.findFirstOrThrow({
-    where: { provider: { slug: 'dana-nutrition' }, nameEn: 'First consultation' },
-  });
-  const wellness = await prisma.service.findFirstOrThrow({
-    where: { provider: { slug: 'nour-wellness' }, nameEn: 'Deep tissue therapy' },
-  });
-
-  const ref = (n: number) => `NMT-${100000 + n}`;
-
-  await prisma.booking.createMany({
-    data: [
-      {
-        reference: ref(1),
-        userId: member.id,
-        serviceId: pilates.id,
-        providerId: pilates.providerId,
-        startsAt: at(0, 18, 0),
-        status: BookingStatus.CONFIRMED,
-        price: 0,
-        coveredByMembership: true,
-      },
-      {
-        reference: ref(2),
-        userId: member.id,
-        serviceId: nutrition.id,
-        providerId: nutrition.providerId,
-        startsAt: at(3, 12, 30),
-        status: BookingStatus.CONFIRMED,
-        price: 0,
-        coveredByMembership: true,
-      },
-      {
-        reference: ref(3),
-        userId: member.id,
-        serviceId: wellness.id,
-        providerId: wellness.providerId,
-        startsAt: at(-6, 18, 0),
-        status: BookingStatus.COMPLETED,
-        price: 20,
-        paymentMethod: 'card',
-      },
-      {
-        reference: ref(4),
-        userId: member.id,
-        serviceId: pilates.id,
-        providerId: pilates.providerId,
-        startsAt: at(-2, 7, 0),
-        status: BookingStatus.CANCELLED,
-        price: 0,
-        coveredByMembership: true,
-        cancelledAt: new Date(Date.now() - 3 * DAY),
-      },
-    ],
-  });
-
-  console.log('Reviews and favourites…');
-  const reformer = await prisma.provider.findUniqueOrThrow({
-    where: { slug: 'reform-pilates-muscat' },
-  });
-  const greenTable = await prisma.provider.findUniqueOrThrow({
-    where: { slug: 'the-green-table' },
-  });
-
-  await prisma.review.create({
-    data: {
-      userId: member.id,
-      providerId: reformer.id,
-      rating: 5,
-      bodyEn: 'Small classes and the instructor actually corrects your form.',
-      bodyAr: 'الحصص صغيرة والمدرّبة تصحّح وضعيتك فعلاً.',
-    },
-  });
-  await prisma.favorite.createMany({
-    data: [
-      { userId: member.id, providerId: reformer.id },
-      { userId: member.id, providerId: greenTable.id },
-    ],
-  });
+  // Demo bookings, reviews and favourites are gone with the fictional
+  // catalogue they hung off. Every one of them referenced a service that no
+  // longer exists — the researched partners have names, addresses and
+  // capabilities, but no menu, no prices and no bookable calendar, because the
+  // research never established any of those.
+  //
+  // They come back when a partner supplies a real service list, not before.
 
   console.log('Notifications…');
   await prisma.notification.createMany({
@@ -915,7 +818,11 @@ async function main() {
     ],
   });
 
+  await seedChallenges(prisma);
+
   console.log('Done.', {
+    challenges: await prisma.challenge.count(),
+    achievements: await prisma.achievement.count(),
     cities: await prisma.city.count(),
     providers: await prisma.provider.count(),
     services: await prisma.service.count(),

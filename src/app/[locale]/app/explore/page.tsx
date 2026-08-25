@@ -73,6 +73,14 @@ export default async function ExplorePage({
                   distanceKm: p.distanceKm,
                   tags: locale === 'ar' ? p.tagsAr : p.tagsEn,
                   included: p.included,
+                  foodTags: p.foodTags,
+                  menuProfile: p.menuProfile,
+                  area: p.area,
+                  ownDelivery: p.ownDelivery,
+                  platformDelivery: p.platformDelivery,
+                  pickup: p.pickup,
+                  weeklyPlan: p.weeklyPlan,
+                  monthlyPlan: p.monthlyPlan,
                 }}
               />
             ))

@@ -1,0 +1,54 @@
+name: namat
+description: "NAMAT — نمط. A wellness ecosystem for Oman."
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State and routing. Riverpod over Bloc because most of this app's state is
+  # derived-from-async rather than event-driven, which is what Riverpod's
+  # AsyncValue models directly and Bloc models with boilerplate.
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.7
+
+  # Networking, kept behind a repository layer so the API can move without the
+  # UI noticing.
+  dio: ^5.7.0
+
+  # Local storage. Secure storage for tokens only; preferences for the rest.
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.2
+
+  intl: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Arabic is the default language, so the Arabic face ships first. Both are
+  # bundled rather than fetched: a wellness app that shows tofu boxes on a
+  # patchy connection has failed before it rendered.
+  fonts:
+    - family: PlexArabic
+      fonts:
+        - asset: assets/fonts/IBMPlexSansArabic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/IBMPlexSansArabic-SemiBold.ttf
+          weight: 600
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+
+  generate: true

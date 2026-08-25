@@ -13,6 +13,7 @@ import { ServiceCard } from '@/components/cards/ServiceCard';
 import { getProvider } from '@/server/queries/explore';
 import { formatPrice, formatDateShort, formatNumber } from '@/lib/format';
 import { pick, pickList } from '@/lib/localized';
+import { providerImage } from '@/lib/provider-image';
 
 /**
  * Provider detail is the conversion screen: gallery, who they are, what they
@@ -46,7 +47,7 @@ export default async function ProviderPage({
       <div className="relative">
         <div className="relative h-64 w-full overflow-hidden">
           <Image
-            src={provider.image}
+            src={providerImage(provider.image, provider.category)}
             alt=""
             fill
             priority

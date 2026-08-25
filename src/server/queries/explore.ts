@@ -2,6 +2,7 @@ import { cache } from 'react';
 import type { Category, Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getCoveringSlug, getCurrentUser } from '@/server/session';
+import { normalizeArabic } from '@/lib/arabic';
 
 /**
  * Discovery queries. Distance is computed in Node rather than PostGIS: the
@@ -12,9 +13,14 @@ import { getCoveringSlug, getCurrentUser } from '@/server/session';
 const EARTH_KM = 6371;
 
 export function distanceKm(
-  a: { latitude: number; longitude: number },
-  b: { latitude: number; longitude: number },
-) {
+  a: { latitude: number | null; longitude: number | null },
+  b: { latitude: number | null; longitude: number | null },
+): number | null {
+  // A researched partner may have no confirmed position yet. Callers rank an
+  // unknown distance as mid-range rather than worst — see food-ranking.ts.
+  if (a.latitude == null || a.longitude == null) return null;
+  if (b.latitude == null || b.longitude == null) return null;
+
   const toRad = (d: number) => (d * Math.PI) / 180;
   const x = toRad(b.longitude - a.longitude) * Math.cos(toRad((a.latitude + b.latitude) / 2));
   const y = toRad(b.latitude - a.latitude);
@@ -44,15 +50,27 @@ export async function searchProviders(filters: ExploreFilters = {}) {
   if (filters.minRating) where.rating = { gte: filters.minRating };
 
   if (filters.q) {
-    const q = filters.q.trim();
-    where.OR = [
-      { nameEn: { contains: q, mode: 'insensitive' } },
-      { nameAr: { contains: q } },
-      { addressEn: { contains: q, mode: 'insensitive' } },
-      { addressAr: { contains: q } },
-      { services: { some: { nameEn: { contains: q, mode: 'insensitive' } } } },
-      { services: { some: { nameAr: { contains: q } } } },
-    ];
+    // Matching happens against the `searchKey` generated columns, which hold an
+    // Arabic-folded form of the name and address: alef carriers unified,
+    // diacritics stripped, digits latinised. Without it a member searching
+    // "اطلس" never finds "أطلس", because those are different strings.
+    //
+    // Raw SQL rather than a Prisma filter because `searchKey` is GENERATED
+    // ALWAYS and Prisma has no way to express that — modelling it as an
+    // ordinary column would make the next `migrate dev` quietly rewrite it
+    // into a plain one and stop it updating.
+    const key = normalizeArabic(filters.q);
+    if (key) {
+      const matches = await prisma.$queryRaw<{ id: string }[]>`
+        SELECT DISTINCT p."id"
+        FROM "Provider" p
+        LEFT JOIN "Service" s
+          ON s."providerId" = p."id" AND s."isActive" = true
+        WHERE p."searchKey" LIKE ${'%' + key + '%'}
+           OR s."searchKey" LIKE ${'%' + key + '%'}
+      `;
+      where.id = { in: matches.map((m) => m.id) };
+    }
   }
 
   // Price and inclusion are properties of the services, not the provider.
@@ -86,10 +104,22 @@ export async function searchProviders(filters: ExploreFilters = {}) {
     tagsEn: p.tagsEn,
     tagsAr: p.tagsAr,
     womenOnly: p.womenOnly,
+    // Everything the card needs to describe the partner in its own terms
+    // rather than repeating the category name on every row.
+    foodTags: p.foodTags,
+    menuProfile: p.menuProfile,
+    area: p.area,
+    ownDelivery: p.ownDelivery,
+    platformDelivery: p.platformDelivery,
+    pickup: p.pickup,
+    weeklyPlan: p.weeklyPlan,
+    monthlyPlan: p.monthlyPlan,
     cityNameEn: p.city.nameEn,
     cityNameAr: p.city.nameAr,
     distanceKm: origin ? distanceKm(origin, p) : null,
-    fromPrice: p.services.length ? Math.min(...p.services.map((s) => s.price)) : null,
+    fromPrice: p.services.length
+      ? Math.min(...p.services.map((s) => s.price))
+      : p.fromPrice,
     included: Boolean(
       coveringSlug && p.services.some((s) => s.includedIn.includes(coveringSlug)),
     ),

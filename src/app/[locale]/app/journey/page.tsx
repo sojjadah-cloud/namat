@@ -13,6 +13,7 @@ import { getHomeFeed } from '@/server/queries/home';
 import { getFavorites } from '@/server/queries/bookings';
 import { formatTime, formatNumber, startOfWeek, addDays, isSameDay } from '@/lib/format';
 import { pick } from '@/lib/localized';
+import { PageTitle } from '@/components/layout/AppHeader';
 
 type Overview = NonNullable<Awaited<ReturnType<typeof getJourneyOverview>>>;
 type MemberOverview = Extract<Overview, { member: true }>;
@@ -32,14 +33,6 @@ export default async function JourneyPage() {
     <MemberJourney journey={journey} locale={locale} />
   ) : (
     <NonMemberJourney journey={journey} locale={locale} />
-  );
-}
-
-function PageTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <header className="px-5 pt-5 pb-4">
-      <h1 className="display text-[28px] text-ink">{children}</h1>
-    </header>
   );
 }
 

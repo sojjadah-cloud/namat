@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        // The member area is personalised and auth-gated; the API is not a page.
+        // Everything past the welcome screen is personalised and behind a
+        // session; the API is not a page.
         disallow: ['/api/', '/en/app/', '/ar/app/', '/en/onboarding', '/ar/onboarding'],
       },
     ],

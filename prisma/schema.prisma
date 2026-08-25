@@ -6,11 +6,15 @@
 // swapped for real partner data without touching the query layer.
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  // Needed to declare the pg_trgm GIN indexes below. Without it Prisma cannot
+  // see them, and every migration diff proposes dropping them.
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [pg_trgm]
 }
 
 // -----------------------------------------------------------------------------
@@ -75,6 +79,49 @@ enum NotificationKind {
 // IDENTITY
 // -----------------------------------------------------------------------------
 
+
+/// What a challenge asks of you. Drives the icon, the daily-task UI and which
+/// unit the progress bar counts in.
+enum ChallengeKind {
+  MOVEMENT
+  NUTRITION
+  HYDRATION
+  SLEEP
+  MIND
+  CONSISTENCY
+  COMMUNITY
+}
+
+enum ChallengeLevel {
+  EASY
+  INTERMEDIATE
+  ADVANCED
+}
+
+/// How a day's task is satisfied. COUNT tracks toward a numeric target
+/// (steps, glasses); CHECK is a single "did it" tick.
+enum TaskKind {
+  COUNT
+  CHECK
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+/// Why points moved. An append-only ledger rather than a running total on the
+/// user, so a balance can always be explained and never silently drifts.
+enum PointsReason {
+  DAY_COMPLETED
+  CHALLENGE_COMPLETED
+  STREAK_MILESTONE
+  BOOKING
+  ACHIEVEMENT
+  ADJUSTMENT
+}
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -96,6 +143,23 @@ model User {
   favorites     Favorite[]
   reviews       Review[]
   notifications Notification[]
+  enrollments   Enrollment[]
+  points        PointsEntry[]
+  achievements  EarnedAchievement[]
+
+  /// Public handle used to find and challenge someone. Null until claimed;
+  /// nothing else about the account is exposed to other members.
+  username         String?          @unique
+  challengePrivacy ChallengePrivacy @default(EVERYONE)
+
+  duelsSent     Duel[]       @relation("DuelChallenger")
+  duelsReceived Duel[]       @relation("DuelOpponent")
+  duelEntries   DuelEntry[]
+  duelEvents    DuelEvent[]
+  following     Connection[] @relation("Follower")
+  followers     Connection[] @relation("Following")
+
+  @@index([username])
 }
 
 /// Everything onboarding collects. Drives the personalized feed.
@@ -169,6 +233,58 @@ model City {
 }
 
 // -----------------------------------------------------------------------------
+// FOOD CATALOGUE
+// -----------------------------------------------------------------------------
+
+/// Filter chips in the healthy-food section.
+enum FoodTag {
+  MEALS
+  SUBSCRIPTIONS
+  HIGH_PROTEIN
+  KETO
+  LOW_CARB
+  VEGETARIAN
+  SALADS
+  JUICES
+  BAKERY
+  GROCERY
+}
+
+/// How much of a partner's menu is actually on-category.
+enum MenuProfile {
+  DEDICATED
+  MOSTLY
+  MIXED
+}
+
+/// How well the operational facts about a partner have been established.
+/// Drives ranking: a card that promises delivery and cannot deliver costs
+/// more trust than it wins.
+enum DataConfidence {
+  CONFIRMED
+  LIKELY
+  UNVERIFIED
+}
+
+/// Researched vs. actually signed. Nothing reaches a member as a partner
+/// until this reads PARTNER.
+enum PartnerStatus {
+  PROSPECT
+  PARTNER
+  BENCHMARK
+}
+
+/// Internal shortlist grade from partner research. Never shown to members.
+enum PartnerGrade {
+  A_PLUS
+  A
+  B_PLUS
+  B
+  C_PLUS
+  C
+}
+
+// -----------------------------------------------------------------------------
 // MARKETPLACE
 // -----------------------------------------------------------------------------
 
@@ -178,17 +294,28 @@ model Provider {
   nameEn      String
   nameAr      String
   category    Category
-  aboutEn     String
-  aboutAr     String
-  image       String
+  /// Null for researched partners until they supply their own copy.
+  aboutEn     String?
+  aboutAr     String?
+  /// Null falls back to a category illustration rather than a stock photo
+  /// standing in for a real shopfront.
+  image       String?
   gallery     String[] @default([])
   cityId      String
   city        City     @relation(fields: [cityId], references: [id])
   addressEn   String
   addressAr   String
-  latitude    Float
-  longitude   Float
-  rating      Float    @default(0)
+  /// Nullable because most researched partners have no confirmed position yet.
+  /// Distance ranking treats a missing coordinate as mid-range rather than
+  /// worst: the gap is in our research, not in the business.
+  latitude    Float?
+  longitude   Float?
+  /// False when the position came from a search result rather than the map.
+  /// Safe to sort by, not safe to navigate to.
+  coordsVerified Boolean @default(false)
+  /// Null until a real rating exists. Never seeded with a plausible-looking
+  /// number — these are real businesses and an invented score misrepresents them.
+  rating      Float?
   reviewCount Int      @default(0)
   /// Short descriptors shown as chips: Women only, Beginner friendly...
   tagsEn      String[] @default([])
@@ -198,6 +325,37 @@ model Provider {
   hoursEn     String?
   hoursAr     String?
   phone       String?
+  /// Neighbourhood as a member would say it, e.g. "الغبرة الشمالية".
+  area        String?
+
+  // --- Food catalogue -------------------------------------------------------
+  foodTags       FoodTag[]      @default([])
+  menuProfile    MenuProfile?
+  dataConfidence DataConfidence @default(UNVERIFIED)
+  status         PartnerStatus  @default(PROSPECT)
+  grade          PartnerGrade?
+
+  /// Tri-state on purpose. Null means "not verified", and the filters must not
+  /// read it as "no": encoding an unknown as false hides businesses that very
+  /// likely do deliver, and the app looks confident while being wrong.
+  ownDelivery      Boolean?
+  platformDelivery Boolean?
+  pickup           Boolean?
+  weeklyPlan       Boolean?
+  monthlyPlan      Boolean?
+  /// Drives the "السعرات محسوبة" / "البروتين محسوب" filters. Left null unless
+  /// actually established — a member eating to a macro target relies on these.
+  caloriesLabelled Boolean?
+  proteinLabelled  Boolean?
+  /// Cheapest item, in OMR. Null until a real price list exists.
+  fromPrice        Float?
+  researchNote     String?
+
+  /// Arabic-folded search text, maintained by a database trigger rather than
+  /// by the application. Declared here so Prisma stops trying to drop it on
+  /// every migration; never assign to it — the trigger overwrites any value.
+  searchKey   String?
+
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
@@ -207,6 +365,10 @@ model Provider {
   favorites Favorite[]
 
   @@index([category, cityId])
+  @@index([status, category])
+  @@index([foodTags], type: Gin)
+  /// Substring search cannot use a btree, so the folded key gets a trigram GIN.
+  @@index([searchKey(ops: raw("gin_trgm_ops"))], type: Gin)
 }
 
 model Service {
@@ -229,6 +391,10 @@ model Service {
   bookings Booking[]
 
   @@index([providerId])
+  @@index([searchKey(ops: raw("gin_trgm_ops"))], type: Gin)
+
+  /// See Provider.searchKey — maintained by a trigger, never assigned.
+  searchKey  String?
 }
 
 /// Concrete bookable moments. Seeded forward from today; a partner portal would
@@ -412,4 +578,310 @@ model VerificationAttempt {
   @@index([phone, createdAt])
   @@index([ip, createdAt])
   @@index([createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// CHALLENGES
+//
+// A Challenge is a template: "10,000 steps, 7 days". An Enrollment is one
+// person taking it, and it carries its own start date so two people can be on
+// day 3 of the same challenge in different weeks. DayLog is the per-day record.
+//
+// Progress is stored as raw amounts against the day's target rather than as a
+// percentage, so the same row renders "7,850 / 10,000 steps" and "78%" without
+// the source of truth ever being a rounded number.
+// -----------------------------------------------------------------------------
+
+model Challenge {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  kind        ChallengeKind
+  level       ChallengeLevel @default(EASY)
+
+  titleEn     String
+  titleAr     String
+  summaryEn   String
+  summaryAr   String
+  /// Rules and objective, one bullet per entry.
+  rulesEn     String[]
+  rulesAr     String[]
+
+  image       String
+  /// Length in days. Day numbers run 1..durationDays.
+  durationDays Int
+  /// Awarded once, on finishing every day of the challenge.
+  rewardPoints Int           @default(0)
+  /// Points for closing a single day.
+  dayPoints    Int           @default(10)
+
+  /// Seeded head start so a new challenge does not read as abandoned. Real
+  /// enrollments are counted and added on top.
+  baseParticipants Int       @default(0)
+
+  isActive    Boolean        @default(true)
+  featured    Boolean        @default(false)
+  sortOrder   Int            @default(0)
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  tasks       ChallengeTask[]
+  enrollments Enrollment[]
+
+  @@index([isActive, sortOrder])
+  @@index([kind])
+}
+
+/// One day's goal. A challenge with a single task repeated daily stores one
+/// row with `day: null`; a varied programme stores one row per day.
+model ChallengeTask {
+  id          String    @id @default(cuid())
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  /// Null means "every day of this challenge".
+  day         Int?
+
+  kind        TaskKind  @default(COUNT)
+  titleEn     String
+  titleAr     String
+  /// Target amount for COUNT tasks; ignored for CHECK.
+  target      Int       @default(1)
+  /// Unit label, e.g. "steps" / "خطوة". Empty for CHECK tasks.
+  unitEn      String    @default("")
+  unitAr      String    @default("")
+
+  @@unique([challengeId, day])
+  @@index([challengeId])
+}
+
+model Enrollment {
+  id          String           @id @default(cuid())
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challengeId String
+  challenge   Challenge        @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  status      EnrollmentStatus @default(ACTIVE)
+  /// Midnight local to the member on the day they joined. Day N of the
+  /// challenge is startedAt + (N-1) days.
+  startedAt   DateTime         @default(now())
+  completedAt DateTime?
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  days        DayLog[]
+
+  /// Someone may retake a challenge, but not be on it twice at once. Enforced
+  /// in the join action, since a partial unique index cannot be expressed here.
+  @@index([userId, status])
+  @@index([challengeId])
+}
+
+model DayLog {
+  id           String     @id @default(cuid())
+  enrollmentId String
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+
+  /// 1-based day within the challenge.
+  day          Int
+  /// Progress so far against that day's target.
+  amount       Int        @default(0)
+  completedAt  DateTime?
+
+  /// The calendar date this day maps to, so streaks can be computed without
+  /// re-deriving dates from startedAt on every read.
+  date         DateTime   @db.Date
+
+  @@unique([enrollmentId, day])
+  @@index([enrollmentId])
+  @@index([date])
+}
+
+// -----------------------------------------------------------------------------
+// REWARDS
+// -----------------------------------------------------------------------------
+
+/// Append-only. The balance is the sum of the ledger, never a stored counter.
+model PointsEntry {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  amount    Int
+  reason    PointsReason
+  /// Free-form pointer to what caused it (enrollment id, booking id, …).
+  refId     String?
+  createdAt DateTime     @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model Achievement {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  titleEn     String
+  titleAr     String
+  captionEn   String
+  captionAr   String
+  /// Lucide icon name, resolved through a map in the UI layer.
+  icon        String
+  points      Int               @default(0)
+  sortOrder   Int               @default(0)
+
+  earned      EarnedAchievement[]
+
+  @@index([sortOrder])
+}
+
+model EarnedAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  earnedAt      DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+  @@index([userId, earnedAt])
+}
+
+// -----------------------------------------------------------------------------
+// PEER CHALLENGES
+//
+// One member against another. Distinct from the Challenge/Enrollment models
+// above, which are NAMAT's own programmes taken alone: a duel has two sides, a
+// pending state before it starts, and a result.
+//
+// Progress mirrors the solo design — derived from per-day rows, never a stored
+// running total — so a re-run or an edited row cannot silently desynchronise
+// the two scoreboards.
+//
+// `source` on every entry records where the number came from. Everything is
+// SELF_REPORTED today, which is fine for a private goal and not fine for a
+// contest with points attached: a member who types "10,000" wins without
+// walking. The column exists so a health-kit integration can be trusted
+// differently from a typed number without a migration.
+// -----------------------------------------------------------------------------
+
+enum DuelMetric {
+  STEPS
+  WORKOUTS
+  WATER
+  STREAK
+  CUSTOM
+}
+
+enum DuelStatus {
+  /// Sent, waiting on the opponent. Nothing counts yet.
+  PENDING
+  ACTIVE
+  COMPLETED
+  DECLINED
+  /// Withdrawn by the challenger before acceptance.
+  CANCELLED
+}
+
+enum ProgressSource {
+  SELF_REPORTED
+  HEALTH_KIT
+  PARTNER_CHECKIN
+}
+
+/// Who may send this member a challenge.
+enum ChallengePrivacy {
+  EVERYONE
+  CONNECTIONS
+  NOBODY
+}
+
+enum DuelEventKind {
+  ACCEPTED
+  PROGRESS
+  GOAL_MET
+  TOOK_LEAD
+  COMPLETED
+}
+
+model Duel {
+  id           String     @id @default(cuid())
+
+  challengerId String
+  challenger   User       @relation("DuelChallenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponentId   String
+  opponent     User       @relation("DuelOpponent", fields: [opponentId], references: [id], onDelete: Cascade)
+
+  metric       DuelMetric
+  /// Daily target, e.g. 10000 steps. For STREAK the target is 1 per day.
+  target       Int
+  durationDays Int
+  /// Only set for CUSTOM, where the pair agree their own wording.
+  titleEn      String?
+  titleAr      String?
+
+  status       DuelStatus @default(PENDING)
+  createdAt    DateTime   @default(now())
+  /// The clock starts on acceptance, not on sending — otherwise a slow reply
+  /// silently eats days off the opponent's side of the contest.
+  startedAt    DateTime?
+  endsAt       DateTime?
+  settledAt    DateTime?
+  /// Null on a draw, or before the duel is settled.
+  winnerId     String?
+
+  entries      DuelEntry[]
+  events       DuelEvent[]
+
+  @@index([challengerId, status])
+  @@index([opponentId, status])
+  @@index([status, endsAt])
+}
+
+model DuelEntry {
+  id       String         @id @default(cuid())
+  duelId   String
+  duel     Duel           @relation(fields: [duelId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// 1-based day within the duel.
+  day      Int
+  amount   Int            @default(0)
+  date     DateTime       @db.Date
+  source   ProgressSource @default(SELF_REPORTED)
+  metAt    DateTime?
+
+  @@unique([duelId, userId, day])
+  @@index([duelId, userId])
+}
+
+/// The activity timeline. System-generated only — this is a scoreboard, not a
+/// chat room, and the spec is explicit that it must not become one.
+model DuelEvent {
+  id        String        @id @default(cuid())
+  duelId    String
+  duel      Duel          @relation(fields: [duelId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  kind      DuelEventKind
+  amount    Int?
+  createdAt DateTime      @default(now())
+
+  @@index([duelId, createdAt])
+}
+
+/// A one-directional follow, kept deliberately thin: enough to challenge the
+/// same person again without building a social network.
+model Connection {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+  @@index([followingId])
 }

@@ -1,0 +1,132 @@
+{
+  "@@locale": "ar",
+  "appName": "نمط",
+  "tagline": "عِش أفضل، كل يوم",
+  "onbTitle1": "كل ما تحتاجه لنمط حياة أفضل",
+  "onbTitle2": "رحلتك في مكان واحد",
+  "onbTitle3": "استمر… وتحدَّ أصدقاءك",
+  "onbStart": "ابدأ الآن",
+  "onbHaveAccount": "لدي حساب",
+  "onbSkip": "تخطٍ",
+  "welcomeHeadline": "أسلوبك الصحي يبدأ بطريقة أذكى",
+  "welcomeSub": "نمط يجمع رحلتك الصحية، خدماتك، تحدياتك وإنجازاتك في مكان واحد.",
+  "createAccount": "إنشاء حساب",
+  "login": "تسجيل الدخول",
+  "exploreAsGuest": "استكشف نمط كزائر",
+  "navHome": "الرئيسية",
+  "navUse": "استخدم نمط",
+  "navChallenges": "التحديات",
+  "navJourney": "رحلتي",
+  "navProfile": "حسابي",
+  "greetingMorning": "صباح الخير، {name}",
+  "greetingEvening": "مساء الخير، {name}",
+  "@greetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@greetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "namatPoints": "نقاط نمط",
+  "doingGreat": "أنت تسير بشكل رائع",
+  "arcNutrition": "التغذية",
+  "arcMovement": "الحركة",
+  "arcHydration": "الترطيب",
+  "quickBookMeal": "احجز وجبة",
+  "quickFindActivity": "ابحث عن نشاط",
+  "quickConsult": "استشر مختص",
+  "quickStartChallenge": "ابدأ تحدياً",
+  "useGreeting": "كيف تريد أن تستخدم نمط اليوم؟",
+  "useSub": "اختر المجال، ونساعدك في الوصول إلى الأنسب لك.",
+  "fieldMeals": "وجبات صحية",
+  "fieldMealsSub": "وجبات ومطاعم تناسب نمطك",
+  "fieldFitness": "رياضة ولياقة",
+  "fieldFitnessSub": "اكتشف النشاط المناسب لك",
+  "fieldConsult": "استشارات",
+  "fieldConsultSub": "خبراء يساعدونك في رحلتك",
+  "fieldStores": "متاجر صحية",
+  "fieldStoresSub": "منتجات تساعدك على الاستمرار",
+  "optionCount": "{count} خياراً",
+  "@optionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noPartnersYet": "ما في شركاء بعد",
+  "explore": "استكشف",
+  "searchMeals": "ابحث عن وجبة أو مطعم",
+  "searchFitness": "ابحث عن نادي أو نشاط",
+  "searchConsult": "ابحث عن مختص",
+  "searchStores": "ابحث عن متجر أو منتج",
+  "filterNearest": "الأقرب",
+  "filterTopRated": "الأعلى تقييماً",
+  "filterHighProtein": "عالي البروتين",
+  "filterSubscriptions": "اشتراكات",
+  "filterPickup": "استلام",
+  "filterDelivery": "توصيل",
+  "inYourPackage": "متاح ضمن باقتك",
+  "viewDetails": "عرض التفاصيل",
+  "resultCount": "{count} نتيجة",
+  "@resultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "challengesTitle": "التحديات",
+  "challengesHero": "نافس. استمر. تطور.",
+  "challengeSomeone": "تحدَّ شخصاً",
+  "vs": "VS",
+  "youLeadBy": "أنت متقدم بـ {amount}",
+  "@youLeadBy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "noChallenges": "ما عندك تحديات حالياً",
+  "findUser": "ابحث باسم المستخدم أو @username",
+  "challenge": "تحدَّ",
+  "namatLevel": "مستوى نمط {level}",
+  "@namatLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "challengeSent": "تم إرسال التحدي",
+  "journeyTitle": "رحلتي",
+  "journeyComplete": "من رحلة هذا الشهر",
+  "startYourJourney": "ابدأ رحلتك مع نمط",
+  "ifSubscribed": "لو كنت مشتركاً هذا الشهر",
+  "potentialSaving": "التوفير المحتمل",
+  "explorePackages": "استكشف الباقات",
+  "mealsUsed": "وجبات",
+  "workoutsUsed": "حصص رياضية",
+  "consultsUsed": "استشارات",
+  "profileTitle": "حسابي",
+  "savedPlaces": "الأماكن المحفوظة",
+  "myBookings": "حجوزاتي",
+  "myOrders": "طلباتي",
+  "myPackages": "باقاتي",
+  "settings": "الإعدادات",
+  "privacy": "الخصوصية",
+  "language": "اللغة",
+  "retry": "إعادة المحاولة",
+  "errorTitle": "ما قدرنا نحمّل البيانات",
+  "errorBody": "جرب مرة ثانية.",
+  "emptyNoBookings": "لسه ما حجزت أي خدمة",
+  "useNamatCta": "استخدم نمط"
+}

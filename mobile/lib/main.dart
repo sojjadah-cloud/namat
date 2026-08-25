@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'core/routing/router.dart';
+import 'core/theme/namat_colors.dart';
+import 'core/theme/namat_theme.dart';
+import 'l10n/app_localizations.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+      systemNavigationBarColor: NamatColors.canvas,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
+  runApp(const ProviderScope(child: NamatApp()));
+}
+
+/// The locale the app is running in.
+///
+/// Arabic is the default rather than a fallback: NAMAT is an Omani product and
+/// the Arabic layout is the designed one. English is the translation.
+final localeProvider = StateProvider<Locale>((ref) => const Locale('ar'));
+
+class NamatApp extends ConsumerWidget {
+  const NamatApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
+      title: 'NAMAT',
+      debugShowCheckedModeBanner: false,
+      theme: NamatTheme.of(locale),
+      locale: locale,
+      supportedLocales: L.supportedLocales,
+      localizationsDelegates: const [
+        L.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      routerConfig: router,
+      builder: (context, child) {
+        // Respect the reader's font-size setting, but stop runaway scaling
+        // from breaking the progress rings and the VS layout.
+        final scale = MediaQuery.textScalerOf(context).clamp(
+          minScaleFactor: 0.9,
+          maxScaleFactor: 1.3,
+        );
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: scale),
+          child: child!,
+        );
+      },
+    );
+  }
+}

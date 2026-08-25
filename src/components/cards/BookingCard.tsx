@@ -7,11 +7,16 @@ import { Badge } from '@/components/ui/chip';
 import { formatTime, formatDateLong, isSameDay, addDays } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
+/** Shown when a provider has not supplied a photograph. Visibly generic on
+ *  purpose: a stock kitchen presented as a real shopfront is a false claim. */
+const FALLBACK_IMAGE =
+  'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=70';
+
 export interface BookingCardData {
   id: string;
   providerName: string;
   serviceName: string;
-  image: string;
+  image: string | null;
   startsAt: Date;
   status: 'CONFIRMED' | 'COMPLETED' | 'CANCELLED';
   coveredByMembership?: boolean;
@@ -68,7 +73,7 @@ export function BookingCard({
         )}
       >
         <div className="relative size-16 shrink-0 overflow-hidden rounded-sm ring-1 ring-white/15">
-          <Image src={image} alt="" fill sizes="64px" className="object-cover" />
+          <Image src={image ?? FALLBACK_IMAGE} alt="" fill sizes="64px" className="object-cover" />
         </div>
 
         <div className="min-w-0 flex-1">

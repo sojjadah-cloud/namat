@@ -10,7 +10,14 @@ import { BookingCard } from '@/components/cards/BookingCard';
 import { JourneyCard } from '@/components/cards/JourneyCard';
 import { RecommendationCard } from '@/components/cards/RecommendationCard';
 import { HomeSearchLink } from '@/features/home/HomeSearchLink';
-import { getHomeFeed, getNextBooking, getUnreadCount } from '@/server/queries/home';
+import { HomeLead, PackageUpsell } from '@/features/home/HomeLead';
+import { ActiveChallengeStrip } from '@/features/challenges/ActiveChallengeStrip';
+import {
+  getHomeFeed,
+  getNextBooking,
+  getUnreadCount,
+  getSpreadOfSpend,
+} from '@/server/queries/home';
 import { getCurrentUser, getMembership } from '@/server/session';
 import { getJourneyOverview } from '@/server/queries/journey';
 import { CATEGORY_ORDER, CATEGORY_META } from '@/lib/categories';
@@ -25,6 +32,7 @@ import { pick } from '@/lib/localized';
 export default async function HomePage() {
   const locale = await getLocale();
   const t = await getTranslations('Home');
+  const tch = await getTranslations('Challenges');
   const tc = await getTranslations('Common');
   const tcat = await getTranslations('Categories');
 
@@ -36,6 +44,8 @@ export default async function HomePage() {
     getMembership(),
     getJourneyOverview(),
   ]);
+
+  const spread = await getSpreadOfSpend();
 
   if (!user) return null;
 
@@ -62,6 +72,23 @@ export default async function HomePage() {
       <div className="px-5">
         <HomeSearchLink placeholder={t('searchPlaceholder')} />
       </div>
+
+      {/* ---------------------------------------------------------- Lead ---
+          Members and non-members are running different products from here on;
+          this states which one before the feed loads. */}
+      <section className="mt-5 px-5">
+        <HomeLead
+          membership={
+            membership && journey?.member
+              ? {
+                  packageName: pick(membership.package, 'name', locale),
+                  daysLeft: journey.daysLeft,
+                }
+              : null
+          }
+          percent={journey?.member ? journey.percent : 0}
+        />
+      </section>
 
       {/* ---------------------------------------------------- NAMAT Today --- */}
       <section className="mt-6 px-5">
@@ -109,6 +136,20 @@ export default async function HomePage() {
             </Link>
           </Button>
         </Surface>
+      </section>
+
+      {/* ------------------------------------------------ Active challenge --- */}
+      <section className="mt-6 px-5">
+        <SectionHeader
+          title={tch('active')}
+          className="mb-3"
+          action={
+            <Link href="/app/challenges" className="text-[13px] font-medium text-green">
+              {tch('explore')}
+            </Link>
+          }
+        />
+        <ActiveChallengeStrip />
       </section>
 
       {/* ------------------------------------------------ Upcoming booking --- */}
@@ -174,6 +215,15 @@ export default async function HomePage() {
               />
             ))}
           </div>
+        </section>
+      ) : null}
+
+      {/* --------------------------------------------------- Package upsell ---
+          Only for a member without one, and only once their own bookings show
+          a package would actually be cheaper. Renders nothing otherwise. */}
+      {!membership ? (
+        <section className="mt-8 px-5">
+          <PackageUpsell categoryCount={spread} />
         </section>
       ) : null}
 

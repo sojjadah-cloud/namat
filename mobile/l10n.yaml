@@ -1,0 +1,8 @@
+arb-dir: lib/l10n
+template-arb-file: app_ar.arb
+output-localization-file: app_localizations.dart
+output-class: L
+# Generated into the source tree rather than the synthetic package, so the
+# imports are ordinary relative paths and the generated code is greppable.
+synthetic-package: false
+output-dir: lib/l10n

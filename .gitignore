@@ -56,3 +56,12 @@ next-env.d.ts
 .windsurf/
 .agents/
 skills-lock.json
+
+# Flutter
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/ios/Pods/
+mobile/android/.gradle/
+mobile/android/local.properties

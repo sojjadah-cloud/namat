@@ -5,6 +5,11 @@ import { Link } from '@/i18n/routing';
 import { Badge } from '@/components/ui/chip';
 import { cn } from '@/lib/utils';
 
+/** Shown when a provider has not supplied a photograph. Visibly generic on
+ *  purpose: a stock kitchen presented as a real shopfront is a false claim. */
+const FALLBACK_IMAGE =
+  'https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=70';
+
 /**
  * Every recommendation states its reason. Personalization the user cannot
  * trace is indistinguishable from advertising — the "because you…" line is
@@ -23,7 +28,7 @@ export function RecommendationCard({
   subtitle?: string;
   /** "Because you want to eat better" — already interpolated. */
   reason: string;
-  image: string;
+  image: string | null;
   className?: string;
 }) {
   return (
@@ -38,7 +43,7 @@ export function RecommendationCard({
     >
       <div className="relative size-20 shrink-0 overflow-hidden rounded-sm">
         <Image
-          src={image}
+          src={image ?? FALLBACK_IMAGE}
           alt=""
           fill
           sizes="80px"

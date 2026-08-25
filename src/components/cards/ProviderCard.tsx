@@ -1,10 +1,12 @@
 import * as React from 'react';
-import Image from 'next/image';
+import type { FoodTag, MenuProfile } from '@prisma/client';
 import { MapPin } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Badge } from '@/components/ui/chip';
 import { Rating } from '@/components/ui/avatar';
+import { PartnerThumb } from '@/components/cards/PartnerThumb';
+import { partnerSummary, partnerFulfilment } from '@/lib/partner-summary';
 import { formatDistance } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
@@ -12,14 +14,23 @@ export interface ProviderCardData {
   slug: string;
   name: string;
   categoryLabel: string;
-  image: string;
-  rating: number;
+  image: string | null;
+  rating: number | null;
   reviewCount: number;
   /** Kilometres from the user. Omitted when location is denied. */
   distanceKm?: number | null;
   tags?: string[];
   /** Covered by the member's active package — the strongest signal on the card. */
   included?: boolean;
+  /** Drives the monogram colour and the generated one-line summary. */
+  foodTags?: FoodTag[];
+  menuProfile?: MenuProfile | null;
+  area?: string | null;
+  ownDelivery?: boolean | null;
+  platformDelivery?: boolean | null;
+  pickup?: boolean | null;
+  weeklyPlan?: boolean | null;
+  monthlyPlan?: boolean | null;
 }
 
 /**
@@ -43,6 +54,41 @@ export function ProviderCard({
   const t = useTranslations('Provider');
   const { slug, name, categoryLabel, image, rating, reviewCount, distanceKm, tags, included } =
     provider;
+
+  // "أكل صحي" on all thirty-four food cards told a member nothing. This says
+  // what the place actually makes and where it is, from their own data.
+  const summary =
+    provider.foodTags && provider.foodTags.length > 0
+      ? partnerSummary(
+          {
+            foodTags: provider.foodTags,
+            menuProfile: provider.menuProfile ?? null,
+            area: provider.area ?? null,
+            ownDelivery: provider.ownDelivery ?? null,
+            platformDelivery: provider.platformDelivery ?? null,
+            pickup: provider.pickup ?? null,
+            weeklyPlan: provider.weeklyPlan ?? null,
+            monthlyPlan: provider.monthlyPlan ?? null,
+          },
+          locale,
+        )
+      : null;
+
+  const fulfilment = provider.foodTags
+    ? partnerFulfilment(
+        {
+          foodTags: provider.foodTags,
+          menuProfile: provider.menuProfile ?? null,
+          area: provider.area ?? null,
+          ownDelivery: provider.ownDelivery ?? null,
+          platformDelivery: provider.platformDelivery ?? null,
+          pickup: provider.pickup ?? null,
+          weeklyPlan: provider.weeklyPlan ?? null,
+          monthlyPlan: provider.monthlyPlan ?? null,
+        },
+        locale,
+      )
+    : [];
 
   const meta = (
     <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -70,12 +116,13 @@ export function ProviderCard({
         )}
       >
         <div className="relative h-32 w-full overflow-hidden">
-          <Image
-            src={image}
-            alt=""
-            fill
+          <PartnerThumb
+            image={image}
+            name={name}
+            tags={provider.foodTags ?? []}
             sizes="224px"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            rounded="rounded-none"
+            className="absolute inset-0 size-full"
           />
           {included ? (
             <Badge tone="included" className="absolute start-3 top-3">
@@ -85,7 +132,9 @@ export function ProviderCard({
         </div>
         <div className="p-3.5">
           <p className="truncate text-[15px] font-semibold text-ink">{name}</p>
-          <p className="mt-0.5 truncate text-[12px] text-ink-soft">{categoryLabel}</p>
+          <p className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-ink-soft">
+            {summary ?? categoryLabel}
+          </p>
           {meta}
         </div>
       </Link>
@@ -102,15 +151,14 @@ export function ProviderCard({
         className,
       )}
     >
-      <div className="relative size-24 shrink-0 overflow-hidden rounded-sm">
-        <Image
-          src={image}
-          alt=""
-          fill
-          sizes="96px"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-        />
-      </div>
+      <PartnerThumb
+        image={image}
+        name={name}
+        tags={provider.foodTags ?? []}
+        sizes="96px"
+        rounded="rounded-sm"
+        className="size-24 shrink-0"
+      />
 
       <div className="min-w-0 flex-1 py-0.5">
         <div className="flex items-start justify-between gap-2">
@@ -121,11 +169,20 @@ export function ProviderCard({
             </Badge>
           ) : null}
         </div>
-        <p className="mt-0.5 truncate text-[12px] text-ink-soft">{categoryLabel}</p>
+        <p className="mt-0.5 line-clamp-2 text-[12px] leading-snug text-ink-soft">
+          {summary ?? categoryLabel}
+        </p>
         {meta}
-        {tags?.length ? (
+        {fulfilment.length > 0 || tags?.length ? (
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {tags.slice(0, 2).map((tag) => (
+            {/* Only verified capabilities appear — an unconfirmed one is
+                absent rather than shown as unavailable. */}
+            {fulfilment.map((f) => (
+              <Badge key={f} tone="neutral">
+                {f}
+              </Badge>
+            ))}
+            {tags?.slice(0, 2).map((tag) => (
               <Badge key={tag} tone="neutral">
                 {tag}
               </Badge>

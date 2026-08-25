@@ -56,12 +56,16 @@ export function Rating({
   size = 'md',
   className,
 }: {
-  value: number;
+  /** Null for a provider with no ratings yet — the component renders nothing
+   *  rather than a zero, which would read as a genuine score of zero stars. */
+  value: number | null;
   count?: number;
   locale: string;
   size?: 'sm' | 'md';
   className?: string;
 }) {
+  if (value === null) return null;
+
   const nf = new Intl.NumberFormat(intlLocale(locale), {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,

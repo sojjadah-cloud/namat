@@ -12,6 +12,7 @@ import { getBooking } from '@/server/queries/bookings';
 import { getAvailability } from '@/server/queries/explore';
 import { formatDateLong, formatTime, formatDuration, formatPrice } from '@/lib/format';
 import { pick } from '@/lib/localized';
+import { providerImage } from '@/lib/provider-image';
 
 export default async function BookingDetailPage({
   params,
@@ -58,7 +59,7 @@ export default async function BookingDetailPage({
         <div className="flex gap-4">
           <div className="relative size-20 shrink-0 overflow-hidden rounded-md">
             <Image
-              src={booking.provider.image}
+              src={providerImage(booking.provider.image, booking.provider.category)}
               alt=""
               fill
               sizes="80px"

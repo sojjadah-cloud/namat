@@ -119,3 +119,15 @@ export function BackBar({
     </div>
   );
 }
+
+/**
+ * The plain title bar used by every app screen that is not Home and not a
+ * detail view. Home has its own greeting header; detail views have BackBar.
+ */
+export function PageTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <header className="px-5 pt-5 pb-4">
+      <h1 className="display text-[28px] text-ink">{children}</h1>
+    </header>
+  );
+}

@@ -108,33 +108,21 @@ export function partOfDay(date: Date): 'MORNING' | 'AFTERNOON' | 'EVENING' {
   return 'EVENING';
 }
 
-export function daysBetween(from: Date, to: Date) {
-  return Math.max(0, Math.ceil((to.getTime() - from.getTime()) / 86_400_000));
-}
-
-export function isSameDay(a: Date, b: Date) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-export function addDays(date: Date, days: number) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
-
-/** Monday-start week containing `date` (Oman weeks run Sun–Sat, so use Saturday). */
-export function startOfWeek(date: Date) {
-  const d = new Date(date);
-  const day = d.getDay(); // 0 Sun … 6 Sat
-  const diff = (day + 1) % 7; // Saturday = start
-  d.setDate(d.getDate() - diff);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
+/**
+ * Calendar arithmetic lives in `time.ts`, which does it in Oman time rather
+ * than the server's. These re-exports keep the existing call sites working;
+ * the previous local copies used the server timezone and so disagreed with the
+ * challenge system about where a day ends.
+ */
+export {
+  daysBetween,
+  isSameDay,
+  isToday,
+  addDays,
+  startOfWeek,
+  omanDate,
+  MS_PER_DAY,
+} from './time';
 
 /**
  * Phone numbers as a reader sees them, not as a dialler stores them:

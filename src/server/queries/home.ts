@@ -56,7 +56,9 @@ export const getHomeFeed = cache(async () => {
       (interests.includes(p.category) ? 40 : 0) +
       (goalCategories.includes(p.category) ? 25 : 0) +
       (profile?.womenOnly && p.womenOnly ? 15 : 0) +
-      p.rating * 4 +
+      // A partner with no rating yet scores zero here rather than being
+      // excluded: absence of a rating is not evidence of a bad one.
+      (p.rating ?? 0) * 4 +
       (distance == null ? 0 : Math.max(0, 12 - distance));
 
     return {
@@ -93,7 +95,7 @@ export const getHomeFeed = cache(async () => {
   // category the user has shown no interest in, so the feed does not close in.
   const tryNew = [...scored]
     .filter((p) => !relevant.has(p.category))
-    .sort((a, b) => b.rating - a.rating)
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
     .slice(0, 4);
 
   return { recommended, nearYou, tryNew, primaryGoal: profile?.goals?.[0] ?? null };
@@ -115,4 +117,31 @@ export const getUnreadCount = cache(async () => {
   const user = await getCurrentUser();
   if (!user) return 0;
   return prisma.notification.count({ where: { userId: user.id, readAt: null } });
+});
+
+/**
+ * How many distinct categories this member has booked in over the last month.
+ *
+ * The signal behind the package suggestion. Counting categories rather than
+ * bookings is deliberate: five gym sessions is a habit and a package saves
+ * little, while one meal, one class and one consultation is exactly the
+ * spread a package is cheaper than.
+ */
+export const getSpreadOfSpend = cache(async () => {
+  const user = await getCurrentUser();
+  if (!user) return 0;
+
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60_000);
+  const rows = await prisma.booking.findMany({
+    where: {
+      userId: user.id,
+      createdAt: { gte: since },
+      status: { in: ['CONFIRMED', 'COMPLETED'] },
+      // Anything already covered by a package is not evidence for buying one.
+      coveredByMembership: false,
+    },
+    select: { service: { select: { category: true } } },
+  });
+
+  return new Set(rows.map((r) => r.service.category)).size;
 });
