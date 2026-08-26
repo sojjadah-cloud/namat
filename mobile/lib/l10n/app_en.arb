@@ -86,5 +86,26 @@
   "errorTitle": "We could not load that",
   "errorBody": "Give it another go.",
   "emptyNoBookings": "You have not booked anything yet",
-  "useNamatCta": "Use NAMAT"
+  "useNamatCta": "Use NAMAT",
+  "@namatLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "@optionCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@resultCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

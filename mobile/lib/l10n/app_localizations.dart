@@ -333,7 +333,7 @@ abstract class L {
   ///
   /// In ar, this message translates to:
   /// **'{count} خياراً'**
-  String optionCount(int count);
+  String optionCount(String count);
 
   /// No description provided for @noPartnersYet.
   ///
@@ -423,7 +423,7 @@ abstract class L {
   ///
   /// In ar, this message translates to:
   /// **'{count} نتيجة'**
-  String resultCount(int count);
+  String resultCount(String count);
 
   /// No description provided for @challengesTitle.
   ///
@@ -477,7 +477,7 @@ abstract class L {
   ///
   /// In ar, this message translates to:
   /// **'مستوى نمط {level}'**
-  String namatLevel(int level);
+  String namatLevel(String level);
 
   /// No description provided for @challengeSent.
   ///

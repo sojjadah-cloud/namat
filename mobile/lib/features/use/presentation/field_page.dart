@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/field.dart';
 
@@ -165,7 +166,7 @@ class _FieldPageState extends State<FieldPage> {
                     ),
                   ),
                   const SizedBox(height: NamatSpace.xl),
-                  Text(l.resultCount(results.length), style: text.bodySmall),
+                  Text(l.resultCount(context.n(results.length)), style: text.bodySmall),
                   const SizedBox(height: NamatSpace.md),
                   for (final r in results) ...[
                     _ResultCard(result: r, field: field),
@@ -255,7 +256,7 @@ class _ResultCard extends StatelessWidget {
                       color: NamatColors.inkSoft,
                     ),
                     const SizedBox(width: 4),
-                    Text('$km كم', style: text.labelSmall),
+                    Text('${context.n(km)} كم', style: text.labelSmall),
                     if (inPackage) ...[
                       const SizedBox(width: 10),
                       const NamatIcon(

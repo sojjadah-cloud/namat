@@ -4,6 +4,7 @@ import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 class ProfilePage extends StatelessWidget {
@@ -44,10 +45,10 @@ class ProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('سارة', style: text.titleLarge),
-                      Text('@sara', style: text.bodySmall),
+                      Text(handle('sara'), style: text.bodySmall),
                       const SizedBox(height: 4),
                       Text(
-                        l.namatLevel(8),
+                        l.namatLevel(context.n(8)),
                         style: text.labelSmall?.copyWith(
                           color: NamatColors.accent,
                         ),

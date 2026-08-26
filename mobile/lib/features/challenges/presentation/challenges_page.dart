@@ -4,6 +4,7 @@ import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 /// Challenges.
@@ -146,7 +147,8 @@ class _Side extends StatelessWidget {
           tween: IntTween(begin: 0, end: score),
           duration: NamatMotion.reveal,
           curve: NamatMotion.curve,
-          builder: (context, v, _) => Text('$v', style: text.titleLarge),
+          builder: (context, v, _) =>
+              Text(context.n(v), style: text.titleLarge),
         ),
       ],
     );

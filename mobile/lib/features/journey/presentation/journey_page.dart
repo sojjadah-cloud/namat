@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// My Journey.
@@ -120,7 +121,8 @@ class _Meter extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(label, style: text.labelMedium),
-                  Text('$used / $total', style: text.labelSmall),
+                  Text('${context.n(used)} / ${context.n(total)}',
+                      style: text.labelSmall),
                 ],
               ),
               const SizedBox(height: 6),

@@ -128,7 +128,7 @@ class LAr extends L {
   String get fieldStoresSub => 'منتجات تساعدك على الاستمرار';
 
   @override
-  String optionCount(int count) {
+  String optionCount(String count) {
     return '$count خياراً';
   }
 
@@ -175,7 +175,7 @@ class LAr extends L {
   String get viewDetails => 'عرض التفاصيل';
 
   @override
-  String resultCount(int count) {
+  String resultCount(String count) {
     return '$count نتيجة';
   }
 
@@ -206,7 +206,7 @@ class LAr extends L {
   String get challenge => 'تحدَّ';
 
   @override
-  String namatLevel(int level) {
+  String namatLevel(String level) {
     return 'مستوى نمط $level';
   }
 

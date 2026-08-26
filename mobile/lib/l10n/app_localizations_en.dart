@@ -128,7 +128,7 @@ class LEn extends L {
   String get fieldStoresSub => 'Products that keep you going';
 
   @override
-  String optionCount(int count) {
+  String optionCount(String count) {
     return '$count options';
   }
 
@@ -175,7 +175,7 @@ class LEn extends L {
   String get viewDetails => 'View details';
 
   @override
-  String resultCount(int count) {
+  String resultCount(String count) {
     return '$count results';
   }
 
@@ -206,7 +206,7 @@ class LEn extends L {
   String get challenge => 'Challenge';
 
   @override
-  String namatLevel(int level) {
+  String namatLevel(String level) {
     return 'NAMAT level $level';
   }
 

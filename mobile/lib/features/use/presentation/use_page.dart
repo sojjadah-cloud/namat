@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/field.dart';
 
@@ -140,7 +141,7 @@ class _FieldCardState extends State<_FieldCard> {
                         child: Text(
                           empty
                               ? l.noPartnersYet
-                              : l.optionCount(widget.count),
+                              : l.optionCount(context.n(widget.count)),
                           style: text.labelSmall?.copyWith(
                             color: empty
                                 ? NamatColors.inkSoft
