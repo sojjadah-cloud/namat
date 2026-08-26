@@ -616,6 +616,252 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'استخدم نمط'**
   String get useNamatCta;
+
+  /// No description provided for @pickOpponent.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر منافسك'**
+  String get pickOpponent;
+
+  /// No description provided for @searchUser.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم المستخدم أو @username'**
+  String get searchUser;
+
+  /// No description provided for @noUserFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لقينا أحداً بهذا الاسم'**
+  String get noUserFound;
+
+  /// No description provided for @chooseChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر التحدي'**
+  String get chooseChallenge;
+
+  /// No description provided for @metricSteps.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطوات'**
+  String get metricSteps;
+
+  /// No description provided for @metricStepsSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يحقق أكبر عدد من الخطوات؟'**
+  String get metricStepsSub;
+
+  /// No description provided for @metricWorkouts.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط'**
+  String get metricWorkouts;
+
+  /// No description provided for @metricWorkoutsSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يسجل أكبر عدد من التمارين؟'**
+  String get metricWorkoutsSub;
+
+  /// No description provided for @metricWater.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماء'**
+  String get metricWater;
+
+  /// No description provided for @metricWaterSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثمانية أكواب يومياً'**
+  String get metricWaterSub;
+
+  /// No description provided for @metricStreak.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستمرارية'**
+  String get metricStreak;
+
+  /// No description provided for @metricStreakSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل يوم بدون انقطاع'**
+  String get metricStreakSub;
+
+  /// No description provided for @duration.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة'**
+  String get duration;
+
+  /// No description provided for @days.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} أيام'**
+  String days(String count);
+
+  /// No description provided for @oneDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم واحد'**
+  String get oneDay;
+
+  /// No description provided for @readyToChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهز للتحدي؟'**
+  String get readyToChallenge;
+
+  /// No description provided for @opponent.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنافس'**
+  String get opponent;
+
+  /// No description provided for @startsAfterAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبدأ بعد قبول {name}'**
+  String startsAfterAccept(String name);
+
+  /// No description provided for @sendChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التحدي'**
+  String get sendChallenge;
+
+  /// No description provided for @challengeSentBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بننبهك أول ما يرد.'**
+  String get challengeSentBody;
+
+  /// No description provided for @backToChallenges.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجوع للتحديات'**
+  String get backToChallenges;
+
+  /// No description provided for @dayOfDuel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم {current} من {total}'**
+  String dayOfDuel(String current, String total);
+
+  /// No description provided for @timeLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي {time}'**
+  String timeLeft(String time);
+
+  /// No description provided for @latestActivity.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر النشاطات'**
+  String get latestActivity;
+
+  /// No description provided for @eventProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} أضاف {amount}'**
+  String eventProgress(String name, String amount);
+
+  /// No description provided for @eventTookLead.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} أصبح في الصدارة'**
+  String eventTookLead(String name);
+
+  /// No description provided for @eventGoalMet.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} أكمل هدف اليوم'**
+  String eventGoalMet(String name);
+
+  /// No description provided for @eventAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} قبل التحدي'**
+  String eventAccepted(String name);
+
+  /// No description provided for @logToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل اليوم'**
+  String get logToday;
+
+  /// No description provided for @drawSoFar.
+  ///
+  /// In ar, this message translates to:
+  /// **'متعادلان'**
+  String get drawSoFar;
+
+  /// No description provided for @behindBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخر بـ {amount}'**
+  String behindBy(String amount);
+
+  /// No description provided for @packagesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقات نمط'**
+  String get packagesTitle;
+
+  /// No description provided for @packagesSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ما يناسب إيقاعك.'**
+  String get packagesSub;
+
+  /// No description provided for @perMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهرياً'**
+  String get perMonth;
+
+  /// No description provided for @choosePackage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ هذه الباقة'**
+  String get choosePackage;
+
+  /// No description provided for @currentPackage.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقتك الحالية'**
+  String get currentPackage;
+
+  /// No description provided for @partnerAbout.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن الشريك'**
+  String get partnerAbout;
+
+  /// No description provided for @partnerServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات'**
+  String get partnerServices;
+
+  /// No description provided for @bookNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز الآن'**
+  String get bookNow;
+
+  /// No description provided for @useFromPackage.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم من باقتك'**
+  String get useFromPackage;
+
+  /// No description provided for @noDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما زوّدنا الشريك بوصف بعد.'**
+  String get noDescription;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

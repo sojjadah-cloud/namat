@@ -278,4 +278,145 @@ class LEn extends L {
 
   @override
   String get useNamatCta => 'Use NAMAT';
+
+  @override
+  String get pickOpponent => 'Pick your opponent';
+
+  @override
+  String get searchUser => 'Search by name or @username';
+
+  @override
+  String get noUserFound => 'Nobody found by that name';
+
+  @override
+  String get chooseChallenge => 'Choose the challenge';
+
+  @override
+  String get metricSteps => 'Steps';
+
+  @override
+  String get metricStepsSub => 'Who takes the most steps?';
+
+  @override
+  String get metricWorkouts => 'Activity';
+
+  @override
+  String get metricWorkoutsSub => 'Who logs the most workouts?';
+
+  @override
+  String get metricWater => 'Water';
+
+  @override
+  String get metricWaterSub => 'Eight glasses a day';
+
+  @override
+  String get metricStreak => 'Consistency';
+
+  @override
+  String get metricStreakSub => 'Every day, no gaps';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String days(String count) {
+    return '$count days';
+  }
+
+  @override
+  String get oneDay => 'One day';
+
+  @override
+  String get readyToChallenge => 'Ready?';
+
+  @override
+  String get opponent => 'Opponent';
+
+  @override
+  String startsAfterAccept(String name) {
+    return 'Starts once $name accepts';
+  }
+
+  @override
+  String get sendChallenge => 'Send challenge';
+
+  @override
+  String get challengeSentBody => 'We will tell you as soon as they reply.';
+
+  @override
+  String get backToChallenges => 'Back to challenges';
+
+  @override
+  String dayOfDuel(String current, String total) {
+    return 'Day $current of $total';
+  }
+
+  @override
+  String timeLeft(String time) {
+    return '$time left';
+  }
+
+  @override
+  String get latestActivity => 'Latest activity';
+
+  @override
+  String eventProgress(String name, String amount) {
+    return '$name added $amount';
+  }
+
+  @override
+  String eventTookLead(String name) {
+    return '$name took the lead';
+  }
+
+  @override
+  String eventGoalMet(String name) {
+    return '$name met today’s goal';
+  }
+
+  @override
+  String eventAccepted(String name) {
+    return '$name accepted';
+  }
+
+  @override
+  String get logToday => 'Log today';
+
+  @override
+  String get drawSoFar => 'Level';
+
+  @override
+  String behindBy(String amount) {
+    return 'Behind by $amount';
+  }
+
+  @override
+  String get packagesTitle => 'NAMAT packages';
+
+  @override
+  String get packagesSub => 'Pick the one that fits your rhythm.';
+
+  @override
+  String get perMonth => 'per month';
+
+  @override
+  String get choosePackage => 'Start this package';
+
+  @override
+  String get currentPackage => 'Your current package';
+
+  @override
+  String get partnerAbout => 'About';
+
+  @override
+  String get partnerServices => 'Services';
+
+  @override
+  String get bookNow => 'Book now';
+
+  @override
+  String get useFromPackage => 'Use from your package';
+
+  @override
+  String get noDescription => 'This partner has not supplied a description yet.';
 }

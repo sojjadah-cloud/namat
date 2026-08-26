@@ -5,6 +5,7 @@ import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../core/l10n/numbers.dart';
+import '../../../core/widgets/namat_motion.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/field.dart';
 
@@ -42,7 +43,7 @@ class UsePage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(
             NamatSpace.gutter, NamatSpace.xl, NamatSpace.gutter, 120,
           ),
-          children: [
+          children: revealAll([
             Text(l.useGreeting, style: text.displayMedium),
             const SizedBox(height: NamatSpace.sm),
             Text(l.useSub, style: text.bodySmall),
@@ -51,7 +52,7 @@ class UsePage extends StatelessWidget {
               _FieldCard(field: field, count: _counts[field] ?? 0),
               const SizedBox(height: NamatSpace.lg),
             ],
-          ],
+          ]),
         ),
       ),
     );

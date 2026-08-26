@@ -2,6 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/challenges/presentation/challenges_page.dart';
+import '../../features/challenges/presentation/create_duel_page.dart';
+import '../../features/challenges/presentation/duel_room_page.dart';
+import '../../features/challenges/presentation/duel_sent_page.dart';
+import '../../features/challenges/presentation/find_opponent_page.dart';
+import '../../features/packages/presentation/packages_page.dart';
 import '../../features/home/presentation/home_page.dart';
 import '../../features/journey/presentation/journey_page.dart';
 import '../../features/onboarding/presentation/splash_page.dart';
@@ -49,11 +54,47 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           StatefulShellBranch(
             routes: [
-              GoRoute(path: '/challenges', builder: (_, __) => const ChallengesPage()),
+              GoRoute(
+                path: '/challenges',
+                builder: (_, __) => const ChallengesPage(),
+                routes: [
+                  GoRoute(
+                    path: 'find',
+                    builder: (_, __) => const FindOpponentPage(),
+                  ),
+                  GoRoute(
+                    path: 'new/:username',
+                    builder: (_, state) => CreateDuelPage(
+                      username: state.pathParameters['username']!,
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'sent/:username',
+                    builder: (_, state) => DuelSentPage(
+                      username: state.pathParameters['username']!,
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'room',
+                    builder: (_, __) => const DuelRoomPage(),
+                  ),
+                ],
+              ),
             ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: '/journey', builder: (_, __) => const JourneyPage())],
+            routes: [
+              GoRoute(
+                path: '/journey',
+                builder: (_, __) => const JourneyPage(),
+                routes: [
+                  GoRoute(
+                    path: 'packages',
+                    builder: (_, __) => const PackagesPage(),
+                  ),
+                ],
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: '/profile', builder: (_, __) => const ProfilePage())],

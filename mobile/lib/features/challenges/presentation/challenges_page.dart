@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_motion.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
@@ -30,7 +32,7 @@ class ChallengesPage extends StatelessWidget {
             NamatSpace.gutter,
             120,
           ),
-          children: [
+          children: revealAll([
             Text(l.challengesTitle, style: text.displayMedium),
             const SizedBox(height: 4),
             Text(
@@ -39,7 +41,7 @@ class ChallengesPage extends StatelessWidget {
             ),
             const SizedBox(height: NamatSpace.xl),
             FilledButton.icon(
-              onPressed: () {},
+              onPressed: () => context.go('/challenges/find'),
               icon: const NamatIcon(
                 NamatIcons.challenge,
                 size: 20,
@@ -49,7 +51,7 @@ class ChallengesPage extends StatelessWidget {
             ),
             const SizedBox(height: NamatSpace.xxl),
             const _VersusCard(),
-          ],
+          ]),
         ),
       ),
     );
@@ -70,6 +72,7 @@ class _VersusCard extends StatelessWidget {
 
     return NamatCard(
       organic: true,
+      onTap: () => context.go('/challenges/room'),
       child: Column(
         children: [
           Row(

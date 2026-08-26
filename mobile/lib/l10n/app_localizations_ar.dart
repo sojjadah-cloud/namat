@@ -278,4 +278,145 @@ class LAr extends L {
 
   @override
   String get useNamatCta => 'استخدم نمط';
+
+  @override
+  String get pickOpponent => 'اختر منافسك';
+
+  @override
+  String get searchUser => 'ابحث باسم المستخدم أو @username';
+
+  @override
+  String get noUserFound => 'ما لقينا أحداً بهذا الاسم';
+
+  @override
+  String get chooseChallenge => 'اختر التحدي';
+
+  @override
+  String get metricSteps => 'خطوات';
+
+  @override
+  String get metricStepsSub => 'من يحقق أكبر عدد من الخطوات؟';
+
+  @override
+  String get metricWorkouts => 'النشاط';
+
+  @override
+  String get metricWorkoutsSub => 'من يسجل أكبر عدد من التمارين؟';
+
+  @override
+  String get metricWater => 'الماء';
+
+  @override
+  String get metricWaterSub => 'ثمانية أكواب يومياً';
+
+  @override
+  String get metricStreak => 'الاستمرارية';
+
+  @override
+  String get metricStreakSub => 'كل يوم بدون انقطاع';
+
+  @override
+  String get duration => 'المدة';
+
+  @override
+  String days(String count) {
+    return '$count أيام';
+  }
+
+  @override
+  String get oneDay => 'يوم واحد';
+
+  @override
+  String get readyToChallenge => 'جاهز للتحدي؟';
+
+  @override
+  String get opponent => 'المنافس';
+
+  @override
+  String startsAfterAccept(String name) {
+    return 'يبدأ بعد قبول $name';
+  }
+
+  @override
+  String get sendChallenge => 'إرسال التحدي';
+
+  @override
+  String get challengeSentBody => 'بننبهك أول ما يرد.';
+
+  @override
+  String get backToChallenges => 'رجوع للتحديات';
+
+  @override
+  String dayOfDuel(String current, String total) {
+    return 'اليوم $current من $total';
+  }
+
+  @override
+  String timeLeft(String time) {
+    return 'باقي $time';
+  }
+
+  @override
+  String get latestActivity => 'آخر النشاطات';
+
+  @override
+  String eventProgress(String name, String amount) {
+    return '$name أضاف $amount';
+  }
+
+  @override
+  String eventTookLead(String name) {
+    return '$name أصبح في الصدارة';
+  }
+
+  @override
+  String eventGoalMet(String name) {
+    return '$name أكمل هدف اليوم';
+  }
+
+  @override
+  String eventAccepted(String name) {
+    return '$name قبل التحدي';
+  }
+
+  @override
+  String get logToday => 'سجّل اليوم';
+
+  @override
+  String get drawSoFar => 'متعادلان';
+
+  @override
+  String behindBy(String amount) {
+    return 'متأخر بـ $amount';
+  }
+
+  @override
+  String get packagesTitle => 'باقات نمط';
+
+  @override
+  String get packagesSub => 'اختر ما يناسب إيقاعك.';
+
+  @override
+  String get perMonth => 'شهرياً';
+
+  @override
+  String get choosePackage => 'ابدأ هذه الباقة';
+
+  @override
+  String get currentPackage => 'باقتك الحالية';
+
+  @override
+  String get partnerAbout => 'عن الشريك';
+
+  @override
+  String get partnerServices => 'الخدمات';
+
+  @override
+  String get bookNow => 'احجز الآن';
+
+  @override
+  String get useFromPackage => 'استخدم من باقتك';
+
+  @override
+  String get noDescription => 'ما زوّدنا الشريك بوصف بعد.';
 }

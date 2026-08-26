@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_motion.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// Home: what today looks like.
@@ -29,7 +30,7 @@ class HomePage extends StatelessWidget {
             NamatSpace.gutter,
             120,
           ),
-          children: [
+          children: revealAll([
             Row(
               children: [
                 const NamatAvatar(name: 'سارة'),
@@ -54,7 +55,7 @@ class HomePage extends StatelessWidget {
             Text(l.useGreeting, style: text.titleMedium),
             const SizedBox(height: NamatSpace.md),
             const _QuickActions(),
-          ],
+          ]),
         ),
       ),
     );

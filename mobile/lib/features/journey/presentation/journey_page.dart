@@ -176,7 +176,7 @@ class _GuestJourney extends StatelessWidget {
               style: text.displayMedium?.copyWith(color: NamatColors.accent)),
           const SizedBox(height: NamatSpace.xl),
           FilledButton(
-            onPressed: () => context.go('/use'),
+            onPressed: () => context.go('/journey/packages'),
             child: Text(l.explorePackages),
           ),
         ],

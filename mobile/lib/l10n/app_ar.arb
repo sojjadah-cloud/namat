@@ -128,5 +128,115 @@
   "errorTitle": "ما قدرنا نحمّل البيانات",
   "errorBody": "جرب مرة ثانية.",
   "emptyNoBookings": "لسه ما حجزت أي خدمة",
-  "useNamatCta": "استخدم نمط"
+  "useNamatCta": "استخدم نمط",
+  "pickOpponent": "اختر منافسك",
+  "searchUser": "ابحث باسم المستخدم أو @username",
+  "noUserFound": "ما لقينا أحداً بهذا الاسم",
+  "chooseChallenge": "اختر التحدي",
+  "metricSteps": "خطوات",
+  "metricStepsSub": "من يحقق أكبر عدد من الخطوات؟",
+  "metricWorkouts": "النشاط",
+  "metricWorkoutsSub": "من يسجل أكبر عدد من التمارين؟",
+  "metricWater": "الماء",
+  "metricWaterSub": "ثمانية أكواب يومياً",
+  "metricStreak": "الاستمرارية",
+  "metricStreakSub": "كل يوم بدون انقطاع",
+  "duration": "المدة",
+  "days": "{count} أيام",
+  "oneDay": "يوم واحد",
+  "readyToChallenge": "جاهز للتحدي؟",
+  "opponent": "المنافس",
+  "startsAfterAccept": "يبدأ بعد قبول {name}",
+  "sendChallenge": "إرسال التحدي",
+  "challengeSentBody": "بننبهك أول ما يرد.",
+  "backToChallenges": "رجوع للتحديات",
+  "dayOfDuel": "اليوم {current} من {total}",
+  "timeLeft": "باقي {time}",
+  "latestActivity": "آخر النشاطات",
+  "eventProgress": "{name} أضاف {amount}",
+  "eventTookLead": "{name} أصبح في الصدارة",
+  "eventGoalMet": "{name} أكمل هدف اليوم",
+  "eventAccepted": "{name} قبل التحدي",
+  "logToday": "سجّل اليوم",
+  "drawSoFar": "متعادلان",
+  "behindBy": "متأخر بـ {amount}",
+  "packagesTitle": "باقات نمط",
+  "packagesSub": "اختر ما يناسب إيقاعك.",
+  "perMonth": "شهرياً",
+  "choosePackage": "ابدأ هذه الباقة",
+  "currentPackage": "باقتك الحالية",
+  "partnerAbout": "عن الشريك",
+  "partnerServices": "الخدمات",
+  "bookNow": "احجز الآن",
+  "useFromPackage": "استخدم من باقتك",
+  "noDescription": "ما زوّدنا الشريك بوصف بعد.",
+  "@days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@startsAfterAccept": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dayOfDuel": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@timeLeft": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventTookLead": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventGoalMet": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@behindBy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

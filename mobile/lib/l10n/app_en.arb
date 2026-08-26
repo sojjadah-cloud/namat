@@ -107,5 +107,115 @@
         "type": "String"
       }
     }
+  },
+  "pickOpponent": "Pick your opponent",
+  "searchUser": "Search by name or @username",
+  "noUserFound": "Nobody found by that name",
+  "chooseChallenge": "Choose the challenge",
+  "metricSteps": "Steps",
+  "metricStepsSub": "Who takes the most steps?",
+  "metricWorkouts": "Activity",
+  "metricWorkoutsSub": "Who logs the most workouts?",
+  "metricWater": "Water",
+  "metricWaterSub": "Eight glasses a day",
+  "metricStreak": "Consistency",
+  "metricStreakSub": "Every day, no gaps",
+  "duration": "Duration",
+  "days": "{count} days",
+  "oneDay": "One day",
+  "readyToChallenge": "Ready?",
+  "opponent": "Opponent",
+  "startsAfterAccept": "Starts once {name} accepts",
+  "sendChallenge": "Send challenge",
+  "challengeSentBody": "We will tell you as soon as they reply.",
+  "backToChallenges": "Back to challenges",
+  "dayOfDuel": "Day {current} of {total}",
+  "timeLeft": "{time} left",
+  "latestActivity": "Latest activity",
+  "eventProgress": "{name} added {amount}",
+  "eventTookLead": "{name} took the lead",
+  "eventGoalMet": "{name} met today’s goal",
+  "eventAccepted": "{name} accepted",
+  "logToday": "Log today",
+  "drawSoFar": "Level",
+  "behindBy": "Behind by {amount}",
+  "packagesTitle": "NAMAT packages",
+  "packagesSub": "Pick the one that fits your rhythm.",
+  "perMonth": "per month",
+  "choosePackage": "Start this package",
+  "currentPackage": "Your current package",
+  "partnerAbout": "About",
+  "partnerServices": "Services",
+  "bookNow": "Book now",
+  "useFromPackage": "Use from your package",
+  "noDescription": "This partner has not supplied a description yet.",
+  "@days": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@startsAfterAccept": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@dayOfDuel": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@timeLeft": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventTookLead": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventGoalMet": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@eventAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "@behindBy": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   }
 }
