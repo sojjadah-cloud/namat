@@ -157,13 +157,27 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       address: needsAddress ? _address.text.trim() : null,
     );
 
+    // Which partners are new has to be read before the order is placed, or
+    // the order being placed makes every one of them look familiar.
+    final seen = {
+      for (final o in ref.read(ordersProvider))
+        for (final i in o.items) i.partner,
+    };
+
     ref.read(ordersProvider.notifier).place(order);
+
     // Earned for finishing something, not for spending. Awarding by value
     // would make the programme a discount on large orders, which rewards a
     // burst rather than the continuing this product is about.
-    ref
-        .read(pointsProvider.notifier)
-        .award(PointsReason.order, detail: order.reference);
+    final points = ref.read(pointsProvider.notifier)
+      ..award(PointsReason.order, detail: order.reference);
+
+    // And once per partner, ever — trying somewhere new is the behaviour
+    // worth paying for; going back is already its own reward.
+    for (final partner in {for (final i in items) i.partner}) {
+      if (partner.isEmpty || seen.contains(partner)) continue;
+      points.awardOnce(PointsReason.newPartner, detail: partner);
+    }
     ref.read(cartProvider.notifier).clear();
     context.go('/cart/done/${order.reference}');
   }

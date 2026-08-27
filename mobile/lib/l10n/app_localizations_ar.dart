@@ -1490,4 +1490,46 @@ class LAr extends L {
 
   @override
   String get deleteAddress => 'احذف';
+
+  @override
+  String get personalChallenges => 'تحديات شخصية';
+
+  @override
+  String get personalChallengesSub => 'تُحتسب من عاداتك، بدون منافس';
+
+  @override
+  String get pcThreeWorkouts => 'ثلاثة تمارين';
+
+  @override
+  String get pcWeekOfMeals => 'أسبوع وجبات صحية';
+
+  @override
+  String get pcFiveDaysHydrated => 'خمسة أيام ترطيب';
+
+  @override
+  String get pcSevenDayStreak => 'سبعة أيام متواصلة';
+
+  @override
+  String challengeProgress(String done, String total) {
+    return '$done من $total';
+  }
+
+  @override
+  String claimReward(String points) {
+    return 'استلم $points نقطة';
+  }
+
+  @override
+  String get claimed => 'مستلَم';
+
+  @override
+  String duelPending(String name) {
+    return 'بانتظار قبول $name';
+  }
+
+  @override
+  String get duelPendingBody => 'ما نقدر نعرض تقدّمه قبل ما يقبل التحدي';
+
+  @override
+  String get yourProgress => 'تقدّمك';
 }

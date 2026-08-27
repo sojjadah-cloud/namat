@@ -9,6 +9,8 @@ import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/duels_provider.dart';
+import '../domain/personal_challenges.dart';
+import '../../rewards/domain/points.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 /// Challenges.
@@ -52,6 +54,17 @@ class ChallengesPage extends StatelessWidget {
               label: Text(l.challengeSomeone),
             ),
             const SizedBox(height: NamatSpace.xxl),
+            // Personal challenges first. They are the only kind that can be
+            // scored honestly without a server, and they are the kind the
+            // product is actually about — competing with a friend is a way to
+            // start, finishing seven days running is the thing NAMAT claims
+            // to help with.
+            Text(l.personalChallenges, style: text.labelMedium),
+            const SizedBox(height: 2),
+            Text(l.personalChallengesSub, style: text.labelSmall),
+            const SizedBox(height: NamatSpace.md),
+            const _PersonalChallenges(),
+            const SizedBox(height: NamatSpace.section),
             Text(l.yourChallenges, style: text.labelMedium),
             const SizedBox(height: NamatSpace.md),
             const _CurrentDuel(),
@@ -301,4 +314,130 @@ class _OfficialChallenges extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Challenges scored from the member's own habit log.
+class _PersonalChallenges extends ConsumerWidget {
+  const _PersonalChallenges();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = L.of(context)!;
+    final progress = ref.watch(challengeProgressProvider);
+    final claimed = ref.watch(claimedProvider);
+
+    return Column(
+      children: [
+        for (final c in PersonalChallenge.values)
+          Padding(
+            padding: const EdgeInsets.only(bottom: NamatSpace.sm),
+            child: _ChallengeRow(
+              challenge: c,
+              done: progress[c] ?? 0,
+              claimed: claimed.contains(c),
+              onClaim: () {
+                ref.read(claimedProvider.notifier).claim(c);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      l.pointsEarned(
+                        context.n(pointsFor[PointsReason.challenge] ?? 0),
+                      ),
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _ChallengeRow extends StatelessWidget {
+  const _ChallengeRow({
+    required this.challenge,
+    required this.done,
+    required this.claimed,
+    required this.onClaim,
+  });
+
+  final PersonalChallenge challenge;
+  final int done;
+  final bool claimed;
+  final VoidCallback onClaim;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = L.of(context)!;
+    final text = Theme.of(context).textTheme;
+    final complete = done >= challenge.target;
+    final fraction = done / challenge.target;
+
+    return NamatCard(
+      padding: const EdgeInsets.all(NamatSpace.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(child: Text(_label(challenge, l), style: text.bodyMedium)),
+              Text(
+                l.challengeProgress(
+                  context.n(done),
+                  context.n(challenge.target),
+                ),
+                style: text.labelSmall?.copyWith(
+                  color: complete ? NamatColors.accent : NamatColors.inkSoft,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: NamatSpace.sm),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: fraction.clamp(0.0, 1.0)),
+              duration: NamatMotion.base,
+              curve: NamatMotion.enter,
+              builder: (context, v, _) => LinearProgressIndicator(
+                value: v,
+                minHeight: 6,
+                backgroundColor: NamatColors.line,
+                valueColor: const AlwaysStoppedAnimation(NamatColors.accent),
+              ),
+            ),
+          ),
+          // The claim is a tap, not an automatic award: a balance that changes
+          // while the member is looking at another screen is a balance they
+          // cannot connect to anything they did.
+          if (complete) ...[
+            const SizedBox(height: NamatSpace.md),
+            if (claimed)
+              Text(
+                l.claimed,
+                style: text.labelSmall?.copyWith(color: NamatColors.accent),
+              )
+            else
+              FilledButton(
+                onPressed: onClaim,
+                child: Text(
+                  l.claimReward(
+                    context.n(pointsFor[PointsReason.challenge] ?? 0),
+                  ),
+                ),
+              ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  static String _label(PersonalChallenge c, L l) => switch (c) {
+        PersonalChallenge.threeWorkouts => l.pcThreeWorkouts,
+        PersonalChallenge.weekOfMeals => l.pcWeekOfMeals,
+        PersonalChallenge.fiveDaysHydrated => l.pcFiveDaysHydrated,
+        PersonalChallenge.sevenDayStreak => l.pcSevenDayStreak,
+      };
 }

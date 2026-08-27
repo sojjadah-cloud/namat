@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../rewards/domain/points.dart';
+
 /// Lightweight habit tracking.
 ///
 /// Deliberately small. NAMAT is not trying to become a medical tracker, and a
@@ -64,7 +66,12 @@ class HabitDay {
 }
 
 class HabitsNotifier extends StateNotifier<Map<String, HabitDay>> {
-  HabitsNotifier() : super(const {});
+  HabitsNotifier([this._onDayOpened]) : super(const {});
+
+  /// Called the first time anything is logged on a given day, with that day's
+  /// key. The points rule lives with the points; the habits only report that
+  /// a day has started, which is the fact they own.
+  final void Function(String dayKey)? _onDayOpened;
 
   HabitDay dayOf(DateTime when) =>
       state[HabitDay.keyFor(when)] ?? HabitDay(date: when);
@@ -84,6 +91,11 @@ class HabitsNotifier extends StateNotifier<Map<String, HabitDay>> {
         ? (current >= habit.target ? 0 : current + 1)
         : (current > 0 ? 0 : 1);
 
+    // Was this day blank before the tap? Undoing a log does not re-open the
+    // day, and a second habit on the same day is not a second day.
+    final opening =
+        next > 0 && existing.counts.values.every((v) => v == 0);
+
     state = {
       ...state,
       key: HabitDay(
@@ -91,6 +103,8 @@ class HabitsNotifier extends StateNotifier<Map<String, HabitDay>> {
         counts: {...existing.counts, habit: next},
       ),
     };
+
+    if (opening) _onDayOpened?.call(key);
   }
 
   /// Consecutive days ending today with anything logged at all.
@@ -128,7 +142,13 @@ class HabitsNotifier extends StateNotifier<Map<String, HabitDay>> {
 
 final habitsProvider =
     StateNotifierProvider<HabitsNotifier, Map<String, HabitDay>>(
-  (ref) => HabitsNotifier(),
+  (ref) => HabitsNotifier(
+    // Once per day, keyed on the day, so logging five habits on Tuesday earns
+    // Tuesday once.
+    (dayKey) => ref
+        .read(pointsProvider.notifier)
+        .awardOnce(PointsReason.streak, detail: dayKey),
+  ),
 );
 
 final todayProvider = Provider<HabitDay>((ref) {

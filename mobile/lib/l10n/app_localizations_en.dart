@@ -1490,4 +1490,46 @@ class LEn extends L {
 
   @override
   String get deleteAddress => 'Delete';
+
+  @override
+  String get personalChallenges => 'Personal challenges';
+
+  @override
+  String get personalChallengesSub => 'Scored from your habits, no opponent needed';
+
+  @override
+  String get pcThreeWorkouts => 'Three workouts';
+
+  @override
+  String get pcWeekOfMeals => 'A week of healthy meals';
+
+  @override
+  String get pcFiveDaysHydrated => 'Five days hydrated';
+
+  @override
+  String get pcSevenDayStreak => 'Seven days running';
+
+  @override
+  String challengeProgress(String done, String total) {
+    return '$done of $total';
+  }
+
+  @override
+  String claimReward(String points) {
+    return 'Claim $points points';
+  }
+
+  @override
+  String get claimed => 'Claimed';
+
+  @override
+  String duelPending(String name) {
+    return 'Waiting for $name to accept';
+  }
+
+  @override
+  String get duelPendingBody => 'We cannot show their progress until they accept';
+
+  @override
+  String get yourProgress => 'Your progress';
 }

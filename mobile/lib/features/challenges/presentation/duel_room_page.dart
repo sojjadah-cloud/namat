@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
@@ -8,39 +10,53 @@ import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 import '../domain/duel.dart';
+import '../domain/duels_provider.dart';
 
 /// The live contest.
 ///
 /// The scoreboard leads, the timeline explains it. Every entry in the timeline
 /// is system-generated — this is a record of what happened, not a chat room,
 /// and letting people type into it turns a scoreboard into an argument.
-class DuelRoomPage extends StatefulWidget {
+/// One duel.
+///
+/// The opponent's score is not shown until they accept, because there is
+/// nowhere to get it from. A scoreboard reading أحمد · 7,950 was a number
+/// invented about a real person — the single least defensible kind of
+/// placeholder in the app, and the reason a duel could never actually
+/// complete or pay out.
+class DuelRoomPage extends ConsumerWidget {
   const DuelRoomPage({super.key});
 
   @override
-  State<DuelRoomPage> createState() => _DuelRoomPageState();
-}
-
-class _DuelRoomPageState extends State<DuelRoomPage> {
-  int _mine = 8420;
-  static const _theirs = 7950;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
+    final duel = ref.watch(currentDuelProvider);
 
-    final standing = DuelStanding(
-      mine: DuelSide(name: 'خالد', score: _mine),
-      theirs: const DuelSide(name: 'أحمد', score: _theirs),
-    );
+    if (duel == null) {
+      return NamatBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            leading: const NamatBack(fallback: '/journey/challenges'),
+          ),
+          body: NamatEmptyState(
+            title: l.noChallenges,
+            action: FilledButton(
+              onPressed: () => context.go('/journey/challenges/find'),
+              child: Text(l.challengeSomeone),
+            ),
+          ),
+        ),
+      );
+    }
 
     return NamatBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: const NamatBack(fallback: '/journey/challenges'),
-          title: Text(l.metricSteps),
+          title: Text(l.challenge),
         ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(
@@ -54,33 +70,54 @@ class _DuelRoomPageState extends State<DuelRoomPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  l.dayOfDuel(context.n(4), context.n(7)),
+                  l.dayOfDuel(
+                    context.n(duel.dayOf),
+                    context.n(duel.days),
+                  ),
                   style: text.labelSmall,
                 ),
-                Text(l.timeLeft('٥ أيام'), style: text.labelSmall),
+                Text(
+                  l.days(context.n(duel.endsAt.difference(DateTime.now()).inDays)),
+                  style: text.labelSmall,
+                ),
               ],
             ),
-            const SizedBox(height: NamatSpace.md),
-            _Scoreboard(standing: standing),
-            const SizedBox(height: NamatSpace.xxl),
-            Text(l.latestActivity, style: text.labelMedium),
-            const SizedBox(height: NamatSpace.md),
-            _Timeline(standing: standing),
+            const SizedBox(height: NamatSpace.xl),
+            if (!duel.accepted)
+              NamatCard(
+                padding: const EdgeInsets.all(NamatSpace.xl),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.duelPending(duel.opponent),
+                      style: text.titleMedium,
+                    ),
+                    const SizedBox(height: NamatSpace.xs),
+                    // Said plainly rather than filled in with a number.
+                    Text(l.duelPendingBody, style: text.bodySmall),
+                    const SizedBox(height: NamatSpace.xl),
+                    Text(l.yourProgress, style: text.labelSmall),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${context.n(duel.myScore)} / '
+                      '${context.n(duel.target)}',
+                      style: text.displayMedium,
+                    ),
+                  ],
+                ),
+              )
+            else
+              _Scoreboard(
+                standing: DuelStanding(
+                  mine: DuelSide(name: '', score: duel.myScore),
+                  theirs: DuelSide(
+                    name: duel.opponent,
+                    score: duel.theirScore,
+                  ),
+                ),
+              ),
           ]),
-        ),
-        bottomSheet: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            NamatSpace.gutter,
-            NamatSpace.md,
-            NamatSpace.gutter,
-            NamatSpace.xxl,
-          ),
-          child: FilledButton(
-            // Absolute, not a delta: a double tap or a retried request must
-            // not inflate a score that has points riding on it.
-            onPressed: () => setState(() => _mine += 500),
-            child: Text(l.logToday),
-          ),
         ),
       ),
     );
@@ -219,59 +256,3 @@ class _Side extends StatelessWidget {
   }
 }
 
-class _Timeline extends StatelessWidget {
-  const _Timeline({required this.standing});
-
-  final DuelStanding standing;
-
-  @override
-  Widget build(BuildContext context) {
-    final l = L.of(context)!;
-    final text = Theme.of(context).textTheme;
-
-    final events = <(String, Color)>[
-      (l.eventProgress(standing.mine.name, context.n(3240)),
-          NamatColors.inkSoft),
-      (l.eventGoalMet(standing.theirs.name), NamatColors.accent),
-      (l.eventTookLead(standing.mine.name), NamatColors.fitness),
-      (l.eventAccepted(standing.theirs.name), NamatColors.inkSoft),
-    ];
-
-    return Column(
-      children: [
-        for (var i = 0; i < events.length; i++)
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  Container(
-                    width: 9,
-                    height: 9,
-                    margin: const EdgeInsets.only(top: 5),
-                    decoration: BoxDecoration(
-                      color: events[i].$2,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  if (i < events.length - 1)
-                    Container(
-                      width: 1.5,
-                      height: 30,
-                      color: NamatColors.line,
-                    ),
-                ],
-              ),
-              const SizedBox(width: NamatSpace.md),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: NamatSpace.lg),
-                  child: Text(events[i].$1, style: text.bodySmall),
-                ),
-              ),
-            ],
-          ),
-      ],
-    );
-  }
-}

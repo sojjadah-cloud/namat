@@ -2884,6 +2884,78 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'احذف'**
   String get deleteAddress;
+
+  /// No description provided for @personalChallenges.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديات شخصية'**
+  String get personalChallenges;
+
+  /// No description provided for @personalChallengesSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُحتسب من عاداتك، بدون منافس'**
+  String get personalChallengesSub;
+
+  /// No description provided for @pcThreeWorkouts.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثلاثة تمارين'**
+  String get pcThreeWorkouts;
+
+  /// No description provided for @pcWeekOfMeals.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوع وجبات صحية'**
+  String get pcWeekOfMeals;
+
+  /// No description provided for @pcFiveDaysHydrated.
+  ///
+  /// In ar, this message translates to:
+  /// **'خمسة أيام ترطيب'**
+  String get pcFiveDaysHydrated;
+
+  /// No description provided for @pcSevenDayStreak.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبعة أيام متواصلة'**
+  String get pcSevenDayStreak;
+
+  /// No description provided for @challengeProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'{done} من {total}'**
+  String challengeProgress(String done, String total);
+
+  /// No description provided for @claimReward.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلم {points} نقطة'**
+  String claimReward(String points);
+
+  /// No description provided for @claimed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستلَم'**
+  String get claimed;
+
+  /// No description provided for @duelPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار قبول {name}'**
+  String duelPending(String name);
+
+  /// No description provided for @duelPendingBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما نقدر نعرض تقدّمه قبل ما يقبل التحدي'**
+  String get duelPendingBody;
+
+  /// No description provided for @yourProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدّمك'**
+  String get yourProgress;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

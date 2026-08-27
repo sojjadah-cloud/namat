@@ -609,5 +609,18 @@
   "noAddresses": "No saved addresses",
   "useThisAddress": "Use this",
   "saveAddress": "Save",
-  "deleteAddress": "Delete"
+  "deleteAddress": "Delete",
+
+  "personalChallenges": "Personal challenges",
+  "personalChallengesSub": "Scored from your habits, no opponent needed",
+  "pcThreeWorkouts": "Three workouts",
+  "pcWeekOfMeals": "A week of healthy meals",
+  "pcFiveDaysHydrated": "Five days hydrated",
+  "pcSevenDayStreak": "Seven days running",
+  "challengeProgress": "{done} of {total}",
+  "claimReward": "Claim {points} points",
+  "claimed": "Claimed",
+  "duelPending": "Waiting for {name} to accept",
+  "duelPendingBody": "We cannot show their progress until they accept",
+  "yourProgress": "Your progress"
 }

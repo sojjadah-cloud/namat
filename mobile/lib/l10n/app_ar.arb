@@ -822,5 +822,42 @@
   "noAddresses": "ما عندك عناوين محفوظة",
   "useThisAddress": "استخدم هذا",
   "saveAddress": "احفظ",
-  "deleteAddress": "احذف"
+  "deleteAddress": "احذف",
+
+  "personalChallenges": "تحديات شخصية",
+  "personalChallengesSub": "تُحتسب من عاداتك، بدون منافس",
+  "pcThreeWorkouts": "ثلاثة تمارين",
+  "pcWeekOfMeals": "أسبوع وجبات صحية",
+  "pcFiveDaysHydrated": "خمسة أيام ترطيب",
+  "pcSevenDayStreak": "سبعة أيام متواصلة",
+  "challengeProgress": "{done} من {total}",
+  "@challengeProgress": {
+      "placeholders": {
+          "done": {
+              "type": "String"
+          },
+          "total": {
+              "type": "String"
+          }
+      }
+  },
+  "claimReward": "استلم {points} نقطة",
+  "@claimReward": {
+      "placeholders": {
+          "points": {
+              "type": "String"
+          }
+      }
+  },
+  "claimed": "مستلَم",
+  "duelPending": "بانتظار قبول {name}",
+  "@duelPending": {
+      "placeholders": {
+          "name": {
+              "type": "String"
+          }
+      }
+  },
+  "duelPendingBody": "ما نقدر نعرض تقدّمه قبل ما يقبل التحدي",
+  "yourProgress": "تقدّمك"
 }

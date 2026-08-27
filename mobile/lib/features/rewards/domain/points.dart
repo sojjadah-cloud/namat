@@ -33,15 +33,22 @@ enum PointsReason {
 
 /// What each action is worth.
 ///
-/// Flat, and deliberately small against the redemption cost: points should
-/// accumulate over weeks of use, because the behaviour being rewarded is
-/// continuing, and a balance that fills in two orders rewards a burst.
+/// Balanced against the cheapest reward rather than picked in isolation. The
+/// first version paid 20 for an order and 10 for a review against a 250-point
+/// reward, which is nine complete order-and-rate cycles before a single button
+/// stopped being grey — so in practice every reward was permanently out of
+/// reach and the screen looked broken. A member who turns up for two weeks
+/// should be able to spend something.
+///
+/// Still weighted towards continuing rather than spending: a daily habit log
+/// is worth half an order, so the person who shows up every day gets there at
+/// about the same rate as the person who buys a lot.
 const pointsFor = <PointsReason, int>{
-  PointsReason.order: 20,
-  PointsReason.review: 10,
-  PointsReason.challenge: 60,
-  PointsReason.streak: 5,
-  PointsReason.newPartner: 25,
+  PointsReason.order: 25,
+  PointsReason.review: 15,
+  PointsReason.challenge: 100,
+  PointsReason.streak: 10,
+  PointsReason.newPartner: 40,
   PointsReason.redeemed: 0,
 };
 
@@ -97,6 +104,22 @@ class PointsNotifier extends StateNotifier<List<PointsEntry>> {
     return true;
   }
 
+  /// Awards once for a given reason and detail, ever.
+  ///
+  /// The daily streak and the first visit to a partner both have to be
+  /// idempotent: a member who logs water twice on Tuesday has not earned
+  /// Tuesday twice, and re-ordering from the same kitchen is not a new
+  /// partner. Keyed on the detail so the check lives here rather than in
+  /// whichever screen happens to call it.
+  bool awardOnce(PointsReason reason, {required String detail}) {
+    final already = state.any(
+      (e) => e.reason == reason && e.detail == detail,
+    );
+    if (already) return false;
+    award(reason, detail: detail);
+    return true;
+  }
+
   static int balanceOf(List<PointsEntry> entries) =>
       entries.fold(0, (sum, e) => sum + e.amount);
 }
@@ -139,7 +162,7 @@ class Reward {
 const namatRewards = <Reward>[
   Reward(
     id: 'r-class',
-    cost: 250,
+    cost: 120,
     title: 'حصة رياضية مجانية',
     titleEn: 'A free class',
     detail: 'أي حصة في نمط سبورت',
@@ -147,7 +170,7 @@ const namatRewards = <Reward>[
   ),
   Reward(
     id: 'r-follow-up',
-    cost: 400,
+    cost: 220,
     title: 'متابعة تغذية مجانية',
     titleEn: 'A free nutrition follow-up',
     detail: 'جلسة عشرين دقيقة',
@@ -155,7 +178,7 @@ const namatRewards = <Reward>[
   ),
   Reward(
     id: 'r-month',
-    cost: 1200,
+    cost: 600,
     title: 'شهر في نمط حركة',
     titleEn: 'A month at NAMAT Move',
     detail: 'كل الحصص، ثلاثين يوماً',
