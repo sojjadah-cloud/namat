@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:namat/core/routing/router.dart';
+import 'package:namat/features/bookings/presentation/bookings_page.dart';
+import 'package:namat/features/bookings/presentation/cart_page.dart';
+import 'package:namat/features/bookings/presentation/order_done_page.dart';
 import 'package:namat/features/challenges/presentation/challenges_page.dart';
 import 'package:namat/features/challenges/presentation/create_duel_page.dart';
 import 'package:namat/features/challenges/presentation/duel_room_page.dart';
@@ -82,5 +85,16 @@ void main() {
     // not crash the app.
     await _pumpAt(tester, '/use/meals/partner/does-not-exist');
     expect(find.byType(PartnerPage), findsOneWidget);
+  });
+
+  testWidgets('the order flow resolves', (tester) async {
+    await _pumpAt(tester, '/home/bookings');
+    expect(find.byType(BookingsPage), findsOneWidget);
+
+    await _pumpAt(tester, '/cart');
+    expect(find.byType(CartPage), findsOneWidget);
+
+    await _pumpAt(tester, '/cart/done');
+    expect(find.byType(OrderDonePage), findsOneWidget);
   });
 }

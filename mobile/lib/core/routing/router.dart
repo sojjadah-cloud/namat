@@ -6,6 +6,9 @@ import '../../features/challenges/presentation/create_duel_page.dart';
 import '../../features/challenges/presentation/duel_room_page.dart';
 import '../../features/challenges/presentation/duel_sent_page.dart';
 import '../../features/challenges/presentation/find_opponent_page.dart';
+import '../../features/bookings/presentation/bookings_page.dart';
+import '../../features/bookings/presentation/cart_page.dart';
+import '../../features/bookings/presentation/order_done_page.dart';
 import '../../features/notifications/presentation/notifications_page.dart';
 import '../../features/packages/presentation/packages_page.dart';
 import '../../features/partners/presentation/partner_page.dart';
@@ -33,6 +36,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingPage()),
       GoRoute(path: '/welcome', builder: (_, __) => const WelcomePage()),
 
+      GoRoute(path: '/cart', builder: (_, __) => const CartPage()),
+      GoRoute(path: '/cart/done', builder: (_, __) => const OrderDonePage()),
+
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(shell: shell),
         branches: [
@@ -46,6 +52,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'notifications',
                     builder: (_, __) => const NotificationsPage(),
                   ),
+                  GoRoute(
+                    path: 'bookings',
+                    builder: (_, __) => const BookingsPage(),
+                  ),
+                  GoRoute(path: 'cart', builder: (_, __) => const CartPage()),
                 ],
               ),
             ],

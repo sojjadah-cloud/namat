@@ -486,4 +486,93 @@ class LAr extends L {
 
   @override
   String get omr => 'ر.ع';
+
+  @override
+  String get bookingsTitle => 'حجوزاتي';
+
+  @override
+  String get tabUpcoming => 'القادمة';
+
+  @override
+  String get tabSubscriptions => 'الاشتراكات';
+
+  @override
+  String get tabPast => 'السابقة';
+
+  @override
+  String get noUpcoming => 'ما عندك حجوزات قادمة';
+
+  @override
+  String get noUpcomingBody => 'احجز خدمة وتظهر لك هنا.';
+
+  @override
+  String get noSubscriptions => 'ما عندك اشتراكات';
+
+  @override
+  String get noPast => 'ما فيه حجوزات سابقة';
+
+  @override
+  String daysRemaining(String days) {
+    return 'باقي $days يوم';
+  }
+
+  @override
+  String get reschedule => 'غيّر الموعد';
+
+  @override
+  String get cancelBooking => 'إلغاء';
+
+  @override
+  String get rateIt => 'قيّم التجربة';
+
+  @override
+  String get cartTitle => 'السلة';
+
+  @override
+  String get cartEmpty => 'سلتك فاضية';
+
+  @override
+  String get cartEmptyBody => 'ضِف وجبة أو منتج أو استشارة وتلقاها هنا.';
+
+  @override
+  String get cartBrowse => 'تصفّح نمط';
+
+  @override
+  String get subtotal => 'المجموع';
+
+  @override
+  String get packageCovers => 'تغطيه باقتك';
+
+  @override
+  String get youPay => 'المطلوب';
+
+  @override
+  String get checkout => 'إتمام الطلب';
+
+  @override
+  String get removeItem => 'حذف';
+
+  @override
+  String get itemMeal => 'وجبة';
+
+  @override
+  String get itemConsult => 'استشارة';
+
+  @override
+  String get itemProduct => 'منتج';
+
+  @override
+  String get freeFromPackage => 'مجاناً من باقتك';
+
+  @override
+  String get orderPlaced => 'تم الطلب';
+
+  @override
+  String get orderPlacedBody => 'بتوصلك تفاصيل الطلب في الإشعارات.';
+
+  @override
+  String get backHome => 'رجوع للرئيسية';
+
+  @override
+  String get covered => 'مشمول';
 }

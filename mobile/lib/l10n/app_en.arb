@@ -252,5 +252,41 @@
         "type": "String"
       }
     }
+  },
+  "bookingsTitle": "My bookings",
+  "tabUpcoming": "Upcoming",
+  "tabSubscriptions": "Subscriptions",
+  "tabPast": "Past",
+  "noUpcoming": "Nothing booked yet",
+  "noUpcomingBody": "Book a service and it will appear here.",
+  "noSubscriptions": "No subscriptions",
+  "noPast": "No past bookings",
+  "daysRemaining": "{days} days left",
+  "reschedule": "Reschedule",
+  "cancelBooking": "Cancel",
+  "rateIt": "Rate it",
+  "cartTitle": "Cart",
+  "cartEmpty": "Your cart is empty",
+  "cartEmptyBody": "Add a meal, a product or a consultation and it lands here.",
+  "cartBrowse": "Browse NAMAT",
+  "subtotal": "Subtotal",
+  "packageCovers": "Covered by your package",
+  "youPay": "You pay",
+  "checkout": "Place order",
+  "removeItem": "Remove",
+  "itemMeal": "Meal",
+  "itemConsult": "Consultation",
+  "itemProduct": "Product",
+  "freeFromPackage": "Free from your package",
+  "orderPlaced": "Order placed",
+  "orderPlacedBody": "Details will arrive in your notifications.",
+  "backHome": "Back to home",
+  "covered": "Covered",
+  "@daysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
   }
 }

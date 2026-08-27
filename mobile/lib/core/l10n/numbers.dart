@@ -40,13 +40,42 @@ String _toArabicIndic(String latin) {
 }
 
 extension NamatNumbers on BuildContext {
+  bool get _isArabic => Localizations.localeOf(this).languageCode == 'ar';
+
   /// Format for display: grouped, and in the locale's own digits.
   String n(num value) {
     // Grouping and decimal placement come from intl; only the glyphs are ours.
     final latin = NumberFormat.decimalPattern('en').format(value);
-    return Localizations.localeOf(this).languageCode == 'ar'
-        ? _toArabicIndic(latin)
-        : latin;
+    return _isArabic ? _toArabicIndic(latin) : latin;
+  }
+
+  /// A moment, as a member would say it: "اليوم ٦:٠٠ م", "الخميس ٤:٠٠ م".
+  ///
+  /// Relative for the next week because that is the horizon a booking lives
+  /// in — "الخميس" is instantly placeable where "٣٠ أغسطس" needs a calendar.
+  /// Beyond that it falls back to a date, since "الخميس" three weeks out is
+  /// ambiguous rather than helpful.
+  String dateTime(DateTime when) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final that = DateTime(when.year, when.month, when.day);
+    final days = that.difference(today).inDays;
+
+    final locale = _isArabic ? 'ar' : 'en';
+    final time = DateFormat.jm(locale).format(when);
+
+    final day = switch (days) {
+      0 => _isArabic ? 'اليوم' : 'Today',
+      1 => _isArabic ? 'بكرة' : 'Tomorrow',
+      -1 => _isArabic ? 'أمس' : 'Yesterday',
+      > 1 && < 7 => DateFormat.EEEE(locale).format(when),
+      _ => DateFormat.MMMd(locale).format(when),
+    };
+
+    // intl renders the date in Latin digits even for 'ar', for the same reason
+    // NumberFormat does — so the glyph swap applies here too.
+    final joined = '$day $time';
+    return _isArabic ? _toArabicIndic(joined) : joined;
   }
 }
 

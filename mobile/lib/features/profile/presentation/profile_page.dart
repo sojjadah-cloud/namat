@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
@@ -15,14 +16,16 @@ class ProfilePage extends StatelessWidget {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
 
-    final rows = <(NamatIcons, String)>[
-      (NamatIcons.leaf, l.savedPlaces),
-      (NamatIcons.package, l.myBookings),
-      (NamatIcons.store, l.myOrders),
-      (NamatIcons.reward, l.myPackages),
-      (NamatIcons.profile, l.settings),
-      (NamatIcons.search, l.privacy),
-      (NamatIcons.use, l.language),
+    // A row with nowhere to go is worse than no row: it teaches people the
+    // app is broken. Only the destinations that exist are linked.
+    final rows = <(NamatIcons, String, String?)>[
+      (NamatIcons.package, l.myBookings, '/home/bookings'),
+      (NamatIcons.store, l.myOrders, '/cart'),
+      (NamatIcons.reward, l.myPackages, '/journey/packages'),
+      (NamatIcons.leaf, l.savedPlaces, null),
+      (NamatIcons.profile, l.settings, null),
+      (NamatIcons.search, l.privacy, null),
+      (NamatIcons.use, l.language, null),
     ];
 
     return NamatBackground(
@@ -76,9 +79,10 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: NamatSpace.xl),
-            for (final (icon, label) in rows)
+            for (final (icon, label, route) in rows)
               ListTile(
                 contentPadding: EdgeInsets.zero,
+                enabled: route != null,
                 leading: NamatIcon(icon, size: 22, color: NamatColors.inkSoft),
                 title: Text(label, style: text.bodyMedium),
                 // Chevron points the way the reader is going, which under RTL
@@ -87,7 +91,7 @@ class ProfilePage extends StatelessWidget {
                   Icons.chevron_left,
                   color: NamatColors.inkSoft,
                 ),
-                onTap: () {},
+                onTap: route == null ? null : () => context.go(route),
               ),
           ],
         ),

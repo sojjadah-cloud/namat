@@ -486,4 +486,93 @@ class LEn extends L {
 
   @override
   String get omr => 'OMR';
+
+  @override
+  String get bookingsTitle => 'My bookings';
+
+  @override
+  String get tabUpcoming => 'Upcoming';
+
+  @override
+  String get tabSubscriptions => 'Subscriptions';
+
+  @override
+  String get tabPast => 'Past';
+
+  @override
+  String get noUpcoming => 'Nothing booked yet';
+
+  @override
+  String get noUpcomingBody => 'Book a service and it will appear here.';
+
+  @override
+  String get noSubscriptions => 'No subscriptions';
+
+  @override
+  String get noPast => 'No past bookings';
+
+  @override
+  String daysRemaining(String days) {
+    return '$days days left';
+  }
+
+  @override
+  String get reschedule => 'Reschedule';
+
+  @override
+  String get cancelBooking => 'Cancel';
+
+  @override
+  String get rateIt => 'Rate it';
+
+  @override
+  String get cartTitle => 'Cart';
+
+  @override
+  String get cartEmpty => 'Your cart is empty';
+
+  @override
+  String get cartEmptyBody => 'Add a meal, a product or a consultation and it lands here.';
+
+  @override
+  String get cartBrowse => 'Browse NAMAT';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get packageCovers => 'Covered by your package';
+
+  @override
+  String get youPay => 'You pay';
+
+  @override
+  String get checkout => 'Place order';
+
+  @override
+  String get removeItem => 'Remove';
+
+  @override
+  String get itemMeal => 'Meal';
+
+  @override
+  String get itemConsult => 'Consultation';
+
+  @override
+  String get itemProduct => 'Product';
+
+  @override
+  String get freeFromPackage => 'Free from your package';
+
+  @override
+  String get orderPlaced => 'Order placed';
+
+  @override
+  String get orderPlacedBody => 'Details will arrive in your notifications.';
+
+  @override
+  String get backHome => 'Back to home';
+
+  @override
+  String get covered => 'Covered';
 }

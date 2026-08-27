@@ -988,6 +988,180 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'ر.ع'**
   String get omr;
+
+  /// No description provided for @bookingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجوزاتي'**
+  String get bookingsTitle;
+
+  /// No description provided for @tabUpcoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'القادمة'**
+  String get tabUpcoming;
+
+  /// No description provided for @tabSubscriptions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاشتراكات'**
+  String get tabSubscriptions;
+
+  /// No description provided for @tabPast.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابقة'**
+  String get tabPast;
+
+  /// No description provided for @noUpcoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك حجوزات قادمة'**
+  String get noUpcoming;
+
+  /// No description provided for @noUpcomingBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز خدمة وتظهر لك هنا.'**
+  String get noUpcomingBody;
+
+  /// No description provided for @noSubscriptions.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك اشتراكات'**
+  String get noSubscriptions;
+
+  /// No description provided for @noPast.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فيه حجوزات سابقة'**
+  String get noPast;
+
+  /// No description provided for @daysRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي {days} يوم'**
+  String daysRemaining(String days);
+
+  /// No description provided for @reschedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الموعد'**
+  String get reschedule;
+
+  /// No description provided for @cancelBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get cancelBooking;
+
+  /// No description provided for @rateIt.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم التجربة'**
+  String get rateIt;
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلة'**
+  String get cartTitle;
+
+  /// No description provided for @cartEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلتك فاضية'**
+  String get cartEmpty;
+
+  /// No description provided for @cartEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضِف وجبة أو منتج أو استشارة وتلقاها هنا.'**
+  String get cartEmptyBody;
+
+  /// No description provided for @cartBrowse.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفّح نمط'**
+  String get cartBrowse;
+
+  /// No description provided for @subtotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموع'**
+  String get subtotal;
+
+  /// No description provided for @packageCovers.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغطيه باقتك'**
+  String get packageCovers;
+
+  /// No description provided for @youPay.
+  ///
+  /// In ar, this message translates to:
+  /// **'المطلوب'**
+  String get youPay;
+
+  /// No description provided for @checkout.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتمام الطلب'**
+  String get checkout;
+
+  /// No description provided for @removeItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get removeItem;
+
+  /// No description provided for @itemMeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجبة'**
+  String get itemMeal;
+
+  /// No description provided for @itemConsult.
+  ///
+  /// In ar, this message translates to:
+  /// **'استشارة'**
+  String get itemConsult;
+
+  /// No description provided for @itemProduct.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتج'**
+  String get itemProduct;
+
+  /// No description provided for @freeFromPackage.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجاناً من باقتك'**
+  String get freeFromPackage;
+
+  /// No description provided for @orderPlaced.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الطلب'**
+  String get orderPlaced;
+
+  /// No description provided for @orderPlacedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بتوصلك تفاصيل الطلب في الإشعارات.'**
+  String get orderPlacedBody;
+
+  /// No description provided for @backHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجوع للرئيسية'**
+  String get backHome;
+
+  /// No description provided for @covered.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشمول'**
+  String get covered;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

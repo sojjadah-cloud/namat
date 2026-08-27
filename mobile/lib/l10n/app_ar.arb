@@ -273,5 +273,41 @@
         "type": "String"
       }
     }
+  },
+  "bookingsTitle": "حجوزاتي",
+  "tabUpcoming": "القادمة",
+  "tabSubscriptions": "الاشتراكات",
+  "tabPast": "السابقة",
+  "noUpcoming": "ما عندك حجوزات قادمة",
+  "noUpcomingBody": "احجز خدمة وتظهر لك هنا.",
+  "noSubscriptions": "ما عندك اشتراكات",
+  "noPast": "ما فيه حجوزات سابقة",
+  "daysRemaining": "باقي {days} يوم",
+  "reschedule": "غيّر الموعد",
+  "cancelBooking": "إلغاء",
+  "rateIt": "قيّم التجربة",
+  "cartTitle": "السلة",
+  "cartEmpty": "سلتك فاضية",
+  "cartEmptyBody": "ضِف وجبة أو منتج أو استشارة وتلقاها هنا.",
+  "cartBrowse": "تصفّح نمط",
+  "subtotal": "المجموع",
+  "packageCovers": "تغطيه باقتك",
+  "youPay": "المطلوب",
+  "checkout": "إتمام الطلب",
+  "removeItem": "حذف",
+  "itemMeal": "وجبة",
+  "itemConsult": "استشارة",
+  "itemProduct": "منتج",
+  "freeFromPackage": "مجاناً من باقتك",
+  "orderPlaced": "تم الطلب",
+  "orderPlacedBody": "بتوصلك تفاصيل الطلب في الإشعارات.",
+  "backHome": "رجوع للرئيسية",
+  "covered": "مشمول",
+  "@daysRemaining": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
   }
 }
