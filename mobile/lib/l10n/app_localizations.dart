@@ -1162,6 +1162,288 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'مشمول'**
   String get covered;
+
+  /// No description provided for @signupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلاً بك في نمط'**
+  String get signupTitle;
+
+  /// No description provided for @signupBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقمك يكفي — بدون كلمة مرور.'**
+  String get signupBody;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حياك الله من جديد'**
+  String get loginTitle;
+
+  /// No description provided for @loginBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك وكمّل من وين وقفت.'**
+  String get loginBody;
+
+  /// No description provided for @phoneLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الجوال'**
+  String get phoneLabel;
+
+  /// No description provided for @phoneHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'٩××× ××××'**
+  String get phoneHint;
+
+  /// No description provided for @continueCta.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get continueCta;
+
+  /// No description provided for @invalidPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم ما يبدو صحيحاً. تأكد منه.'**
+  String get invalidPhone;
+
+  /// No description provided for @verifyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب الرمز'**
+  String get verifyTitle;
+
+  /// No description provided for @verifyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرسلنا رمز من ٦ أرقام إلى {phone}'**
+  String verifyBody(String phone);
+
+  /// No description provided for @editNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الرقم'**
+  String get editNumber;
+
+  /// No description provided for @demoCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز التجربة'**
+  String get demoCode;
+
+  /// No description provided for @verifyCta.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get verifyCta;
+
+  /// No description provided for @wrongCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرمز غير صحيح.'**
+  String get wrongCode;
+
+  /// No description provided for @resendIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة الإرسال بعد {seconds} ث'**
+  String resendIn(String seconds);
+
+  /// No description provided for @resend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة الإرسال'**
+  String get resend;
+
+  /// No description provided for @haveAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندك حساب؟'**
+  String get haveAccount;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول مرة في نمط؟'**
+  String get noAccount;
+
+  /// No description provided for @goLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدخول'**
+  String get goLogin;
+
+  /// No description provided for @goSignup.
+  ///
+  /// In ar, this message translates to:
+  /// **'سوِّ حساب'**
+  String get goSignup;
+
+  /// No description provided for @terms.
+  ///
+  /// In ar, this message translates to:
+  /// **'بمتابعتك أنت توافق على الشروط وسياسة الخصوصية.'**
+  String get terms;
+
+  /// No description provided for @stepOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطوة {current} من {total}'**
+  String stepOf(String current, String total);
+
+  /// No description provided for @qNameTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وش نناديك؟'**
+  String get qNameTitle;
+
+  /// No description provided for @qNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمك'**
+  String get qNameHint;
+
+  /// No description provided for @qGoalTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وش هدفك مع نمط؟'**
+  String get qGoalTitle;
+
+  /// No description provided for @qGoalBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نرتّب لك التطبيق على أساسه.'**
+  String get qGoalBody;
+
+  /// No description provided for @goalLose.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبي أخفف وزني'**
+  String get goalLose;
+
+  /// No description provided for @goalActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبي أكون أكثر نشاطاً'**
+  String get goalActive;
+
+  /// No description provided for @goalMuscle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبي أزيد الكتلة العضلية'**
+  String get goalMuscle;
+
+  /// No description provided for @goalStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبي أبدأ حياة صحية'**
+  String get goalStart;
+
+  /// No description provided for @goalMaintain.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبي أحافظ على نمطي'**
+  String get goalMaintain;
+
+  /// No description provided for @qActivityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف نشاطك حالياً؟'**
+  String get qActivityTitle;
+
+  /// No description provided for @activityLow.
+  ///
+  /// In ar, this message translates to:
+  /// **'قليل — أغلب يومي جالس'**
+  String get activityLow;
+
+  /// No description provided for @activityModerate.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط — أتحرك أحياناً'**
+  String get activityModerate;
+
+  /// No description provided for @activityActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشِط — أتمرن بانتظام'**
+  String get activityActive;
+
+  /// No description provided for @activityVery.
+  ///
+  /// In ar, this message translates to:
+  /// **'عالي — تمرين شبه يومي'**
+  String get activityVery;
+
+  /// No description provided for @qCityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وين أنت؟'**
+  String get qCityTitle;
+
+  /// No description provided for @qCityBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نعرض لك الأقرب منك.'**
+  String get qCityBody;
+
+  /// No description provided for @cityMuscat.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسقط'**
+  String get cityMuscat;
+
+  /// No description provided for @citySohar.
+  ///
+  /// In ar, this message translates to:
+  /// **'صحار'**
+  String get citySohar;
+
+  /// No description provided for @citySalalah.
+  ///
+  /// In ar, this message translates to:
+  /// **'صلالة'**
+  String get citySalalah;
+
+  /// No description provided for @cityNizwa.
+  ///
+  /// In ar, this message translates to:
+  /// **'نزوى'**
+  String get cityNizwa;
+
+  /// No description provided for @qInterestsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وش يهمك؟'**
+  String get qInterestsTitle;
+
+  /// No description provided for @qInterestsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ما شئت.'**
+  String get qInterestsBody;
+
+  /// No description provided for @finishSetup.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا نبدأ'**
+  String get finishSetup;
+
+  /// No description provided for @skipStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطٍ'**
+  String get skipStep;
+
+  /// No description provided for @nextStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي'**
+  String get nextStep;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

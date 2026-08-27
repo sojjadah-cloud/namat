@@ -575,4 +575,151 @@ class LAr extends L {
 
   @override
   String get covered => 'مشمول';
+
+  @override
+  String get signupTitle => 'أهلاً بك في نمط';
+
+  @override
+  String get signupBody => 'رقمك يكفي — بدون كلمة مرور.';
+
+  @override
+  String get loginTitle => 'حياك الله من جديد';
+
+  @override
+  String get loginBody => 'سجّل دخولك وكمّل من وين وقفت.';
+
+  @override
+  String get phoneLabel => 'رقم الجوال';
+
+  @override
+  String get phoneHint => '٩××× ××××';
+
+  @override
+  String get continueCta => 'متابعة';
+
+  @override
+  String get invalidPhone => 'الرقم ما يبدو صحيحاً. تأكد منه.';
+
+  @override
+  String get verifyTitle => 'اكتب الرمز';
+
+  @override
+  String verifyBody(String phone) {
+    return 'أرسلنا رمز من ٦ أرقام إلى $phone';
+  }
+
+  @override
+  String get editNumber => 'تغيير الرقم';
+
+  @override
+  String get demoCode => 'رمز التجربة';
+
+  @override
+  String get verifyCta => 'تأكيد';
+
+  @override
+  String get wrongCode => 'الرمز غير صحيح.';
+
+  @override
+  String resendIn(String seconds) {
+    return 'إعادة الإرسال بعد $seconds ث';
+  }
+
+  @override
+  String get resend => 'إعادة الإرسال';
+
+  @override
+  String get haveAccount => 'عندك حساب؟';
+
+  @override
+  String get noAccount => 'أول مرة في نمط؟';
+
+  @override
+  String get goLogin => 'تسجيل الدخول';
+
+  @override
+  String get goSignup => 'سوِّ حساب';
+
+  @override
+  String get terms => 'بمتابعتك أنت توافق على الشروط وسياسة الخصوصية.';
+
+  @override
+  String stepOf(String current, String total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
+  String get qNameTitle => 'وش نناديك؟';
+
+  @override
+  String get qNameHint => 'اسمك';
+
+  @override
+  String get qGoalTitle => 'وش هدفك مع نمط؟';
+
+  @override
+  String get qGoalBody => 'نرتّب لك التطبيق على أساسه.';
+
+  @override
+  String get goalLose => 'أبي أخفف وزني';
+
+  @override
+  String get goalActive => 'أبي أكون أكثر نشاطاً';
+
+  @override
+  String get goalMuscle => 'أبي أزيد الكتلة العضلية';
+
+  @override
+  String get goalStart => 'أبي أبدأ حياة صحية';
+
+  @override
+  String get goalMaintain => 'أبي أحافظ على نمطي';
+
+  @override
+  String get qActivityTitle => 'كيف نشاطك حالياً؟';
+
+  @override
+  String get activityLow => 'قليل — أغلب يومي جالس';
+
+  @override
+  String get activityModerate => 'متوسط — أتحرك أحياناً';
+
+  @override
+  String get activityActive => 'نشِط — أتمرن بانتظام';
+
+  @override
+  String get activityVery => 'عالي — تمرين شبه يومي';
+
+  @override
+  String get qCityTitle => 'وين أنت؟';
+
+  @override
+  String get qCityBody => 'نعرض لك الأقرب منك.';
+
+  @override
+  String get cityMuscat => 'مسقط';
+
+  @override
+  String get citySohar => 'صحار';
+
+  @override
+  String get citySalalah => 'صلالة';
+
+  @override
+  String get cityNizwa => 'نزوى';
+
+  @override
+  String get qInterestsTitle => 'وش يهمك؟';
+
+  @override
+  String get qInterestsBody => 'اختر ما شئت.';
+
+  @override
+  String get finishSetup => 'يلا نبدأ';
+
+  @override
+  String get skipStep => 'تخطٍ';
+
+  @override
+  String get nextStep => 'التالي';
 }

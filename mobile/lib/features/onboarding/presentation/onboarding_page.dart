@@ -112,7 +112,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     const SizedBox(height: NamatSpace.sm),
                     TextButton(
-                      onPressed: () => context.go('/welcome'),
+                      onPressed: () => context.go('/login'),
                       child: Text(l.onbHaveAccount),
                     ),
                   ],

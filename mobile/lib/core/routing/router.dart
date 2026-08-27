@@ -6,6 +6,9 @@ import '../../features/challenges/presentation/create_duel_page.dart';
 import '../../features/challenges/presentation/duel_room_page.dart';
 import '../../features/challenges/presentation/duel_sent_page.dart';
 import '../../features/challenges/presentation/find_opponent_page.dart';
+import '../../features/auth/presentation/phone_page.dart';
+import '../../features/auth/presentation/setup_page.dart';
+import '../../features/auth/presentation/verify_page.dart';
 import '../../features/bookings/presentation/bookings_page.dart';
 import '../../features/bookings/presentation/cart_page.dart';
 import '../../features/bookings/presentation/order_done_page.dart';
@@ -35,6 +38,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/splash', builder: (_, __) => const SplashPage()),
       GoRoute(path: '/onboarding', builder: (_, __) => const OnboardingPage()),
       GoRoute(path: '/welcome', builder: (_, __) => const WelcomePage()),
+
+      // Signing up and signing in are the same screen twice; only the copy
+      // and the destination after verification differ.
+      for (final mode in ['signup', 'login'])
+        GoRoute(
+          path: '/$mode',
+          builder: (_, __) => PhonePage(mode: mode),
+          routes: [
+            GoRoute(
+              path: 'verify',
+              builder: (_, __) => VerifyPage(mode: mode),
+            ),
+          ],
+        ),
+      GoRoute(path: '/setup', builder: (_, __) => const SetupPage()),
 
       GoRoute(path: '/cart', builder: (_, __) => const CartPage()),
       GoRoute(path: '/cart/done', builder: (_, __) => const OrderDonePage()),

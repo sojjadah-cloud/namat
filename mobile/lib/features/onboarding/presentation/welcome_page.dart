@@ -80,12 +80,12 @@ class _WelcomePageState extends State<WelcomePage>
                 child: Column(
                   children: [
                     FilledButton(
-                      onPressed: () => context.go('/home'),
+                      onPressed: () => context.go('/signup'),
                       child: Text(l.createAccount),
                     ),
                     const SizedBox(height: NamatSpace.md),
                     OutlinedButton(
-                      onPressed: () => context.go('/home'),
+                      onPressed: () => context.go('/login'),
                       child: Text(l.login),
                     ),
                     const SizedBox(height: NamatSpace.md),

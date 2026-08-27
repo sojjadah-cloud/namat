@@ -575,4 +575,151 @@ class LEn extends L {
 
   @override
   String get covered => 'Covered';
+
+  @override
+  String get signupTitle => 'Welcome to NAMAT';
+
+  @override
+  String get signupBody => 'Your number is enough — no password.';
+
+  @override
+  String get loginTitle => 'Welcome back';
+
+  @override
+  String get loginBody => 'Sign in and pick up where you left off.';
+
+  @override
+  String get phoneLabel => 'Mobile number';
+
+  @override
+  String get phoneHint => '9xxx xxxx';
+
+  @override
+  String get continueCta => 'Continue';
+
+  @override
+  String get invalidPhone => 'That number does not look right.';
+
+  @override
+  String get verifyTitle => 'Enter the code';
+
+  @override
+  String verifyBody(String phone) {
+    return 'We sent a six-digit code to $phone';
+  }
+
+  @override
+  String get editNumber => 'Change number';
+
+  @override
+  String get demoCode => 'Demo code';
+
+  @override
+  String get verifyCta => 'Verify';
+
+  @override
+  String get wrongCode => 'That code is not right.';
+
+  @override
+  String resendIn(String seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get resend => 'Resend';
+
+  @override
+  String get haveAccount => 'Already have an account?';
+
+  @override
+  String get noAccount => 'New to NAMAT?';
+
+  @override
+  String get goLogin => 'Log in';
+
+  @override
+  String get goSignup => 'Create account';
+
+  @override
+  String get terms => 'By continuing you agree to the terms and privacy policy.';
+
+  @override
+  String stepOf(String current, String total) {
+    return 'Step $current of $total';
+  }
+
+  @override
+  String get qNameTitle => 'What should we call you?';
+
+  @override
+  String get qNameHint => 'Your name';
+
+  @override
+  String get qGoalTitle => 'What is your goal?';
+
+  @override
+  String get qGoalBody => 'We arrange the app around it.';
+
+  @override
+  String get goalLose => 'Lose weight';
+
+  @override
+  String get goalActive => 'Be more active';
+
+  @override
+  String get goalMuscle => 'Build muscle';
+
+  @override
+  String get goalStart => 'Start a healthier life';
+
+  @override
+  String get goalMaintain => 'Maintain my routine';
+
+  @override
+  String get qActivityTitle => 'How active are you now?';
+
+  @override
+  String get activityLow => 'Low — mostly sitting';
+
+  @override
+  String get activityModerate => 'Moderate — some movement';
+
+  @override
+  String get activityActive => 'Active — regular training';
+
+  @override
+  String get activityVery => 'High — almost daily';
+
+  @override
+  String get qCityTitle => 'Where are you?';
+
+  @override
+  String get qCityBody => 'So we show you what is nearby.';
+
+  @override
+  String get cityMuscat => 'Muscat';
+
+  @override
+  String get citySohar => 'Sohar';
+
+  @override
+  String get citySalalah => 'Salalah';
+
+  @override
+  String get cityNizwa => 'Nizwa';
+
+  @override
+  String get qInterestsTitle => 'What interests you?';
+
+  @override
+  String get qInterestsBody => 'Pick as many as you like.';
+
+  @override
+  String get finishSetup => 'Let us begin';
+
+  @override
+  String get skipStep => 'Skip';
+
+  @override
+  String get nextStep => 'Next';
 }

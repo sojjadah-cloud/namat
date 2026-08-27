@@ -288,5 +288,76 @@
         "type": "String"
       }
     }
+  },
+  "signupTitle": "Welcome to NAMAT",
+  "signupBody": "Your number is enough — no password.",
+  "loginTitle": "Welcome back",
+  "loginBody": "Sign in and pick up where you left off.",
+  "phoneLabel": "Mobile number",
+  "phoneHint": "9xxx xxxx",
+  "continueCta": "Continue",
+  "invalidPhone": "That number does not look right.",
+  "verifyTitle": "Enter the code",
+  "verifyBody": "We sent a six-digit code to {phone}",
+  "editNumber": "Change number",
+  "demoCode": "Demo code",
+  "verifyCta": "Verify",
+  "wrongCode": "That code is not right.",
+  "resendIn": "Resend in {seconds}s",
+  "resend": "Resend",
+  "haveAccount": "Already have an account?",
+  "noAccount": "New to NAMAT?",
+  "goLogin": "Log in",
+  "goSignup": "Create account",
+  "terms": "By continuing you agree to the terms and privacy policy.",
+  "stepOf": "Step {current} of {total}",
+  "qNameTitle": "What should we call you?",
+  "qNameHint": "Your name",
+  "qGoalTitle": "What is your goal?",
+  "qGoalBody": "We arrange the app around it.",
+  "goalLose": "Lose weight",
+  "goalActive": "Be more active",
+  "goalMuscle": "Build muscle",
+  "goalStart": "Start a healthier life",
+  "goalMaintain": "Maintain my routine",
+  "qActivityTitle": "How active are you now?",
+  "activityLow": "Low — mostly sitting",
+  "activityModerate": "Moderate — some movement",
+  "activityActive": "Active — regular training",
+  "activityVery": "High — almost daily",
+  "qCityTitle": "Where are you?",
+  "qCityBody": "So we show you what is nearby.",
+  "cityMuscat": "Muscat",
+  "citySohar": "Sohar",
+  "citySalalah": "Salalah",
+  "cityNizwa": "Nizwa",
+  "qInterestsTitle": "What interests you?",
+  "qInterestsBody": "Pick as many as you like.",
+  "finishSetup": "Let us begin",
+  "skipStep": "Skip",
+  "nextStep": "Next",
+  "@verifyBody": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "@stepOf": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
   }
 }

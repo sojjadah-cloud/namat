@@ -309,5 +309,76 @@
         "type": "String"
       }
     }
+  },
+  "signupTitle": "أهلاً بك في نمط",
+  "signupBody": "رقمك يكفي — بدون كلمة مرور.",
+  "loginTitle": "حياك الله من جديد",
+  "loginBody": "سجّل دخولك وكمّل من وين وقفت.",
+  "phoneLabel": "رقم الجوال",
+  "phoneHint": "٩××× ××××",
+  "continueCta": "متابعة",
+  "invalidPhone": "الرقم ما يبدو صحيحاً. تأكد منه.",
+  "verifyTitle": "اكتب الرمز",
+  "verifyBody": "أرسلنا رمز من ٦ أرقام إلى {phone}",
+  "editNumber": "تغيير الرقم",
+  "demoCode": "رمز التجربة",
+  "verifyCta": "تأكيد",
+  "wrongCode": "الرمز غير صحيح.",
+  "resendIn": "إعادة الإرسال بعد {seconds} ث",
+  "resend": "إعادة الإرسال",
+  "haveAccount": "عندك حساب؟",
+  "noAccount": "أول مرة في نمط؟",
+  "goLogin": "تسجيل الدخول",
+  "goSignup": "سوِّ حساب",
+  "terms": "بمتابعتك أنت توافق على الشروط وسياسة الخصوصية.",
+  "stepOf": "الخطوة {current} من {total}",
+  "qNameTitle": "وش نناديك؟",
+  "qNameHint": "اسمك",
+  "qGoalTitle": "وش هدفك مع نمط؟",
+  "qGoalBody": "نرتّب لك التطبيق على أساسه.",
+  "goalLose": "أبي أخفف وزني",
+  "goalActive": "أبي أكون أكثر نشاطاً",
+  "goalMuscle": "أبي أزيد الكتلة العضلية",
+  "goalStart": "أبي أبدأ حياة صحية",
+  "goalMaintain": "أبي أحافظ على نمطي",
+  "qActivityTitle": "كيف نشاطك حالياً؟",
+  "activityLow": "قليل — أغلب يومي جالس",
+  "activityModerate": "متوسط — أتحرك أحياناً",
+  "activityActive": "نشِط — أتمرن بانتظام",
+  "activityVery": "عالي — تمرين شبه يومي",
+  "qCityTitle": "وين أنت؟",
+  "qCityBody": "نعرض لك الأقرب منك.",
+  "cityMuscat": "مسقط",
+  "citySohar": "صحار",
+  "citySalalah": "صلالة",
+  "cityNizwa": "نزوى",
+  "qInterestsTitle": "وش يهمك؟",
+  "qInterestsBody": "اختر ما شئت.",
+  "finishSetup": "يلا نبدأ",
+  "skipStep": "تخطٍ",
+  "nextStep": "التالي",
+  "@verifyBody": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "@stepOf": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
   }
 }

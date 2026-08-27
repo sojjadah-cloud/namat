@@ -49,6 +49,24 @@ extension NamatNumbers on BuildContext {
     return _isArabic ? _toArabicIndic(latin) : latin;
   }
 
+  /// A phone number as a reader sees it: "+٩٦٨ ٩١٢٣ ٤٥٦٧".
+  ///
+  /// Grouped and converted, unlike the number in the entry field — that one is
+  /// typed on a keypad and sent to a network, this one is read back so the
+  /// member can confirm it is theirs.
+  String phone(String e164) {
+    final digits = e164.replaceAll(RegExp(r'[^0-9]'), '');
+    if (digits.length < 4) return e164;
+    final country = digits.substring(0, 3);
+    final rest = digits.substring(3);
+    final grouped = rest.replaceAllMapped(
+      RegExp(r'(\d{4})(?=\d)'),
+      (m) => '${m[1]} ',
+    );
+    final latin = '+$country $grouped';
+    return _isArabic ? _toArabicIndic(latin) : latin;
+  }
+
   /// A moment, as a member would say it: "اليوم ٦:٠٠ م", "الخميس ٤:٠٠ م".
   ///
   /// Relative for the next week because that is the horizon a booking lives

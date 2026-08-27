@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:namat/core/routing/router.dart';
+import 'package:namat/features/auth/presentation/phone_page.dart';
+import 'package:namat/features/auth/presentation/setup_page.dart';
+import 'package:namat/features/auth/presentation/verify_page.dart';
 import 'package:namat/features/bookings/presentation/bookings_page.dart';
 import 'package:namat/features/bookings/presentation/cart_page.dart';
 import 'package:namat/features/bookings/presentation/order_done_page.dart';
@@ -96,5 +99,28 @@ void main() {
 
     await _pumpAt(tester, '/cart/done');
     expect(find.byType(OrderDonePage), findsOneWidget);
+  });
+
+  testWidgets('the sign-up flow resolves end to end', (tester) async {
+    await _pumpAt(tester, '/signup');
+    expect(find.byType(PhonePage), findsOneWidget);
+    expect(
+      tester.widget<PhonePage>(find.byType(PhonePage)).mode,
+      'signup',
+    );
+
+    await _pumpAt(tester, '/signup/verify');
+    expect(find.byType(VerifyPage), findsOneWidget);
+
+    await _pumpAt(tester, '/setup');
+    expect(find.byType(SetupPage), findsOneWidget);
+  });
+
+  testWidgets('login reuses the same screen in the other mode', (tester) async {
+    await _pumpAt(tester, '/login');
+    expect(tester.widget<PhonePage>(find.byType(PhonePage)).mode, 'login');
+
+    await _pumpAt(tester, '/login/verify');
+    expect(tester.widget<VerifyPage>(find.byType(VerifyPage)).mode, 'login');
   });
 }
