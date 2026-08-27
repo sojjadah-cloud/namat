@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../theme/namat_colors.dart';
 import '../widgets/namat_icon.dart';
 import '../widgets/namat_scaffold.dart';
-import '../../l10n/app_localizations.dart';
 
 /// Loading and failure, as designed states rather than as afterthoughts.
 ///

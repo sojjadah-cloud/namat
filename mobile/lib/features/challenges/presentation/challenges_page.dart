@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
-import '../../../core/widgets/namat_scaffold.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/duels_provider.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
@@ -95,7 +95,7 @@ class _CurrentDuel extends ConsumerWidget {
             const SizedBox(width: NamatSpace.md),
             Expanded(child: Text(l.noChallenges, style: text.bodySmall)),
             const Icon(
-              Icons.chevron_left,
+              Icons.chevron_right,
               size: 18,
               color: NamatColors.inkSoft,
             ),

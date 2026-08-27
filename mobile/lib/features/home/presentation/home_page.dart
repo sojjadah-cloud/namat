@@ -166,7 +166,7 @@ class HomePage extends ConsumerWidget {
                     child: Text(l.challengesHero, style: text.bodyMedium),
                   ),
                   const Icon(
-                    Icons.chevron_left,
+                    Icons.chevron_right,
                     size: 18,
                     color: NamatColors.inkSoft,
                   ),
@@ -196,7 +196,7 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(width: NamatSpace.md),
                   Expanded(child: Text(l.packagesSub, style: text.bodyMedium)),
                   const Icon(
-                    Icons.chevron_left,
+                    Icons.chevron_right,
                     size: 18,
                     color: NamatColors.inkSoft,
                   ),
@@ -462,7 +462,7 @@ class _NextStepCard extends ConsumerWidget {
             ),
           ),
           const Icon(
-            Icons.chevron_left,
+            Icons.chevron_right,
             size: 18,
             color: NamatColors.inkSoft,
           ),
@@ -513,7 +513,7 @@ class _Worlds extends StatelessWidget {
                     ),
                   ),
                   Icon(
-                    Icons.chevron_left,
+                    Icons.chevron_right,
                     size: 18,
                     color: field.accent,
                   ),

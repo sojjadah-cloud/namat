@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
@@ -9,7 +10,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
 import '../../favorites/domain/favorites.dart';
 import '../../rewards/domain/points.dart';
-import '../../../core/l10n/numbers.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 class ProfilePage extends ConsumerWidget {
@@ -23,18 +23,20 @@ class ProfilePage extends ConsumerWidget {
     final points = ref.watch(pointsBalanceProvider);
     final saved = ref.watch(favouritesCountProvider);
 
-    // A row with nowhere to go is worse than no row: it teaches people the
-    // app is broken. Only the destinations that exist are linked.
+    // Things the member has, then one door to everything they can change.
+    //
+    // Privacy, language and support used to sit here as well as inside
+    // Settings. Tapping one from this list and pressing back landed on the
+    // Settings screen — a page the member had never opened — because the
+    // route it deep-linked to carries Settings in its own path. One entry
+    // point per destination, and back always retraces the way in.
     final rows = <(NamatIcons, String, String?)>[
       (NamatIcons.package, l.myBookings, '/bookings'),
       (NamatIcons.reward, l.pointsTitle, '/profile/points'),
       (NamatIcons.leaf, l.favoritesTitle, '/profile/favorites'),
-      (NamatIcons.package, l.myPackages, '/journey/packages'),
       (NamatIcons.challenge, l.challengesTitle, '/journey/challenges'),
+      (NamatIcons.package, l.myPackages, '/journey/packages'),
       (NamatIcons.profile, l.settingsTitle, '/profile/settings'),
-      (NamatIcons.search, l.privacyTitle, '/profile/settings/privacy'),
-      (NamatIcons.use, l.languageTitle, '/profile/settings/language'),
-      (NamatIcons.partner, l.supportTitle, '/profile/settings/support'),
     ];
 
     return NamatBackground(
@@ -103,7 +105,7 @@ class ProfilePage extends ConsumerWidget {
                 // Chevron points the way the reader is going, which under RTL
                 // is toward the start edge.
                 trailing: const Icon(
-                  Icons.chevron_left,
+                  Icons.chevron_right,
                   color: NamatColors.inkSoft,
                 ),
                 onTap: route == null ? null : () => context.go(route),

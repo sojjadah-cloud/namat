@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/account/presentation/addresses_page.dart';
 import '../../features/auth/presentation/phone_page.dart';
 import '../../features/auth/presentation/setup_page.dart';
 import '../../features/auth/presentation/verify_page.dart';
@@ -23,11 +24,10 @@ import '../../features/onboarding/presentation/welcome_page.dart';
 import '../../features/packages/presentation/packages_page.dart';
 import '../../features/partners/presentation/partner_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
-import '../../features/account/presentation/addresses_page.dart';
-import '../../features/rewards/presentation/points_page.dart';
-import '../../features/settings/presentation/settings_pages.dart';
 import '../../features/reviews/presentation/rate_page.dart';
+import '../../features/rewards/presentation/points_page.dart';
 import '../../features/search/presentation/search_page.dart';
+import '../../features/settings/presentation/settings_pages.dart';
 import '../../features/shell/app_shell.dart';
 import '../../features/use/presentation/field_page.dart';
 import '../../features/use/presentation/use_page.dart';

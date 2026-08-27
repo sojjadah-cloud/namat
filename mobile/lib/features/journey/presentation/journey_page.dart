@@ -108,7 +108,7 @@ class JourneyPage extends ConsumerWidget {
                     child: Text(l.challengesTitle, style: text.bodyMedium),
                   ),
                   const Icon(
-                    Icons.chevron_left,
+                    Icons.chevron_right,
                     size: 18,
                     color: NamatColors.inkSoft,
                   ),
@@ -333,7 +333,7 @@ class _Upcoming extends ConsumerWidget {
               child: Text(l.nothingUpcoming, style: text.bodySmall),
             ),
             const Icon(
-              Icons.chevron_left,
+              Icons.chevron_right,
               size: 18,
               color: NamatColors.inkSoft,
             ),
@@ -366,7 +366,7 @@ class _Upcoming extends ConsumerWidget {
                     ),
                   ),
                   const Icon(
-                    Icons.chevron_left,
+                    Icons.chevron_right,
                     size: 18,
                     color: NamatColors.inkSoft,
                   ),

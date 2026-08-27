@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
-import '../../../core/widgets/namat_scaffold.dart';
-import '../../../core/l10n/numbers.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../catalogue/domain/catalogue.dart';
 import '../domain/field.dart';

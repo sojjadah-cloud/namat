@@ -6,6 +6,7 @@ import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/booking.dart';
@@ -86,10 +87,7 @@ class _BookingsPageState extends ConsumerState<BookingsPage>
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(),
           title: Text(l.bookingsTitle),
           bottom: TabBar(
             controller: _tabs,

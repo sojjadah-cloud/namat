@@ -6,6 +6,7 @@ import '../../../core/domain/city.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
@@ -40,11 +41,7 @@ class _SettingsScaffold extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () =>
-                context.canPop() ? context.pop() : context.go(fallback),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: NamatBack(fallback: fallback),
           title: Text(title),
         ),
         body: ListView(
@@ -155,11 +152,7 @@ class _Row extends StatelessWidget {
             if (trailing != null)
               Text(trailing!, style: text.labelSmall)
             else if (onTap != null)
-              const Icon(
-                Icons.chevron_left,
-                size: 18,
-                color: NamatColors.inkSoft,
-              ),
+              const NamatChevron(),
           ],
         ),
       ),

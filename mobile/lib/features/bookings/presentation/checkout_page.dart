@@ -6,9 +6,10 @@ import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
-import '../../../l10n/app_localizations.dart';
 import '../../../core/widgets/namat_states.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
 import '../../catalogue/domain/catalogue.dart';
 import '../../rewards/domain/points.dart';
@@ -215,10 +216,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.go('/cart'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(fallback: '/cart'),
           title: Text(l.checkoutTitle),
         ),
         body: ListView(

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bookings/domain/cart_notifier.dart';
@@ -59,10 +60,7 @@ class _RatePageState extends ConsumerState<RatePage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            leading: IconButton(
-              onPressed: () => context.go('/bookings'),
-              icon: const Icon(Icons.arrow_forward),
-            ),
+            leading: const NamatBack(fallback: '/bookings'),
           ),
           body: NamatEmptyState(title: l.errorTitle, body: l.errorBody),
         ),
@@ -77,10 +75,7 @@ class _RatePageState extends ConsumerState<RatePage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.go('/bookings'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(fallback: '/bookings'),
           actions: [
             // Always available. A rating screen with no way out is how you
             // collect ratings nobody meant to give.

@@ -6,6 +6,7 @@ import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
@@ -45,10 +46,7 @@ class _CreateDuelPageState extends ConsumerState<CreateDuelPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.go('/journey/challenges/find'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(fallback: '/journey/challenges/find'),
           title: Text(l.chooseChallenge),
         ),
         body: ListView(

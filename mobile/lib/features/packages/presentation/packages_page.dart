@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../membership/domain/membership.dart';
@@ -94,11 +94,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () =>
-                context.canPop() ? context.pop() : context.go('/journey'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(fallback: '/journey'),
           title: Text(l.packagesTitle),
         ),
         body: Column(

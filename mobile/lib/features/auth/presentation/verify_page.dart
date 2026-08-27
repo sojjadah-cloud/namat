@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
@@ -88,10 +89,7 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.go('/${widget.mode}'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: NamatBack(fallback: '/${widget.mode}'),
         ),
         body: SafeArea(
           child: Padding(

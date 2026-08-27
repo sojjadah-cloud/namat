@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/addresses.dart';
@@ -51,12 +51,7 @@ class _AddressesPageState extends ConsumerState<AddressesPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.canPop()
-                ? context.pop()
-                : context.go('/profile/settings'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(fallback: '/profile/settings'),
           title: Text(l.addressesTitle),
         ),
         body: ListView(

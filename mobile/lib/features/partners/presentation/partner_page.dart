@@ -6,6 +6,7 @@ import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bookings/domain/cart_notifier.dart';
@@ -39,10 +40,7 @@ class PartnerPage extends ConsumerWidget {
     if (p == null) {
       return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(),
         ),
         body: NamatEmptyState(title: l.errorTitle, body: l.errorBody),
       );
@@ -56,10 +54,7 @@ class PartnerPage extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () => context.pop(),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(),
         ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(

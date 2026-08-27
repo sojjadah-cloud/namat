@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/domain/city.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../core/domain/city.dart';
 import '../../account/domain/session.dart';
 import '../domain/profile_draft.dart';
 
@@ -74,7 +74,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
               ? null
               : IconButton(
                   onPressed: () => setState(() => _step--),
-                  icon: const Icon(Icons.arrow_forward),
+                  icon: const Icon(Icons.arrow_back),
                 ),
           title: Text(
             l.stepOf(context.n(_step + 1), context.n(_steps)),

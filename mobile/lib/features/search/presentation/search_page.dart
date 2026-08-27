@@ -5,6 +5,7 @@ import '../../../core/l10n/arabic.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../catalogue/domain/catalogue.dart';
@@ -65,11 +66,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () =>
-                context.canPop() ? context.pop() : context.go('/home'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
+          leading: const NamatBack(fallback: '/home'),
           title: Text(l.searchEverything),
         ),
         body: Column(
