@@ -26,6 +26,10 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   shared_preferences: ^2.3.2
 
+  # Digests only — the account registry keeps a fingerprint of a phone number
+  # rather than the number, so a plain key-value store never holds one.
+  crypto: ^3.0.5
+
   intl: any
 
 dev_dependencies:

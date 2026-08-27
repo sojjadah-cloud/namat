@@ -1,18 +1,30 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
+import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_skyline.dart';
 import '../../../l10n/app_localizations.dart';
 
-/// The pre-login screen.
+/// The pre-login screen, built to the brand board.
 ///
-/// Not a form with a headline above it. The ecosystem drifts slowly at the
-/// centre — five services orbiting the mark — because the thing being sold is
-/// that they are one product, and a list of four bullet points does not say
-/// that.
+/// The composition is the board's: the mark alone in the leading top corner, a
+/// soft green sweep weighting the opposite one, and the Omani seafront drawn
+/// in one hairline along the bottom — the fort, the port cranes, a dhow, the
+/// palms and the minaret. Sohar is where NAMAT launches, and that horizon is
+/// what the product is for.
+///
+/// Everything between them is left as paper. The previous version filled that
+/// space with five orbiting service icons, which explained the ecosystem to
+/// somebody who had not yet asked what it was; the board's own answer is
+/// quieter and better, so the middle now holds one sentence and two buttons.
+///
+/// Every line is painted rather than shipped as an asset: it takes the theme's
+/// colours, scales to any width without a second file, and adds nothing to the
+/// download — which on a first screen, on a phone, on a slow connection, is
+/// the entire argument.
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
 
@@ -22,14 +34,14 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage>
     with SingleTickerProviderStateMixin {
-  late final _drift = AnimationController(
+  late final _entry = AnimationController(
     vsync: this,
-    duration: const Duration(seconds: 30),
-  )..repeat();
+    duration: const Duration(milliseconds: 1600),
+  )..forward();
 
   @override
   void dispose() {
-    _drift.dispose();
+    _entry.dispose();
     super.dispose();
   }
 
@@ -39,137 +51,106 @@ class _WelcomePageState extends State<WelcomePage>
     final text = Theme.of(context).textTheme;
 
     return NamatBackground(
+      // The bloom is off: the sweep and the horizon are the composition, and a
+      // third soft shape behind them turns three deliberate marks into haze.
+      bloom: false,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: NamatSpace.xl),
-              const NamatLogoMark(size: 46),
-              const SizedBox(height: NamatSpace.xl),
-              Padding(
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            // ------------------------------------------------ the sweep, top
+            const Align(
+              alignment: Alignment.topCenter,
+              child: NamatCornerSweep(height: 230),
+            ),
+
+            // --------------------------------------------- the coast, bottom
+            //
+            // Drawn behind the buttons and given its own height rather than
+            // being sized by the Stack, so the horizon sits at a fixed
+            // distance from the bottom edge on every screen instead of
+            // stretching on a tall one.
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: FadeTransition(
+                opacity: CurvedAnimation(
+                  parent: _entry,
+                  // Arrives last and slowest. It is the setting, not the
+                  // subject, and a horizon that races in reads as a banner.
+                  curve: const Interval(0.35, 1, curve: Curves.easeOut),
+                ),
+                child: const SizedBox(
+                  height: 210,
+                  width: double.infinity,
+                  child: NamatSkyline(),
+                ),
+              ),
+            ),
+
+            // ------------------------------------------------------ the page
+            SafeArea(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: NamatSpace.xxl,
+                  horizontal: NamatSpace.gutter,
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      l.welcomeHeadline,
-                      style: text.displayMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: NamatSpace.md),
-                    Text(
-                      l.welcomeSub,
-                      style: text.bodySmall,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Center(
-                  child: AnimatedBuilder(
-                    animation: _drift,
-                    builder: (context, _) => _Ecosystem(t: _drift.value),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(NamatSpace.gutter),
-                child: Column(
-                  children: [
+                    const SizedBox(height: NamatSpace.xl),
+                    // Leading corner, alone, exactly as on the board.
+                    const NamatLogoMark(size: 52),
+
+                    const Spacer(flex: 2),
+
+                    ...revealAll([
+                      Text(l.welcomeHeadline, style: text.displayLarge),
+                      const SizedBox(height: NamatSpace.md),
+                      SizedBox(
+                        width: 340,
+                        child: Text(
+                          l.welcomeSub,
+                          style: text.bodyMedium?.copyWith(
+                            color: NamatColors.inkSoft,
+                            height: 1.6,
+                          ),
+                        ),
+                      ),
+                    ]),
+
+                    const Spacer(flex: 3),
+
+                    // The two doors, and a third way in that needs neither.
                     FilledButton(
                       onPressed: () => context.go('/signup'),
                       child: Text(l.createAccount),
                     ),
-                    const SizedBox(height: NamatSpace.md),
+                    const SizedBox(height: NamatSpace.sm),
                     OutlinedButton(
                       onPressed: () => context.go('/login'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(52),
+                        side: const BorderSide(color: NamatColors.line),
+                      ),
                       child: Text(l.login),
                     ),
-                    const SizedBox(height: NamatSpace.md),
-                    TextButton(
-                      onPressed: () => context.go('/explore'),
-                      child: Text(
-                        l.exploreAsGuest,
-                        style: text.labelMedium?.copyWith(
-                          color: NamatColors.accent,
-                        ),
+                    const SizedBox(height: NamatSpace.xs),
+                    Center(
+                      child: TextButton(
+                        // Browsing needs no account, and saying so here is
+                        // what keeps the catalogue reachable by anyone who has
+                        // not decided yet.
+                        onPressed: () => context.go('/home'),
+                        child: Text(l.exploreAsGuest),
                       ),
                     ),
+                    const SizedBox(height: NamatSpace.xxl),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-class _Ecosystem extends StatelessWidget {
-  const _Ecosystem({required this.t});
-
-  /// 0–1 around the orbit.
-  final double t;
-
-  @override
-  Widget build(BuildContext context) {
-    const orbiting = [
-      (NamatIcons.meals, NamatColors.food),
-      (NamatIcons.fitness, NamatColors.fitness),
-      (NamatIcons.consultation, NamatColors.nutrition),
-      (NamatIcons.store, NamatColors.products),
-      (NamatIcons.challenge, NamatColors.pilates),
-    ];
-
-    return SizedBox.square(
-      dimension: 260,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          for (final r in [78.0, 108.0])
-            DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: NamatColors.line.withOpacity(0.7),
-                ),
-              ),
-              child: SizedBox.square(dimension: r * 2),
-            ),
-          const NamatLogoMark(size: 58),
-          for (var i = 0; i < orbiting.length; i++)
-            Transform.translate(
-              // Alternating radii so the icons do not read as a single ring,
-              // and a per-icon phase so they never line up.
-              offset: Offset.fromDirection(
-                (t * 2 * math.pi) + (i / orbiting.length) * 2 * math.pi,
-                i.isEven ? 108 : 78,
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  color: NamatColors.surface,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x142F4F4A),
-                      blurRadius: 14,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: NamatIcon(
-                  orbiting[i].$1,
-                  size: 20,
-                  color: orbiting[i].$2,
-                ),
-              ),
-            ),
-        ],
       ),
     );
   }

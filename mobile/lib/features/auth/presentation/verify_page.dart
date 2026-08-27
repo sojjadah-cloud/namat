@@ -11,6 +11,7 @@ import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
+import '../domain/accounts.dart';
 import '../domain/profile_draft.dart';
 
 /// Code entry.
@@ -71,9 +72,12 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
     // The session starts here, not on the setup screen: a member who skips
     // every question is still signed in, and gating on the answers would
     // leave them a guest who cannot order.
-    ref.read(sessionProvider.notifier).signIn(
-          name: ref.read(profileDraftProvider).name,
-        );
+    final draft = ref.read(profileDraftProvider);
+    ref.read(sessionProvider.notifier).signIn(name: draft.name);
+
+    // And the number is on the books from this point, so a second sign-up
+    // with it is offered the sign-in door instead of the questions again.
+    ref.read(accountsProvider.notifier).register(draft.phone);
 
     // Signing up continues into the questions; signing in already has answers.
     context.go(widget.mode == 'signup' ? '/setup' : '/home');

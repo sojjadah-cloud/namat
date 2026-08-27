@@ -1580,4 +1580,28 @@ class LEn extends L {
 
   @override
   String get pickUsername => 'Pick a username';
+
+  @override
+  String get alreadyRegistered => 'This number already has an account';
+
+  @override
+  String get alreadyRegisteredBody => 'We will take you to sign in instead of creating another';
+
+  @override
+  String get goToLogin => 'Sign in';
+
+  @override
+  String get notRegistered => 'No account with this number';
+
+  @override
+  String get notRegisteredBody => 'We will take you to create one with the same number';
+
+  @override
+  String get goToSignup => 'Create an account';
+
+  @override
+  String get switchedToLogin => 'That number is registered — carry on signing in';
+
+  @override
+  String get switchedToSignup => 'That number is not registered — carry on creating an account';
 }

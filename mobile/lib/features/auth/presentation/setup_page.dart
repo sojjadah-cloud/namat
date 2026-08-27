@@ -29,7 +29,24 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   int _step = 0;
   static const _steps = 5;
 
-  final _name = TextEditingController();
+  late final TextEditingController _name;
+
+  @override
+  void initState() {
+    super.initState();
+    // Seeded from whatever is already stored, so a member who reloads mid-way
+    // through setup does not find the field blank while the app is greeting
+    // them by name on the next screen.
+    _name = TextEditingController(text: ref.read(profileDraftProvider).name)
+      ..addListener(
+        // Written down on every keystroke rather than when the step is left.
+        // Advancing was the only thing that saved it, so a name typed and then
+        // abandoned — by a reload, or by backing out — was simply gone.
+        () => ref
+            .read(profileDraftProvider.notifier)
+            .setName(_name.text.trim()),
+      );
+  }
 
   @override
   void dispose() {
@@ -38,9 +55,6 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   }
 
   void _next() {
-    if (_step == 0) {
-      ref.read(profileDraftProvider.notifier).setName(_name.text.trim());
-    }
     if (_step < _steps - 1) {
       setState(() => _step++);
     } else {

@@ -877,5 +877,14 @@
   "saveChanges": "احفظ",
   "saved2": "انحفظ",
   "noUsername": "ما اخترت اسم مستخدم",
-  "pickUsername": "اختر اسم مستخدم"
+  "pickUsername": "اختر اسم مستخدم",
+
+  "alreadyRegistered": "هذا الرقم مسجّل عندنا",
+  "alreadyRegisteredBody": "نودّيك لتسجيل الدخول بدل إنشاء حساب جديد",
+  "goToLogin": "سجّل دخولك",
+  "notRegistered": "ما لقينا حساباً بهذا الرقم",
+  "notRegisteredBody": "نودّيك لإنشاء حساب بنفس الرقم",
+  "goToSignup": "أنشئ حساباً",
+  "switchedToLogin": "الرقم مسجّل — كمّل تسجيل الدخول",
+  "switchedToSignup": "الرقم مو مسجّل — كمّل إنشاء الحساب"
 }

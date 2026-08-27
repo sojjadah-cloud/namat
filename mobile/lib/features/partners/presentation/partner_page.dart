@@ -9,6 +9,7 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_states.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bookings/domain/cart_notifier.dart';
 import '../../catalogue/domain/catalogue.dart';
@@ -224,7 +225,9 @@ class PartnerPage extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {},
+                      // No dialler is wired, and a button that silently
+                      // does nothing is worse than one that says so.
+                      onPressed: () => namatNotConnected(context),
                       icon: const Icon(Icons.call_outlined, size: 17),
                       label: Text(
                         l.callPartner,
@@ -236,7 +239,7 @@ class PartnerPage extends ConsumerWidget {
                   const SizedBox(width: NamatSpace.sm),
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => namatNotConnected(context),
                       icon: const Icon(Icons.directions_outlined, size: 17),
                       label: Text(
                         l.directions,

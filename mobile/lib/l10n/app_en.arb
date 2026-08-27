@@ -640,5 +640,14 @@
   "saveChanges": "Save",
   "saved2": "Saved",
   "noUsername": "No username yet",
-  "pickUsername": "Pick a username"
+  "pickUsername": "Pick a username",
+
+  "alreadyRegistered": "This number already has an account",
+  "alreadyRegisteredBody": "We will take you to sign in instead of creating another",
+  "goToLogin": "Sign in",
+  "notRegistered": "No account with this number",
+  "notRegisteredBody": "We will take you to create one with the same number",
+  "goToSignup": "Create an account",
+  "switchedToLogin": "That number is registered — carry on signing in",
+  "switchedToSignup": "That number is not registered — carry on creating an account"
 }

@@ -67,7 +67,10 @@ class ProfileDraftNotifier extends StateNotifier<ProfileDraft>
 
   @override
   Object encode(ProfileDraft value) => {
-        'phone': value.phone,
+        // The number is deliberately absent. It is personal data, this store
+        // is plain localStorage on the web, and the draft needs it only for
+        // the few seconds between typing it and confirming the code — so
+        // writing it down buys nothing and leaves it on the device forever.
         'name': value.name,
         'goal': value.goal?.name,
         'activity': value.activity?.name,
@@ -79,7 +82,6 @@ class ProfileDraftNotifier extends StateNotifier<ProfileDraft>
   ProfileDraft decode(Object raw) {
     final map = raw as Map<String, dynamic>;
     return ProfileDraft(
-      phone: map['phone'] as String? ?? '',
       name: map['name'] as String? ?? '',
       goal: Goal.values.where((g) => g.name == map['goal']).firstOrNull,
       activity: ActivityLevel.values
@@ -117,10 +119,24 @@ final profileDraftProvider =
 /// but not part of the international form, and keeping it would make
 /// "091234567" and "91234567" two accounts for one handset.
 String normalisePhone(String input, {String country = '968'}) {
-  final digits = input.replaceAll(RegExp(r'[^\d]'), '');
+  var digits = input.replaceAll(RegExp(r'[^\d]'), '');
+  if (digits.isEmpty) return input.trim();
+
+  // Already international.
   if (input.trim().startsWith('+')) return '+$digits';
-  if (digits.startsWith(country)) return '+$digits';
-  return '+$country${digits.replaceFirst(RegExp(r'^0+'), '')}';
+
+  // 00 is how the Gulf writes the international prefix, and people use it
+  // constantly. Without this the leading zeros were stripped as though they
+  // were a trunk code and the country code was then added a second time, so
+  // 00968 9123 4567 became +968 96891234567 — a number belonging to nobody,
+  // and a second account for someone who already had one.
+  if (digits.startsWith('00')) digits = digits.substring(2);
+
+  // A local trunk zero.
+  digits = digits.replaceFirst(RegExp(r'^0+'), '');
+
+  // Whatever is left either carries the country code or does not.
+  return digits.startsWith(country) ? '+$digits' : '+$country$digits';
 }
 
 /// Omani mobiles are eight digits after the country code. Anything shorter is

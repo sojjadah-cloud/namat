@@ -8,6 +8,7 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_states.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/duels_provider.dart';
 import '../domain/personal_challenges.dart';
@@ -279,7 +280,7 @@ class _OfficialChallenges extends StatelessWidget {
             child: NamatCard(
               color: c.tint,
               elevated: false,
-              onTap: () {},
+              onTap: () => namatNotConnected(context),
               child: Row(
                 children: [
                   NamatIcon(c.icon, size: 30, color: c.accent),

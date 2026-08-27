@@ -3052,6 +3052,54 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'اختر اسم مستخدم'**
   String get pickUsername;
+
+  /// No description provided for @alreadyRegistered.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الرقم مسجّل عندنا'**
+  String get alreadyRegistered;
+
+  /// No description provided for @alreadyRegisteredBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نودّيك لتسجيل الدخول بدل إنشاء حساب جديد'**
+  String get alreadyRegisteredBody;
+
+  /// No description provided for @goToLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك'**
+  String get goToLogin;
+
+  /// No description provided for @notRegistered.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لقينا حساباً بهذا الرقم'**
+  String get notRegistered;
+
+  /// No description provided for @notRegisteredBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نودّيك لإنشاء حساب بنفس الرقم'**
+  String get notRegisteredBody;
+
+  /// No description provided for @goToSignup.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنشئ حساباً'**
+  String get goToSignup;
+
+  /// No description provided for @switchedToLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم مسجّل — كمّل تسجيل الدخول'**
+  String get switchedToLogin;
+
+  /// No description provided for @switchedToSignup.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم مو مسجّل — كمّل إنشاء الحساب'**
+  String get switchedToSignup;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

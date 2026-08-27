@@ -9,6 +9,7 @@ import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../domain/accounts.dart';
 import '../domain/profile_draft.dart';
 
 /// Phone entry — the whole of signing up and signing in.
@@ -30,6 +31,11 @@ class _PhonePageState extends ConsumerState<PhonePage> {
   final _controller = TextEditingController();
   String? _error;
 
+  /// Set when the number turns out to belong on the other screen: true when it
+  /// is already registered and this is sign-up, false when it is not and this
+  /// is sign-in. Null while neither applies.
+  bool? _wrongDoor;
+
   bool get _isSignup => widget.mode == 'signup';
 
   @override
@@ -41,10 +47,37 @@ class _PhonePageState extends ConsumerState<PhonePage> {
   void _submit() {
     final raw = _controller.text;
     if (!isValidPhone(raw)) {
-      setState(() => _error = L.of(context)!.invalidPhone);
+      setState(() {
+        _error = L.of(context)!.invalidPhone;
+        _wrongDoor = null;
+      });
       return;
     }
-    ref.read(profileDraftProvider.notifier).setPhone(normalisePhone(raw));
+
+    final phone = normalisePhone(raw);
+    ref.read(profileDraftProvider.notifier).setPhone(phone);
+
+    // Signing up with a number that already has an account walks the member
+    // through every setup question again only to arrive at the account they
+    // already had. Signing in with one that has none sends a correct code to
+    // a member who then has nothing to sign in to. Both are the same mistake,
+    // and the app knows the answer before either happens.
+    final registered = ref.read(accountsProvider.notifier).isRegistered(phone);
+    // Signing up and finding it registered, or signing in and finding it is
+    // not: the two cases where the member is at the wrong door.
+    if (registered == _isSignup) {
+      // The number is fine; only the door is wrong. Offered rather than
+      // taken: they typed a number, not an intention to be moved, and they
+      // may have meant to use a different one.
+      //
+      // Inline rather than in a sheet. A sheet has to close before a route can
+      // be pushed, and doing both in one gesture collides with the transition
+      // already in flight — but more than that, the member is looking at the
+      // field they just filled in, which is where the answer belongs.
+      setState(() => _wrongDoor = registered);
+      return;
+    }
+
     context.go('/${widget.mode}/verify');
   }
 
@@ -128,8 +161,57 @@ class _PhonePageState extends ConsumerState<PhonePage> {
                     style: text.bodySmall?.copyWith(color: NamatColors.danger),
                   ),
                 ],
+                if (_wrongDoor case final registered?) ...[
+                  const SizedBox(height: NamatSpace.lg),
+                  NamatCard(
+                    color: NamatColors.greenSoft,
+                    elevated: false,
+                    padding: const EdgeInsets.all(NamatSpace.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          registered
+                              ? l.alreadyRegistered
+                              : l.notRegistered,
+                          style: text.bodyMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          registered
+                              ? l.alreadyRegisteredBody
+                              : l.notRegisteredBody,
+                          style: text.labelSmall,
+                        ),
+                        const SizedBox(height: NamatSpace.md),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            // Straight to the code: the number is typed and
+                            // already stored, so asking for it again on the
+                            // other screen is asking twice for one answer.
+                            onPressed: () => context.go(
+                              registered
+                                  ? '/login/verify'
+                                  : '/signup/verify',
+                            ),
+                            child: Text(
+                              registered ? l.goToLogin : l.goToSignup,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: NamatSpace.xl),
-                FilledButton(onPressed: _submit, child: Text(l.continueCta)),
+                FilledButton(
+                  // Disabled once the number is known to belong elsewhere.
+                  // Leaving it live would let a member walk into the flow the
+                  // screen has just told them is the wrong one.
+                  onPressed: _wrongDoor == null ? _submit : null,
+                  child: Text(l.continueCta),
+                ),
                 const SizedBox(height: NamatSpace.lg),
                 Center(
                   child: Text(

@@ -219,3 +219,19 @@ class NamatSignInPrompt extends StatelessWidget {
     );
   }
 }
+
+/// Says so, rather than swallowing the tap.
+///
+/// A control that does nothing when pressed teaches people the app is broken,
+/// and they stop trusting the controls that do work. Where a destination
+/// genuinely does not exist yet — because it needs a server, a dialler or a
+/// maps app — the honest response is to say that in one line.
+void namatNotConnected(BuildContext context) {
+  final l = L.of(context)!;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(l.notConnectedYet),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}

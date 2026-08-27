@@ -5,6 +5,7 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_states.dart';
 import '../../../l10n/app_localizations.dart';
 
 /// Notifications.
@@ -133,7 +134,7 @@ class _Row extends StatelessWidget {
         color: unread ? colour.withOpacity(0.08) : NamatColors.surface,
         elevated: !unread,
         padding: const EdgeInsets.all(NamatSpace.lg),
-        onTap: () {},
+        onTap: () => namatNotConnected(context),
         child: Row(
           children: [
             NamatIcon(icon, size: 22, color: colour),

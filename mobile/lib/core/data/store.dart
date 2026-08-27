@@ -68,6 +68,10 @@ abstract final class _StorageKeys {
     StorageKey.cart,
     StorageKey.duels,
     StorageKey.addresses,
+    // StorageKey.accounts is deliberately absent. Signing out means "this is
+    // not my session any more", not "this number was never used here" — and a
+    // member signing back in should meet the sign-in path rather than a fresh
+    // set of setup questions.
   ];
 }
 
@@ -84,6 +88,7 @@ abstract final class StorageKey {
   static const cart = 'namat.cart';
   static const duels = 'namat.duels';
   static const addresses = 'namat.addresses';
+  static const accounts = 'namat.accounts';
   static const preferences = 'namat.preferences';
 }
 

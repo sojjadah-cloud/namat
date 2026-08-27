@@ -1580,4 +1580,28 @@ class LAr extends L {
 
   @override
   String get pickUsername => 'اختر اسم مستخدم';
+
+  @override
+  String get alreadyRegistered => 'هذا الرقم مسجّل عندنا';
+
+  @override
+  String get alreadyRegisteredBody => 'نودّيك لتسجيل الدخول بدل إنشاء حساب جديد';
+
+  @override
+  String get goToLogin => 'سجّل دخولك';
+
+  @override
+  String get notRegistered => 'ما لقينا حساباً بهذا الرقم';
+
+  @override
+  String get notRegisteredBody => 'نودّيك لإنشاء حساب بنفس الرقم';
+
+  @override
+  String get goToSignup => 'أنشئ حساباً';
+
+  @override
+  String get switchedToLogin => 'الرقم مسجّل — كمّل تسجيل الدخول';
+
+  @override
+  String get switchedToSignup => 'الرقم مو مسجّل — كمّل إنشاء الحساب';
 }

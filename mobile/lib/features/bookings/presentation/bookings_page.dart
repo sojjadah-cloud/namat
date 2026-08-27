@@ -8,6 +8,7 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
+import '../../../core/widgets/namat_states.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/booking.dart';
 import '../domain/cart_notifier.dart';
@@ -199,7 +200,7 @@ class _BookingCard extends StatelessWidget {
 
     return NamatCard(
       padding: const EdgeInsets.all(NamatSpace.lg),
-      onTap: () {},
+      onTap: () => namatNotConnected(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -259,14 +260,29 @@ class _BookingCard extends StatelessWidget {
             const SizedBox(height: NamatSpace.md),
             Row(
               children: [
-                _Action(label: l.reschedule, onTap: () {}),
+                _Action(
+                  label: l.reschedule,
+                  onTap: () => namatNotConnected(context),
+                ),
                 const SizedBox(width: NamatSpace.sm),
-                _Action(label: l.cancelBooking, onTap: () {}, danger: true),
+                _Action(
+                  label: l.cancelBooking,
+                  onTap: () => namatNotConnected(context),
+                  danger: true,
+                ),
               ],
             ),
           ] else if (booking.state == BookingState.completed) ...[
             const SizedBox(height: NamatSpace.md),
-            _Action(label: l.rateIt, onTap: () {}),
+            // The booking id carries the order reference it came from, so
+            // this one can be real: a completed booking goes straight to the
+            // screen that rates the order it belongs to.
+            _Action(
+              label: l.rateIt,
+              onTap: () => context.go(
+                '/rate/${booking.id.split('-').take(2).join('-')}',
+              ),
+            ),
           ],
         ],
       ),
