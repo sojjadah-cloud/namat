@@ -6,12 +6,14 @@ import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
 import '../../bookings/domain/cart_notifier.dart';
 import '../../catalogue/domain/catalogue.dart';
 import '../../journey/domain/habits.dart';
+import '../../membership/domain/membership.dart';
 import '../../use/domain/field.dart';
 import '../domain/home_feed.dart';
 
@@ -36,6 +38,7 @@ class HomePage extends ConsumerWidget {
     final name = ref.watch(greetingNameProvider);
     final session = ref.watch(sessionProvider);
     final cartCount = ref.watch(cartCountProvider);
+    final membership = ref.watch(membershipProvider);
     final recommended = ref.watch(recommendedProvider).take(4).toList();
     final nearby = ref.watch(nearbyProvider).take(3).toList();
 
@@ -177,32 +180,15 @@ class HomePage extends ConsumerWidget {
             // ------------------------------------------------------ bundles
             const SizedBox(height: NamatSpace.xxl),
             _SectionHeading(
-              label: l.bundlesPreview,
+              label: membership == null ? l.bundlesPreview : l.membershipTitle,
               onSeeAll: () => context.go('/journey/packages'),
             ),
             const SizedBox(height: NamatSpace.md),
-            NamatCard(
-              color: NamatColors.greenSoft,
-              elevated: false,
-              padding: const EdgeInsets.all(NamatSpace.lg),
-              onTap: () => context.go('/journey/packages'),
-              child: Row(
-                children: [
-                  const NamatIcon(
-                    NamatIcons.package,
-                    size: 24,
-                    color: NamatColors.deep,
-                  ),
-                  const SizedBox(width: NamatSpace.md),
-                  Expanded(child: Text(l.packagesSub, style: text.bodyMedium)),
-                  const Icon(
-                    Icons.chevron_right,
-                    size: 18,
-                    color: NamatColors.inkSoft,
-                  ),
-                ],
-              ),
-            ),
+            // A subscribed member's own package, with what is left of it. Home
+            // showed the same generic invitation to every member whether or
+            // not they had one — so choosing a package changed nothing on the
+            // screen they open most, which reads as it not having worked.
+            const _MembershipCard(),
 
             // ------------------------------------------------------- nearby
             if (nearby.isNotEmpty) ...[
@@ -685,4 +671,96 @@ class NamatAvatar extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The member's package on Home, or an invitation to take one.
+class _MembershipCard extends ConsumerWidget {
+  const _MembershipCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = L.of(context)!;
+    final text = Theme.of(context).textTheme;
+    final arabic = Localizations.localeOf(context).languageCode == 'ar';
+    final membership = ref.watch(membershipProvider);
+    final left = ref.watch(allowanceLeftProvider);
+    final pack = membership?.package;
+
+    if (pack == null) {
+      return NamatCard(
+        color: NamatColors.greenSoft,
+        elevated: false,
+        padding: const EdgeInsets.all(NamatSpace.lg),
+        onTap: () => context.go('/journey/packages'),
+        child: Row(
+          children: [
+            const NamatIcon(
+              NamatIcons.package,
+              size: 24,
+              color: NamatColors.deep,
+            ),
+            const SizedBox(width: NamatSpace.md),
+            Expanded(child: Text(l.packagesSub, style: text.bodyMedium)),
+            const NamatChevron(),
+          ],
+        ),
+      );
+    }
+
+    return NamatCard(
+      color: NamatColors.greenSoft,
+      elevated: false,
+      padding: const EdgeInsets.all(NamatSpace.lg),
+      onTap: () => context.go('/journey/packages'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const NamatIcon(
+                NamatIcons.package,
+                size: 22,
+                color: NamatColors.deep,
+              ),
+              const SizedBox(width: NamatSpace.md),
+              Expanded(
+                child: Text(
+                  pack.localisedName(arabic),
+                  style: text.titleMedium,
+                ),
+              ),
+              Text(
+                membership!.paused
+                    ? l.membershipPaused
+                    : l.renewsIn(context.n(membership.daysRemaining)),
+                style: text.labelSmall,
+              ),
+            ],
+          ),
+          const SizedBox(height: NamatSpace.md),
+          // What is left, not what was granted: the number a member needs on
+          // the way out of the door is how many they still have.
+          Wrap(
+            spacing: NamatSpace.lg,
+            runSpacing: 4,
+            children: [
+              for (final entry in pack.grants.entries)
+                Text(
+                  '${context.n(left[entry.key] ?? entry.value)} '
+                  '${_allowanceLabel(entry.key, l)}',
+                  style: text.labelMedium
+                      ?.copyWith(color: NamatColors.deeper),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _allowanceLabel(Allowance a, L l) => switch (a) {
+        Allowance.meals => l.allowanceMeals,
+        Allowance.sessions => l.allowanceSessions,
+        Allowance.consultations => l.allowanceConsults,
+      };
 }

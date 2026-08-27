@@ -33,9 +33,17 @@ class _PackagesPageState extends ConsumerState<PackagesPage> {
   /// The look of each package. Kept next to the screen rather than in the
   /// domain: a colour is a presentation decision, and the allowances are not.
   static const _looks = <String, (NamatIcons, Color, Color)>{
-    'active': (NamatIcons.fitness, NamatColors.fitness, NamatColors.fitnessSoft),
+    'active': (
+      NamatIcons.fitness,
+      NamatColors.fitness,
+      NamatColors.fitnessSoft
+    ),
     'balance': (NamatIcons.leaf, NamatColors.accent, NamatColors.greenSoft),
-    'complete': (NamatIcons.reward, NamatColors.products, NamatColors.productsSoft),
+    'complete': (
+      NamatIcons.reward,
+      NamatColors.products,
+      NamatColors.productsSoft
+    ),
   };
 
   @override
@@ -118,39 +126,46 @@ class _PackagesPageState extends ConsumerState<PackagesPage> {
                   final p = namatPackages[i];
                   final look = _looks[p.id]!;
                   final current = membership?.packageId == p.id;
-                  return AnimatedScale(
-                    // The focused card sits slightly forward, so the eye knows
-                    // which one it is reading.
-                    scale: i == _index ? 1 : 0.94,
-                    duration: NamatMotion.base,
-                    curve: NamatMotion.enter,
-                    child: SingleChildScrollView(
-                      // The card is as tall as its own content, and this is
-                      // what lets it exceed the screen. Before, it was pinned
-                      // to the pager's height and the only scrollable thing
-                      // was the benefits list in its middle — so on a phone
-                      // the price and the button were squeezed against the
-                      // bottom and nothing could be scrolled to reach them.
-                      padding: const EdgeInsets.fromLTRB(6, 0, 6, NamatSpace.xl),
-                      child: _PackageCard(
-                        package: p,
-                        icon: look.$1,
-                        accent: look.$2,
-                        tint: look.$3,
-                        arabic: arabic,
-                        current: current,
-                        hasOther: membership != null && !current,
-                        onChoose: () {
-                          ref
-                              .read(membershipProvider.notifier)
-                              .start(p.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(p.localisedName(arabic)),
-                              behavior: SnackBarBehavior.floating,
-                            ),
-                          );
-                        },
+                  return IgnorePointer(
+                    // Only the card in front can be acted on. The pager shows
+                    // a sliver of each neighbour, and a button inside that
+                    // sliver would subscribe the member to a package they were
+                    // not looking at — which then reads as the one in front of
+                    // them still needing to be chosen.
+                    ignoring: i != _index,
+                    child: AnimatedScale(
+                      // The focused card sits slightly forward, so the eye knows
+                      // which one it is reading.
+                      scale: i == _index ? 1 : 0.94,
+                      duration: NamatMotion.base,
+                      curve: NamatMotion.enter,
+                      child: SingleChildScrollView(
+                        // The card is as tall as its own content, and this is
+                        // what lets it exceed the screen. Before, it was pinned
+                        // to the pager's height and the only scrollable thing
+                        // was the benefits list in its middle — so on a phone
+                        // the price and the button were squeezed against the
+                        // bottom and nothing could be scrolled to reach them.
+                        padding:
+                            const EdgeInsets.fromLTRB(6, 0, 6, NamatSpace.xl),
+                        child: _PackageCard(
+                          package: p,
+                          icon: look.$1,
+                          accent: look.$2,
+                          tint: look.$3,
+                          arabic: arabic,
+                          current: current,
+                          hasOther: membership != null && !current,
+                          onChoose: () {
+                            ref.read(membershipProvider.notifier).start(p.id);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(p.localisedName(arabic)),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   );
@@ -169,8 +184,7 @@ class _PackagesPageState extends ConsumerState<PackagesPage> {
                     height: 6,
                     width: i == _index ? 22 : 6,
                     decoration: BoxDecoration(
-                      color:
-                          i == _index ? NamatColors.deep : NamatColors.line,
+                      color: i == _index ? NamatColors.deep : NamatColors.line,
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),

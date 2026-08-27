@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
 import '../../bookings/domain/booking.dart';
 import '../../bookings/domain/cart_notifier.dart';
 import '../../catalogue/domain/catalogue.dart';
@@ -172,8 +173,38 @@ class Membership {
       );
 }
 
-class MembershipNotifier extends StateNotifier<Membership?> {
-  MembershipNotifier() : super(null);
+class MembershipNotifier extends StateNotifier<Membership?>
+    with Persisted<Membership?> {
+  MembershipNotifier([this.store]) : super(null) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.membership;
+
+  @override
+  Object encode(Membership? value) => value == null
+      ? const <String, Object?>{}
+      : {
+          'packageId': value.packageId,
+          'startedAt': value.startedAt.toIso8601String(),
+          'paused': value.paused,
+        };
+
+  @override
+  Membership? decode(Object raw) {
+    final map = raw as Map<String, dynamic>;
+    final id = map['packageId'] as String?;
+    if (id == null) return null;
+    return Membership(
+      packageId: id,
+      startedAt: DateTime.parse(map['startedAt'] as String),
+      paused: map['paused'] as bool? ?? false,
+    );
+  }
 
   void start(String packageId) =>
       state = Membership(packageId: packageId, startedAt: DateTime.now());
@@ -190,7 +221,7 @@ class MembershipNotifier extends StateNotifier<Membership?> {
 
 final membershipProvider =
     StateNotifierProvider<MembershipNotifier, Membership?>(
-  (ref) => MembershipNotifier(),
+  (ref) => MembershipNotifier(ref.watch(storeProvider)),
 );
 
 /// How much of each allowance has been spent this cycle.

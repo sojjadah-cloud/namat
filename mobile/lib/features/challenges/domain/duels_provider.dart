@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
 import 'duel.dart';
 
 /// The member's own challenges.
@@ -63,8 +64,50 @@ class ActiveDuel {
       );
 }
 
-class DuelsNotifier extends StateNotifier<List<ActiveDuel>> {
-  DuelsNotifier() : super(const []);
+class DuelsNotifier extends StateNotifier<List<ActiveDuel>>
+    with Persisted<List<ActiveDuel>> {
+  DuelsNotifier([this.store]) : super(const []) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.duels;
+
+  @override
+  Object encode(List<ActiveDuel> value) => [
+        for (final d in value)
+          {
+            'id': d.id,
+            'opponent': d.opponent,
+            'metric': d.metric.name,
+            'target': d.target,
+            'startedAt': d.startedAt.toIso8601String(),
+            'days': d.days,
+            'myScore': d.myScore,
+            'theirScore': d.theirScore,
+            'accepted': d.accepted,
+          },
+      ];
+
+  @override
+  List<ActiveDuel> decode(Object raw) => [
+        for (final d in raw as List)
+          ActiveDuel(
+            id: (d as Map)['id'] as String,
+            opponent: d['opponent'] as String,
+            metric:
+                DuelMetric.values.firstWhere((m) => m.name == d['metric']),
+            target: d['target'] as int,
+            startedAt: DateTime.parse(d['startedAt'] as String),
+            days: d['days'] as int,
+            myScore: d['myScore'] as int? ?? 0,
+            theirScore: d['theirScore'] as int? ?? 0,
+            accepted: d['accepted'] as bool? ?? false,
+          ),
+      ];
 
   void send({
     required String opponent,
@@ -93,9 +136,8 @@ class DuelsNotifier extends StateNotifier<List<ActiveDuel>> {
   void remove(String id) => state = [for (final d in state) if (d.id != id) d];
 }
 
-final duelsProvider =
-    StateNotifierProvider<DuelsNotifier, List<ActiveDuel>>(
-  (ref) => DuelsNotifier(),
+final duelsProvider = StateNotifierProvider<DuelsNotifier, List<ActiveDuel>>(
+  (ref) => DuelsNotifier(ref.watch(storeProvider)),
 );
 
 /// The one to show on the challenges screen: the newest still running.

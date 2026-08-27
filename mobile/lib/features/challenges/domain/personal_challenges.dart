@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
 import '../../journey/domain/habits.dart';
 import '../../rewards/domain/points.dart';
 
@@ -90,10 +91,29 @@ final claimableProvider = Provider<List<PersonalChallenge>>((ref) {
   ];
 });
 
-class ClaimedNotifier extends StateNotifier<Set<PersonalChallenge>> {
-  ClaimedNotifier(this._points) : super(const {});
+class ClaimedNotifier extends StateNotifier<Set<PersonalChallenge>>
+    with Persisted<Set<PersonalChallenge>> {
+  ClaimedNotifier(this._points, [this.store]) : super(const {}) {
+    restore();
+  }
 
   final PointsNotifier _points;
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.claimed;
+
+  @override
+  Object encode(Set<PersonalChallenge> value) =>
+      [for (final c in value) c.name];
+
+  @override
+  Set<PersonalChallenge> decode(Object raw) => {
+        for (final name in raw as List)
+          PersonalChallenge.values.firstWhere((c) => c.name == name),
+      };
 
   /// Claiming is a tap, not an automatic award.
   ///
@@ -110,5 +130,8 @@ class ClaimedNotifier extends StateNotifier<Set<PersonalChallenge>> {
 
 final claimedProvider =
     StateNotifierProvider<ClaimedNotifier, Set<PersonalChallenge>>(
-  (ref) => ClaimedNotifier(ref.read(pointsProvider.notifier)),
+  (ref) => ClaimedNotifier(
+    ref.read(pointsProvider.notifier),
+    ref.watch(storeProvider),
+  ),
 );

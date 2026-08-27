@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
+
 /// Saved delivery addresses.
 ///
 /// Free text, on purpose. Most of Oman is addressed by description rather than
@@ -23,8 +25,33 @@ class SavedAddress {
   final String detail;
 }
 
-class AddressesNotifier extends StateNotifier<List<SavedAddress>> {
-  AddressesNotifier() : super(const []);
+class AddressesNotifier extends StateNotifier<List<SavedAddress>>
+    with Persisted<List<SavedAddress>> {
+  AddressesNotifier([this.store]) : super(const []) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.addresses;
+
+  @override
+  Object encode(List<SavedAddress> value) => [
+        for (final a in value)
+          {'id': a.id, 'label': a.label, 'detail': a.detail},
+      ];
+
+  @override
+  List<SavedAddress> decode(Object raw) => [
+        for (final a in raw as List)
+          SavedAddress(
+            id: (a as Map)['id'] as String,
+            label: a['label'] as String? ?? '',
+            detail: a['detail'] as String,
+          ),
+      ];
 
   void add(String label, String detail) {
     final trimmed = detail.trim();
@@ -44,5 +71,5 @@ class AddressesNotifier extends StateNotifier<List<SavedAddress>> {
 
 final addressesProvider =
     StateNotifierProvider<AddressesNotifier, List<SavedAddress>>(
-  (ref) => AddressesNotifier(),
+  (ref) => AddressesNotifier(ref.watch(storeProvider)),
 );

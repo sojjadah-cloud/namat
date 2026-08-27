@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
 import '../../catalogue/domain/catalogue.dart';
 import 'booking.dart';
 import 'order.dart';
@@ -32,8 +33,49 @@ String makeReference([Random? random]) {
   return 'NM-$body';
 }
 
-class CartNotifier extends StateNotifier<List<CartItem>> {
-  CartNotifier() : super(const []);
+/// Turns a cart line into JSON and back.
+///
+/// Written out rather than generated because it is the one record in the app
+/// with a price in it: a field silently dropped by a code generator is a line
+/// that comes back cheaper than the member agreed to.
+Map<String, Object?> _encodeItem(CartItem i) => {
+      'id': i.id,
+      'kind': i.kind.name,
+      'title': i.title,
+      'partner': i.partner,
+      'price': i.price,
+      'quantity': i.quantity,
+      'covered': i.coveredByPackage,
+    };
+
+CartItem _decodeItem(Map<String, dynamic> m) => CartItem(
+      id: m['id'] as String,
+      kind: BookingKind.values.firstWhere((k) => k.name == m['kind']),
+      title: m['title'] as String,
+      partner: m['partner'] as String,
+      price: (m['price'] as num).toDouble(),
+      quantity: m['quantity'] as int,
+      coveredByPackage: m['covered'] as bool? ?? false,
+    );
+
+class CartNotifier extends StateNotifier<List<CartItem>>
+    with Persisted<List<CartItem>> {
+  CartNotifier([this.store]) : super(const []) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.cart;
+
+  @override
+  Object encode(List<CartItem> value) => [for (final i in value) _encodeItem(i)];
+
+  @override
+  List<CartItem> decode(Object raw) =>
+      [for (final i in raw as List) _decodeItem(i as Map<String, dynamic>)];
 
   /// Adds an offering, or raises the quantity if it is already in the cart.
   ///
@@ -121,8 +163,9 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
       };
 }
 
-final cartProvider =
-    StateNotifierProvider<CartNotifier, List<CartItem>>((ref) => CartNotifier());
+final cartProvider = StateNotifierProvider<CartNotifier, List<CartItem>>(
+  (ref) => CartNotifier(ref.watch(storeProvider)),
+);
 
 /// How many items the tab badge shows. Quantities count, so two of one dish
 /// reads as two.
@@ -134,8 +177,58 @@ final cartCountProvider = Provider<int>((ref) {
 final cartTotalsProvider =
     Provider<CartTotals>((ref) => CartTotals(ref.watch(cartProvider)));
 
-class OrdersNotifier extends StateNotifier<List<PlacedOrder>> {
-  OrdersNotifier() : super(const []);
+class OrdersNotifier extends StateNotifier<List<PlacedOrder>>
+    with Persisted<List<PlacedOrder>> {
+  OrdersNotifier([this.store]) : super(const []) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.orders;
+
+  @override
+  Object encode(List<PlacedOrder> value) => [
+        for (final o in value)
+          {
+            'reference': o.reference,
+            'items': [for (final i in o.items) _encodeItem(i)],
+            'placedAt': o.placedAt.toIso8601String(),
+            'method': o.method.name,
+            'fulfilment': o.fulfilment.name,
+            'paid': o.paid,
+            'covered': o.covered,
+            'slot': o.slot?.toIso8601String(),
+            'address': o.address,
+            'rating': o.rating,
+          },
+      ];
+
+  @override
+  List<PlacedOrder> decode(Object raw) => [
+        for (final o in raw as List)
+          PlacedOrder(
+            reference: (o as Map)['reference'] as String,
+            items: [
+              for (final i in o['items'] as List)
+                _decodeItem(i as Map<String, dynamic>),
+            ],
+            placedAt: DateTime.parse(o['placedAt'] as String),
+            method: PaymentMethod.values
+                .firstWhere((m) => m.name == o['method']),
+            fulfilment: Fulfilment.values
+                .firstWhere((f) => f.name == o['fulfilment']),
+            paid: (o['paid'] as num).toDouble(),
+            covered: (o['covered'] as num).toDouble(),
+            slot: o['slot'] == null
+                ? null
+                : DateTime.parse(o['slot'] as String),
+            address: o['address'] as String?,
+            rating: o['rating'] as int?,
+          ),
+      ];
 
   /// Newest first, because that is the one being asked about.
   void place(PlacedOrder order) => state = [order, ...state];
@@ -151,7 +244,7 @@ class OrdersNotifier extends StateNotifier<List<PlacedOrder>> {
 
 final ordersProvider =
     StateNotifierProvider<OrdersNotifier, List<PlacedOrder>>(
-  (ref) => OrdersNotifier(),
+  (ref) => OrdersNotifier(ref.watch(storeProvider)),
 );
 
 /// The most recent order that has not been rated.

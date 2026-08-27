@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
 import '../../rewards/domain/points.dart';
 
 /// Lightweight habit tracking.
@@ -65,8 +66,43 @@ class HabitDay {
   String get key => keyFor(date);
 }
 
-class HabitsNotifier extends StateNotifier<Map<String, HabitDay>> {
-  HabitsNotifier([this._onDayOpened]) : super(const {});
+class HabitsNotifier extends StateNotifier<Map<String, HabitDay>>
+    with Persisted<Map<String, HabitDay>> {
+  HabitsNotifier([this._onDayOpened, this.store]) : super(const {}) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.habits;
+
+  @override
+  Object encode(Map<String, HabitDay> value) => {
+        for (final entry in value.entries)
+          entry.key: {
+            for (final c in entry.value.counts.entries) c.key.name: c.value,
+          },
+      };
+
+  @override
+  Map<String, HabitDay> decode(Object raw) {
+    final map = raw as Map<String, dynamic>;
+    return {
+      for (final entry in map.entries)
+        entry.key: HabitDay(
+          // Rebuilt from the key rather than stored twice, so the date and the
+          // key it is filed under cannot disagree.
+          date: DateTime.parse(entry.key),
+          counts: {
+            for (final c in (entry.value as Map).entries)
+              Habit.values.firstWhere((h) => h.name == c.key):
+                  c.value as int,
+          },
+        ),
+    };
+  }
 
   /// Called the first time anything is logged on a given day, with that day's
   /// key. The points rule lives with the points; the habits only report that
@@ -148,6 +184,7 @@ final habitsProvider =
     (dayKey) => ref
         .read(pointsProvider.notifier)
         .awardOnce(PointsReason.streak, detail: dayKey),
+    ref.watch(storeProvider),
   ),
 );
 

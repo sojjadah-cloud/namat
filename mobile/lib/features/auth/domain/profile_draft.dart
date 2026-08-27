@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
+
 /// What the member tells us while setting up.
 ///
 /// Held in one place and written once at the end rather than saved per screen,
@@ -51,8 +53,45 @@ class ProfileDraft {
   bool get canFinish => goal != null;
 }
 
-class ProfileDraftNotifier extends StateNotifier<ProfileDraft> {
-  ProfileDraftNotifier() : super(const ProfileDraft());
+class ProfileDraftNotifier extends StateNotifier<ProfileDraft>
+    with Persisted<ProfileDraft> {
+  ProfileDraftNotifier([this.store]) : super(const ProfileDraft()) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.draft;
+
+  @override
+  Object encode(ProfileDraft value) => {
+        'phone': value.phone,
+        'name': value.name,
+        'goal': value.goal?.name,
+        'activity': value.activity?.name,
+        'city': value.city,
+        'interests': [for (final i in value.interests) i.name],
+      };
+
+  @override
+  ProfileDraft decode(Object raw) {
+    final map = raw as Map<String, dynamic>;
+    return ProfileDraft(
+      phone: map['phone'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+      goal: Goal.values.where((g) => g.name == map['goal']).firstOrNull,
+      activity: ActivityLevel.values
+          .where((a) => a.name == map['activity'])
+          .firstOrNull,
+      city: map['city'] as String?,
+      interests: {
+        for (final i in (map['interests'] as List? ?? const []))
+          Interest.values.firstWhere((v) => v.name == i),
+      },
+    );
+  }
 
   void setPhone(String v) => state = state.copyWith(phone: v);
   void setName(String v) => state = state.copyWith(name: v);
@@ -69,7 +108,7 @@ class ProfileDraftNotifier extends StateNotifier<ProfileDraft> {
 
 final profileDraftProvider =
     StateNotifierProvider<ProfileDraftNotifier, ProfileDraft>(
-  (ref) => ProfileDraftNotifier(),
+  (ref) => ProfileDraftNotifier(ref.watch(storeProvider)),
 );
 
 /// Normalise to E.164 so "9123 4567" and "+968 91234567" are one account.

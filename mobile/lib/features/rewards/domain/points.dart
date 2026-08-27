@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
+
 /// Namat Points.
 ///
 /// A ledger rather than a running total. A member who cannot see why their
@@ -71,8 +73,40 @@ class PointsEntry {
   final String? detail;
 }
 
-class PointsNotifier extends StateNotifier<List<PointsEntry>> {
-  PointsNotifier() : super(const []);
+class PointsNotifier extends StateNotifier<List<PointsEntry>>
+    with Persisted<List<PointsEntry>> {
+  PointsNotifier([this.store]) : super(const []) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.points;
+
+  @override
+  Object encode(List<PointsEntry> value) => [
+        for (final e in value)
+          {
+            'reason': e.reason.name,
+            'amount': e.amount,
+            'at': e.at.toIso8601String(),
+            'detail': e.detail,
+          },
+      ];
+
+  @override
+  List<PointsEntry> decode(Object raw) => [
+        for (final e in raw as List)
+          PointsEntry(
+            reason: PointsReason.values
+                .firstWhere((r) => r.name == (e as Map)['reason']),
+            amount: (e as Map)['amount'] as int,
+            at: DateTime.parse(e['at'] as String),
+            detail: e['detail'] as String?,
+          ),
+      ];
 
   void award(PointsReason reason, {String? detail, DateTime? at}) {
     final amount = pointsFor[reason] ?? 0;
@@ -126,7 +160,7 @@ class PointsNotifier extends StateNotifier<List<PointsEntry>> {
 
 final pointsProvider =
     StateNotifierProvider<PointsNotifier, List<PointsEntry>>(
-  (ref) => PointsNotifier(),
+  (ref) => PointsNotifier(ref.watch(storeProvider)),
 );
 
 final pointsBalanceProvider = Provider<int>(

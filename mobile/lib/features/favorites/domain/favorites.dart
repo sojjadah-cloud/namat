@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
+
 /// Saved things.
 ///
 /// One store for every kind rather than a list per section: a member does not
@@ -27,8 +29,31 @@ class Favourite {
   int get hashCode => Object.hash(kind, id);
 }
 
-class FavouritesNotifier extends StateNotifier<Set<Favourite>> {
-  FavouritesNotifier() : super(const {});
+class FavouritesNotifier extends StateNotifier<Set<Favourite>>
+    with Persisted<Set<Favourite>> {
+  FavouritesNotifier([this.store]) : super(const {}) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.favourites;
+
+  @override
+  Object encode(Set<Favourite> value) =>
+      [for (final f in value) '${f.kind.name}:${f.id}'];
+
+  @override
+  Set<Favourite> decode(Object raw) => {
+        for (final entry in raw as List)
+          if ((entry as String).split(':') case [final kind, ...final rest])
+            Favourite(
+              FavouriteKind.values.firstWhere((k) => k.name == kind),
+              rest.join(':'),
+            ),
+      };
 
   bool contains(FavouriteKind kind, String id) =>
       state.contains(Favourite(kind, id));
@@ -53,7 +78,7 @@ class FavouritesNotifier extends StateNotifier<Set<Favourite>> {
 
 final favouritesProvider =
     StateNotifierProvider<FavouritesNotifier, Set<Favourite>>(
-  (ref) => FavouritesNotifier(),
+  (ref) => FavouritesNotifier(ref.watch(storeProvider)),
 );
 
 /// Whether one specific thing is saved.

@@ -3,13 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'core/data/store.dart';
 import 'core/routing/router.dart';
 import 'core/theme/namat_colors.dart';
 import 'core/theme/namat_theme.dart';
 import 'features/settings/domain/preferences.dart';
 import 'l10n/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -20,7 +23,20 @@ void main() {
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
-  runApp(const ProviderScope(child: NamatApp()));
+  // Loaded before the first frame rather than hydrated afterwards. The
+  // alternative is a visible flash of an empty app followed by the member's
+  // own data appearing — which on the screen that says "no package" reads as
+  // the subscription having been lost and then found.
+  final prefs = await SharedPreferences.getInstance();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        storeProvider.overrideWithValue(NamatStore(prefs)),
+      ],
+      child: const NamatApp(),
+    ),
+  );
 }
 
 /// The locale the app is running in.

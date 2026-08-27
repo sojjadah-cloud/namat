@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
+
 /// What the member has chosen about how NAMAT behaves.
 ///
 /// Every one of these defaults to the more private or the quieter option where
@@ -62,8 +64,45 @@ class Preferences {
       );
 }
 
-class PreferencesNotifier extends StateNotifier<Preferences> {
-  PreferencesNotifier() : super(const Preferences());
+class PreferencesNotifier extends StateNotifier<Preferences>
+    with Persisted<Preferences> {
+  PreferencesNotifier([this.store]) : super(const Preferences()) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.preferences;
+
+  @override
+  Object encode(Preferences value) => {
+        'locale': value.locale?.languageCode,
+        'channels': {
+          for (final e in value.channels.entries) e.key.name: e.value,
+        },
+        'useLocation': value.useLocation,
+        'personalise': value.personalise,
+        'challengeVisible': value.challengeVisible,
+      };
+
+  @override
+  Preferences decode(Object raw) {
+    final map = raw as Map<String, dynamic>;
+    final code = map['locale'] as String?;
+    return Preferences(
+      locale: code == null ? null : Locale(code),
+      channels: {
+        for (final c in NotificationChannel.values)
+          c: (map['channels'] as Map?)?[c.name] as bool? ??
+              const Preferences().isOn(c),
+      },
+      useLocation: map['useLocation'] as bool? ?? false,
+      personalise: map['personalise'] as bool? ?? true,
+      challengeVisible: map['challengeVisible'] as bool? ?? true,
+    );
+  }
 
   void setLocale(Locale? locale) => state = locale == null
       ? state.copyWith(clearLocale: true)
@@ -83,5 +122,5 @@ class PreferencesNotifier extends StateNotifier<Preferences> {
 
 final preferencesProvider =
     StateNotifierProvider<PreferencesNotifier, Preferences>(
-  (ref) => PreferencesNotifier(),
+  (ref) => PreferencesNotifier(ref.watch(storeProvider)),
 );

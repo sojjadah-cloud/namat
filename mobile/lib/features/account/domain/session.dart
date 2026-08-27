@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/data/store.dart';
+
 import '../../../core/domain/city.dart';
 import '../../auth/domain/profile_draft.dart';
 
@@ -58,8 +60,38 @@ class Session {
       );
 }
 
-class SessionNotifier extends StateNotifier<Session> {
-  SessionNotifier() : super(const Session());
+class SessionNotifier extends StateNotifier<Session> with Persisted<Session> {
+  SessionNotifier([this.store]) : super(const Session()) {
+    restore();
+  }
+
+  @override
+  final NamatStore? store;
+
+  @override
+  String get storageKey => StorageKey.session;
+
+  @override
+  Object encode(Session value) => {
+        'kind': value.kind.name,
+        'name': value.name,
+        'city': value.city.name,
+        'hasPackage': value.hasPackage,
+      };
+
+  @override
+  Session? decode(Object raw) {
+    final map = raw as Map<String, dynamic>;
+    return Session(
+      kind: SessionKind.values
+              .where((k) => k.name == map['kind'])
+              .firstOrNull ??
+          SessionKind.guest,
+      name: map['name'] as String? ?? '',
+      city: NamatCity.byName(map['city'] as String? ?? '') ?? NamatCity.launch,
+      hasPackage: map['hasPackage'] as bool? ?? false,
+    );
+  }
 
   void signIn({String name = '', NamatCity? city}) => state = state.copyWith(
         kind: SessionKind.member,
@@ -67,7 +99,13 @@ class SessionNotifier extends StateNotifier<Session> {
         city: city,
       );
 
-  void signOut() => state = const Session();
+  /// Signing out clears everything the member owns, not just the session.
+  /// Leaving their points and their habit log behind for whoever opens the
+  /// app next is the opposite of what signing out means.
+  void signOut() {
+    store?.clearAll();
+    state = const Session();
+  }
 
   void setCity(NamatCity city) => state = state.copyWith(city: city);
 
@@ -76,8 +114,9 @@ class SessionNotifier extends StateNotifier<Session> {
   void setPackage(bool active) => state = state.copyWith(hasPackage: active);
 }
 
-final sessionProvider =
-    StateNotifierProvider<SessionNotifier, Session>((ref) => SessionNotifier());
+final sessionProvider = StateNotifierProvider<SessionNotifier, Session>(
+  (ref) => SessionNotifier(ref.watch(storeProvider)),
+);
 
 /// The name to greet with, from whichever source has it.
 ///
