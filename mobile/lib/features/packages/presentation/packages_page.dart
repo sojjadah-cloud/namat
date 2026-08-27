@@ -124,8 +124,14 @@ class _PackagesPageState extends ConsumerState<PackagesPage> {
                     scale: i == _index ? 1 : 0.94,
                     duration: NamatMotion.base,
                     curve: NamatMotion.enter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: SingleChildScrollView(
+                      // The card is as tall as its own content, and this is
+                      // what lets it exceed the screen. Before, it was pinned
+                      // to the pager's height and the only scrollable thing
+                      // was the benefits list in its middle — so on a phone
+                      // the price and the button were squeezed against the
+                      // bottom and nothing could be scrolled to reach them.
+                      padding: const EdgeInsets.fromLTRB(6, 0, 6, NamatSpace.xl),
                       child: _PackageCard(
                         package: p,
                         icon: look.$1,
@@ -172,28 +178,37 @@ class _PackagesPageState extends ConsumerState<PackagesPage> {
             ),
             if (membership != null) ...[
               const SizedBox(height: NamatSpace.md),
-              // Both exits, side by side and equally weighted.
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () => membership.paused
-                        ? ref.read(membershipProvider.notifier).resume()
-                        : ref.read(membershipProvider.notifier).pause(),
-                    child: Text(
-                      membership.paused
-                          ? l.resumeMembership
-                          : l.pauseMembership,
+              // Both exits, equally weighted. Wrap rather than Row: the two
+              // labels are 47 pixels too wide together at 360dp, and a Row
+              // clips the second one — which is the one that lets a member
+              // leave.
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: NamatSpace.gutter,
+                ),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: NamatSpace.sm,
+                  children: [
+                    TextButton(
+                      onPressed: () => membership.paused
+                          ? ref.read(membershipProvider.notifier).resume()
+                          : ref.read(membershipProvider.notifier).pause(),
+                      child: Text(
+                        membership.paused
+                            ? l.resumeMembership
+                            : l.pauseMembership,
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: _confirmCancel,
-                    child: Text(
-                      l.cancelMembership,
-                      style: const TextStyle(color: NamatColors.danger),
+                    TextButton(
+                      onPressed: _confirmCancel,
+                      child: Text(
+                        l.cancelMembership,
+                        style: const TextStyle(color: NamatColors.danger),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
             const SizedBox(height: NamatSpace.xl),
@@ -240,6 +255,9 @@ class _PackageCard extends StatelessWidget {
       padding: const EdgeInsets.all(NamatSpace.xxl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        // Sized to what is in it. A package with four benefits is taller than
+        // one with three, and that is the honest shape for it to be.
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
@@ -267,33 +285,27 @@ class _PackageCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(package.localisedBestFor(arabic), style: text.bodySmall),
           const SizedBox(height: NamatSpace.xl),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                for (final b in package.localisedBenefits(arabic))
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: NamatSpace.sm),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 5,
-                          height: 5,
-                          margin: const EdgeInsets.only(top: 8),
-                          decoration: BoxDecoration(
-                            color: accent,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: NamatSpace.sm),
-                        Expanded(child: Text(b, style: text.bodyMedium)),
-                      ],
+          for (final b in package.localisedBenefits(arabic))
+            Padding(
+              padding: const EdgeInsets.only(bottom: NamatSpace.sm),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 5,
+                    height: 5,
+                    margin: const EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: accent,
+                      shape: BoxShape.circle,
                     ),
                   ),
-              ],
+                  const SizedBox(width: NamatSpace.sm),
+                  Expanded(child: Text(b, style: text.bodyMedium)),
+                ],
+              ),
             ),
-          ),
+          const SizedBox(height: NamatSpace.lg),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
