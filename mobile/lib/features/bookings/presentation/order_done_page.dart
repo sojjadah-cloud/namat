@@ -107,7 +107,7 @@ class _OrderDonePageState extends ConsumerState<OrderDonePage>
                 ),
                 const SizedBox(height: NamatSpace.section),
                 FilledButton(
-                  onPressed: () => context.go('/home/bookings'),
+                  onPressed: () => context.go('/bookings'),
                   child: Text(l.bookingsTitle),
                 ),
                 if (order != null && !order.isRated) ...[

@@ -90,7 +90,7 @@ class _DuelSentPageState extends State<DuelSentPage>
                 ),
                 const SizedBox(height: NamatSpace.section),
                 FilledButton(
-                  onPressed: () => context.go('/challenges'),
+                  onPressed: () => context.go('/journey/challenges'),
                   child: Text(l.backToChallenges),
                 ),
               ],

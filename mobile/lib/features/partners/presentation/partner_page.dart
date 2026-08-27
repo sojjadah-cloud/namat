@@ -10,6 +10,8 @@ import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bookings/domain/cart_notifier.dart';
 import '../../catalogue/domain/catalogue.dart';
+import '../../favorites/domain/favorites.dart';
+import '../../favorites/presentation/favorites_page.dart' show FavouriteButton;
 import '../../catalogue/presentation/offering_sheet.dart';
 import '../../use/presentation/field_page.dart' show monogram;
 
@@ -88,7 +90,20 @@ class PartnerPage extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(p.localisedName(arabic), style: text.titleLarge),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              p.localisedName(arabic),
+                              style: text.titleLarge,
+                            ),
+                          ),
+                          FavouriteButton(
+                            kind: FavouriteKind.partner,
+                            id: p.slug,
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 2),
                       Text(
                         p.firstParty ? l.firstPartyNote : field.title(l),
@@ -187,16 +202,75 @@ class PartnerPage extends ConsumerWidget {
               ),
             ],
             const SizedBox(height: NamatSpace.xxl),
-            Text(l.partnerMenu, style: text.labelMedium),
+            Text(l.partnerAbout, style: text.labelMedium),
+            const SizedBox(height: NamatSpace.sm),
+            // A description is a business's own words. Writing one on their
+            // behalf puts claims in their mouth, so a partner who has not
+            // given us one shows that, not a paragraph we made up.
+            Text(
+              p.localisedAbout(arabic) ?? l.noDescription,
+              style: text.bodySmall,
+            ),
+            const SizedBox(height: NamatSpace.lg),
+            _Hours(hours: p.hours),
+            if (p.phone != null) ...[
+              const SizedBox(height: NamatSpace.md),
+              // Expanded, not intrinsic: a Row hands its children unbounded
+              // width, and an icon button that sizes to its label then asks
+              // for infinity. Two equal halves is also the layout these two
+              // want — neither is the primary action.
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.call_outlined, size: 17),
+                      label: Text(
+                        l.callPartner,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: NamatSpace.sm),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.directions_outlined, size: 17),
+                      label: Text(
+                        l.directions,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: NamatSpace.xxl),
+            Row(
+              children: [
+                Expanded(child: Text(l.partnerMenu, style: text.labelMedium)),
+                Text(
+                  l.serviceCount(context.n(p.offerings.length)),
+                  style: text.labelSmall,
+                ),
+              ],
+            ),
             const SizedBox(height: NamatSpace.md),
             if (p.offerings.isEmpty)
-              Text(l.noDescription, style: text.bodySmall)
-            else
+              Text(l.noPartnersYet, style: text.bodySmall)
+            else ...[
+              if (!p.hasAnythingAvailable) ...[
+                Text(l.everythingUnavailable, style: text.labelSmall),
+                const SizedBox(height: NamatSpace.sm),
+              ],
               for (final o in p.offerings)
                 Padding(
                   padding: const EdgeInsets.only(bottom: NamatSpace.sm),
                   child: _OfferingRow(offering: o, partner: p, arabic: arabic),
                 ),
+            ],
           ]),
         ),
         bottomSheet: cartCount == 0
@@ -244,87 +318,163 @@ class _OfferingRow extends StatelessWidget {
     final covered = o.coveredByPackage && partner.inPackage;
     final n = o.nutrition;
 
-    return NamatCard(
-      padding: const EdgeInsets.all(NamatSpace.lg),
-      onTap: () => showOfferingSheet(
-        context,
-        offering: o,
-        partner: partner,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(o.localisedName(arabic), style: text.bodyMedium),
-                if (note != null) ...[
-                  const SizedBox(height: 3),
-                  Text(
-                    note,
-                    style: text.labelSmall,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+    final available = o.canBuy;
+    final spots = o.availability?.spotsLeft;
+
+    return Opacity(
+      // Dimmed, not hidden. A member who came for this class needs to see it
+      // is here and full, rather than doubt they remembered the app right.
+      opacity: available ? 1 : 0.55,
+      child: NamatCard(
+        padding: const EdgeInsets.all(NamatSpace.lg),
+        onTap: () => showOfferingSheet(
+          context,
+          offering: o,
+          partner: partner,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(o.localisedName(arabic), style: text.bodyMedium),
+                  if (note != null) ...[
+                    const SizedBox(height: 3),
+                    Text(
+                      note,
+                      style: text.labelSmall,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                  const SizedBox(height: 7),
+                  // Wrap: the price, the package note and the macros are three
+                  // independent facts, and on a narrow phone they need two
+                  // lines. A Row pushed the macros off the edge entirely.
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        '${context.money(o.price)} ${l.omr}',
+                        style: text.labelMedium?.copyWith(
+                          color:
+                              covered ? NamatColors.inkSoft : NamatColors.ink,
+                          decoration:
+                              covered ? TextDecoration.lineThrough : null,
+                        ),
+                      ),
+                      if (covered)
+                        Text(
+                          l.freeFromPackage,
+                          style: text.labelSmall
+                              ?.copyWith(color: NamatColors.accent),
+                        ),
+                      // Protein first because it is the number the members who
+                      // filter on nutrition are actually filtering on.
+                      if (n != null)
+                        Text(
+                          '${context.n(n.calories)} ${l.calories} · '
+                          '${l.gramsShort(context.n(n.protein))} '
+                          '${l.protein}',
+                          style: text.labelSmall,
+                        )
+                      else if (o.minutes != null)
+                        Text(
+                          l.minutesShort(context.n(o.minutes!)),
+                          style: text.labelSmall,
+                        ),
+                      // Only when it is nearly gone. A comfortable number is
+                      // noise on a list of eight services.
+                      if (available && spots != null && spots <= 3)
+                        Text(
+                          l.lastSpots(context.n(spots)),
+                          style: text.labelSmall
+                              ?.copyWith(color: NamatColors.danger),
+                        ),
+                    ],
                   ),
                 ],
-                const SizedBox(height: 7),
-                // Wrap: the price, the package note and the macros are three
-                // independent facts, and on a narrow phone they need two
-                // lines. A Row pushed the macros off the edge entirely.
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 4,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text(
-                      '${context.money(o.price)} ${l.omr}',
-                      style: text.labelMedium?.copyWith(
-                        color: covered
-                            ? NamatColors.inkSoft
-                            : NamatColors.ink,
-                        decoration:
-                            covered ? TextDecoration.lineThrough : null,
-                      ),
-                    ),
-                    if (covered)
-                      Text(
-                        l.freeFromPackage,
-                        style: text.labelSmall
-                            ?.copyWith(color: NamatColors.accent),
-                      ),
-                    // Protein first because it is the number the members who
-                    // filter on nutrition are actually filtering on.
-                    if (n != null)
-                      Text(
-                        '${context.n(n.calories)} ${l.calories} · '
-                        '${l.gramsShort(context.n(n.protein))} '
-                        '${l.protein}',
-                        style: text.labelSmall,
-                      )
-                    else if (o.minutes != null)
-                      Text(
-                        l.minutesShort(context.n(o.minutes!)),
-                        style: text.labelSmall,
-                      ),
-                  ],
+              ),
+            ),
+            const SizedBox(width: NamatSpace.sm),
+            if (available)
+              Container(
+                width: 34,
+                height: 34,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: partner.field.tint,
+                  borderRadius: BorderRadius.circular(NamatRadius.xs),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(width: NamatSpace.sm),
-          Container(
-            width: 34,
-            height: 34,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: partner.field.tint,
-              borderRadius: BorderRadius.circular(NamatRadius.xs),
-            ),
-            child: Icon(Icons.add, size: 18, color: partner.field.accent),
-          ),
-        ],
+                child: Icon(Icons.add, size: 18, color: partner.field.accent),
+              )
+            else
+              Text(
+                o.isSoldOut ? l.soldOut : l.outOfStock,
+                style: text.labelSmall?.copyWith(color: NamatColors.danger),
+              ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+/// Opening hours, or an honest gap where they would be.
+class _Hours extends StatelessWidget {
+  const _Hours({required this.hours});
+
+  final OpeningHours? hours;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = L.of(context)!;
+    final text = Theme.of(context).textTheme;
+    final h = hours;
+
+    // A wrong closing time sends someone to a locked door, which is worse
+    // than showing nothing at all.
+    if (h == null) {
+      return Text(l.hoursUnknown, style: text.labelSmall);
+    }
+
+    final open = h.isOpenAt(DateTime.now());
+
+    return Row(
+      children: [
+        Container(
+          width: 7,
+          height: 7,
+          decoration: BoxDecoration(
+            color: open ? NamatColors.accent : NamatColors.inkSoft,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 7),
+        Text(
+          open ? l.openNow : l.closedNow,
+          style: text.labelSmall?.copyWith(
+            color: open ? NamatColors.accent : NamatColors.inkSoft,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            // The clock is read, not transcribed, so its digits follow the
+            // interface language like every other number on the page.
+            l.hoursLine(
+              context.digits(OpeningHours.format(h.opensAt)),
+              context.digits(OpeningHours.format(h.closesAt)),
+            ),
+            style: text.labelSmall,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

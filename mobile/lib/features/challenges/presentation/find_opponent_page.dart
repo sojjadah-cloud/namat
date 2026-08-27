@@ -65,7 +65,7 @@ class _FindOpponentPageState extends State<FindOpponentPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/challenges'),
+            onPressed: () => context.go('/journey/challenges'),
             icon: const Icon(Icons.arrow_forward),
           ),
           title: Text(l.pickOpponent),
@@ -164,7 +164,7 @@ class _PersonCard extends StatelessWidget {
           // goes. Hiding the person entirely would look like a broken search.
           if (person.acceptsChallenges)
             Pressable(
-              onTap: () => context.go('/challenges/new/${person.username}'),
+              onTap: () => context.go('/journey/challenges/new/${person.username}'),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,

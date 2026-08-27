@@ -521,5 +521,184 @@
   "noOrdersYetBody": "أول طلب يبدأ من قسم استخدم نمط",
   "recentOrders": "طلباتك",
   "noResults": "ما لقينا نتائج",
-  "noResultsBody": "جرّب كلمة أقصر، أو شِل الفلاتر"
+  "noResultsBody": "جرّب كلمة أقصر، أو شِل الفلاتر",
+
+  "whatsIncluded": "وش يشمل",
+  "serviceLevel": "المستوى",
+  "levelAny": "لكل المستويات",
+  "levelBeginner": "مبتدئ",
+  "levelIntermediate": "متوسط",
+  "levelAdvanced": "متقدم",
+  "serviceFormat": "طريقة الحضور",
+  "formatInPerson": "حضور في المكان",
+  "formatRemote": "عن بُعد",
+  "formatEither": "حضوراً أو عن بُعد",
+  "cancellationTitle": "الإلغاء",
+  "cancelFree24h": "إلغاء مجاني قبل ٢٤ ساعة",
+  "cancelFree2h": "إلغاء مجاني قبل ساعتين",
+  "cancelNonRefundable": "غير قابل للاسترداد",
+  "cancelUnknown": "ما زوّدنا الشريك بسياسة الإلغاء",
+  "spotsLeft": "باقي {count} أماكن",
+  "@spotsLeft": {
+      "placeholders": {
+          "count": {
+              "type": "String"
+          }
+      }
+  },
+  "lastSpots": "باقي {count} فقط",
+  "@lastSpots": {
+      "placeholders": {
+          "count": {
+              "type": "String"
+          }
+      }
+  },
+  "soldOut": "مكتمل",
+  "outOfStock": "غير متوفر حالياً",
+  "soldOutBody": "ما فيه أماكن في هذا الموعد. جرّب موعداً ثانياً أو حصة غيرها.",
+  "nextTimes": "المواعيد القادمة",
+  "noFixedTimes": "بدون موعد ثابت — تختار الوقت عند الطلب",
+  "openNow": "مفتوح الآن",
+  "closedNow": "مغلق الآن",
+  "hoursLine": "{from} — {to}",
+  "@hoursLine": {
+      "placeholders": {
+          "from": {
+              "type": "String"
+          },
+          "to": {
+              "type": "String"
+          }
+      }
+  },
+  "hoursUnknown": "ما زوّدنا الشريك بأوقات العمل",
+  "allergensUnknown": "معلومات الحساسية غير متوفرة — راجع الشريك قبل الطلب",
+  "everythingUnavailable": "كل الخدمات هنا مكتملة حالياً",
+  "serviceCount": "{count} خدمات",
+  "@serviceCount": {
+      "placeholders": {
+          "count": {
+              "type": "String"
+          }
+      }
+  },
+
+  "navExplore": "استكشف",
+  "navBookings": "حجوزاتي",
+  "searchEverything": "ابحث في نمط",
+  "searchHint": "مطعم، وجبة، ناد، مختص، منتج",
+  "searchPartnersGroup": "الأماكن",
+  "searchServicesGroup": "الخدمات",
+  "searchNothing": "ما لقينا شي",
+  "searchNothingBody": "جرّب كلمة أقصر أو اسم مختلف",
+  "searchStart": "اكتب وش تدور عليه",
+  "searchStartBody": "نبحث في المطاعم والأندية والمختصين والمنتجات كلها",
+  "favoritesTitle": "المحفوظات",
+  "favoritesEmpty": "ما حفظت شي بعد",
+  "favoritesEmptyBody": "اضغط القلب على أي مكان أو خدمة عشان تلقاها هنا",
+  "savedPartners": "أماكن",
+  "savedServices": "خدمات",
+  "saved": "محفوظ",
+  "removedFromSaved": "شيلناه من المحفوظات",
+  "pointsTitle": "نقاط نمط",
+  "pointsBalance": "رصيدك",
+  "pointsHow": "كيف تجمع نقاط",
+  "pointsEarnOrder": "طلب أو حجز مكتمل",
+  "pointsEarnReview": "تقييم بعد الخدمة",
+  "pointsEarnChallenge": "إكمال تحدٍ",
+  "pointsEarnStreak": "يوم جديد بدون انقطاع",
+  "pointsEarnNewPartner": "أول مرة عند شريك",
+  "pointsRedeemedLabel": "استبدال",
+  "pointsEmpty": "ما جمعت نقاط بعد",
+  "pointsEmptyBody": "أول طلب يبدأ الرصيد",
+  "rewardsTitle": "استبدل نقاطك",
+  "redeem": "استبدل",
+  "pointsCost": "{cost} نقطة",
+  "@pointsCost": {
+      "placeholders": {
+          "cost": {
+              "type": "String"
+          }
+      }
+  },
+  "pointsShort": "باقي {count} نقطة",
+  "@pointsShort": {
+      "placeholders": {
+          "count": {
+              "type": "String"
+          }
+      }
+  },
+  "redeemed": "تم الاستبدال",
+  "pointsEarned": "+{count} نقطة",
+  "@pointsEarned": {
+      "placeholders": {
+          "count": {
+              "type": "String"
+          }
+      }
+  },
+  "signInToOrder": "سجّل دخولك عشان تكمل الطلب",
+  "signInToBook": "سجّل دخولك عشان تحجز",
+  "signInToJoin": "سجّل دخولك عشان تنضم",
+  "signInToSave": "سجّل دخولك عشان تحفظ",
+  "signInToChallenge": "سجّل دخولك عشان تتحدى",
+  "signInBody": "دقيقة وحدة برقم جوالك، وتكمل من نفس المكان",
+  "keepBrowsing": "أكمل التصفح",
+  "cityTitle": "مدينتك",
+  "changeCity": "غيّر المدينة",
+  "citySur": "صور",
+  "cityBarka": "بركاء",
+  "noPartnersInCity": "ما وصلنا {city} في هذا المجال بعد",
+  "@noPartnersInCity": {
+      "placeholders": {
+          "city": {
+              "type": "String"
+          }
+      }
+  },
+  "noPartnersInCityBody": "نشتغل على إضافة شركاء. تقدر تشوف المتاح في مدينة ثانية.",
+  "showCity": "اعرض {city}",
+  "@showCity": {
+      "placeholders": {
+          "city": {
+              "type": "String"
+          }
+      }
+  },
+  "inCity": "في {city}",
+  "@inCity": {
+      "placeholders": {
+          "city": {
+              "type": "String"
+          }
+      }
+  },
+  "otherCity": "مدينة ثانية",
+  "nextStep": "خطوتك القادمة",
+  "thisWeek": "رحلتك هذا الأسبوع",
+  "viewJourney": "عرض رحلتي",
+  "weekProgress": "{percent}% من أهداف الأسبوع",
+  "@weekProgress": {
+      "placeholders": {
+          "percent": {
+              "type": "String"
+          }
+      }
+  },
+  "recommendedForYou": "مناسب لهدفك",
+  "nearYou": "قريب منك",
+  "namatPicks": "اختيارات نمط لك",
+  "bundlesPreview": "باقات نمط",
+  "seeAll": "الكل",
+  "noNextStep": "ما عندك شي مجدول اليوم",
+  "noNextStepBody": "اختر خدمة وتلقاها هنا",
+  "loadingTitle": "لحظة…",
+  "offlineTitle": "ما فيه اتصال",
+  "offlineBody": "تأكد من الإنترنت وجرّب مرة ثانية",
+  "paymentFailed": "ما تمت العملية",
+  "paymentFailedBody": "ما انخصم أي مبلغ. جرّب طريقة دفع ثانية.",
+  "unavailableTitle": "الخدمة ما عادت متاحة",
+  "unavailableBody": "انحجزت قبل شوي. اختر موعداً أو خدمة ثانية."
 }

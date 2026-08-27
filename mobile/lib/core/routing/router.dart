@@ -1,11 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/challenges/presentation/challenges_page.dart';
-import '../../features/challenges/presentation/create_duel_page.dart';
-import '../../features/challenges/presentation/duel_room_page.dart';
-import '../../features/challenges/presentation/duel_sent_page.dart';
-import '../../features/challenges/presentation/find_opponent_page.dart';
 import '../../features/auth/presentation/phone_page.dart';
 import '../../features/auth/presentation/setup_page.dart';
 import '../../features/auth/presentation/verify_page.dart';
@@ -13,26 +8,43 @@ import '../../features/bookings/presentation/bookings_page.dart';
 import '../../features/bookings/presentation/cart_page.dart';
 import '../../features/bookings/presentation/checkout_page.dart';
 import '../../features/bookings/presentation/order_done_page.dart';
-import '../../features/notifications/presentation/notifications_page.dart';
-import '../../features/packages/presentation/packages_page.dart';
-import '../../features/partners/presentation/partner_page.dart';
+import '../../features/challenges/presentation/challenges_page.dart';
+import '../../features/challenges/presentation/create_duel_page.dart';
+import '../../features/challenges/presentation/duel_room_page.dart';
+import '../../features/challenges/presentation/duel_sent_page.dart';
+import '../../features/challenges/presentation/find_opponent_page.dart';
+import '../../features/favorites/presentation/favorites_page.dart';
 import '../../features/home/presentation/home_page.dart';
 import '../../features/journey/presentation/journey_page.dart';
-import '../../features/onboarding/presentation/splash_page.dart';
+import '../../features/notifications/presentation/notifications_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
+import '../../features/onboarding/presentation/splash_page.dart';
 import '../../features/onboarding/presentation/welcome_page.dart';
+import '../../features/packages/presentation/packages_page.dart';
+import '../../features/partners/presentation/partner_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
+import '../../features/rewards/presentation/points_page.dart';
 import '../../features/reviews/presentation/rate_page.dart';
+import '../../features/search/presentation/search_page.dart';
 import '../../features/shell/app_shell.dart';
-import '../../features/use/presentation/use_page.dart';
 import '../../features/use/presentation/field_page.dart';
+import '../../features/use/presentation/use_page.dart';
 
 /// Routing.
 ///
-/// The five tabs live inside a [StatefulShellRoute] so each keeps its own
-/// navigation stack: opening a partner from Use NAMAT and then tapping Journey
-/// and back returns you to the partner, not to the top of the tab. That is
-/// what makes tab navigation feel native rather than like a set of links.
+/// Five tabs, named for what a member is doing rather than for what the app
+/// contains: الرئيسية, استكشف, رحلتي, حجوزاتي, حسابي. Challenges used to hold a
+/// tab of its own; it belongs under رحلتي, because a challenge is a way of
+/// continuing rather than a separate product — and the destination it was
+/// occupying left bookings, the thing members open most often, two taps deep.
+///
+/// Each tab lives inside a [StatefulShellRoute] so it keeps its own navigation
+/// stack: opening a partner from استكشف, tapping رحلتي, then coming back
+/// returns you to the partner rather than to the top of the tab. That is what
+/// makes tab navigation feel native instead of like a set of links.
+///
+/// The order flow sits OUTSIDE the shell on purpose. Once a member is paying,
+/// the bottom bar is a way to lose the cart, not a way to navigate.
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
@@ -56,8 +68,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       GoRoute(path: '/setup', builder: (_, __) => const SetupPage()),
 
-      // The order flow sits outside the tab shell: once a member is paying,
-      // the bottom bar is a way to lose the cart, not a way to navigate.
+      // Search is global and reached from every tab, so no one tab owns it.
+      GoRoute(path: '/search', builder: (_, __) => const SearchPage()),
+
       GoRoute(path: '/cart', builder: (_, __) => const CartPage()),
       GoRoute(
         path: '/cart/checkout',
@@ -79,6 +92,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(shell: shell),
         branches: [
+          // ------------------------------------------------------ الرئيسية
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -89,19 +103,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'notifications',
                     builder: (_, __) => const NotificationsPage(),
                   ),
-                  GoRoute(
-                    path: 'bookings',
-                    builder: (_, __) => const BookingsPage(),
-                  ),
-                  GoRoute(path: 'cart', builder: (_, __) => const CartPage()),
                 ],
               ),
             ],
           ),
+
+          // -------------------------------------------------------- استكشف
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/use',
+                path: '/explore',
                 builder: (_, __) => const UsePage(),
                 routes: [
                   GoRoute(
@@ -121,36 +132,8 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/challenges',
-                builder: (_, __) => const ChallengesPage(),
-                routes: [
-                  GoRoute(
-                    path: 'find',
-                    builder: (_, __) => const FindOpponentPage(),
-                  ),
-                  GoRoute(
-                    path: 'new/:username',
-                    builder: (_, state) => CreateDuelPage(
-                      username: state.pathParameters['username']!,
-                    ),
-                  ),
-                  GoRoute(
-                    path: 'sent/:username',
-                    builder: (_, state) => DuelSentPage(
-                      username: state.pathParameters['username']!,
-                    ),
-                  ),
-                  GoRoute(
-                    path: 'room',
-                    builder: (_, __) => const DuelRoomPage(),
-                  ),
-                ],
-              ),
-            ],
-          ),
+
+          // --------------------------------------------------------- رحلتي
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -161,12 +144,65 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'packages',
                     builder: (_, __) => const PackagesPage(),
                   ),
+                  GoRoute(
+                    path: 'challenges',
+                    builder: (_, __) => const ChallengesPage(),
+                    routes: [
+                      GoRoute(
+                        path: 'find',
+                        builder: (_, __) => const FindOpponentPage(),
+                      ),
+                      GoRoute(
+                        path: 'new/:username',
+                        builder: (_, state) => CreateDuelPage(
+                          username: state.pathParameters['username']!,
+                        ),
+                      ),
+                      GoRoute(
+                        path: 'sent/:username',
+                        builder: (_, state) => DuelSentPage(
+                          username: state.pathParameters['username']!,
+                        ),
+                      ),
+                      GoRoute(
+                        path: 'room',
+                        builder: (_, __) => const DuelRoomPage(),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
+
+          // ------------------------------------------------------- حجوزاتي
           StatefulShellBranch(
-            routes: [GoRoute(path: '/profile', builder: (_, __) => const ProfilePage())],
+            routes: [
+              GoRoute(
+                path: '/bookings',
+                builder: (_, __) => const BookingsPage(),
+              ),
+            ],
+          ),
+
+          // --------------------------------------------------------- حسابي
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (_, __) => const ProfilePage(),
+                routes: [
+                  GoRoute(
+                    path: 'favorites',
+                    builder: (_, __) => const FavoritesPage(),
+                  ),
+                  GoRoute(
+                    path: 'points',
+                    builder: (_, __) => const PointsPage(),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

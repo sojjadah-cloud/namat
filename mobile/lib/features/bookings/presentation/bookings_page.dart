@@ -160,7 +160,7 @@ class _List extends StatelessWidget {
         title: emptyTitle,
         body: emptyBody,
         action: FilledButton(
-          onPressed: () => context.go('/use'),
+          onPressed: () => context.go('/explore'),
           child: Text(l.useNamatCta),
         ),
       );
@@ -365,7 +365,7 @@ class _Orders extends StatelessWidget {
         title: l.noOrdersYet,
         body: l.noOrdersYetBody,
         action: FilledButton(
-          onPressed: () => context.go('/use'),
+          onPressed: () => context.go('/explore'),
           child: Text(l.useNamatCta),
         ),
       );

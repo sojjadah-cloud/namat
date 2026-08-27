@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../account/domain/session.dart';
+import '../../favorites/domain/favorites.dart';
+import '../../rewards/domain/points.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
+    final name = ref.watch(greetingNameProvider);
+    final points = ref.watch(pointsBalanceProvider);
+    final saved = ref.watch(favouritesCountProvider);
 
     // A row with nowhere to go is worse than no row: it teaches people the
     // app is broken. Only the destinations that exist are linked.
     final rows = <(NamatIcons, String, String?)>[
-      (NamatIcons.package, l.myBookings, '/home/bookings'),
-      (NamatIcons.store, l.myOrders, '/cart'),
-      (NamatIcons.reward, l.myPackages, '/journey/packages'),
-      (NamatIcons.leaf, l.savedPlaces, null),
+      (NamatIcons.package, l.myBookings, '/bookings'),
+      (NamatIcons.reward, l.pointsTitle, '/profile/points'),
+      (NamatIcons.leaf, l.favoritesTitle, '/profile/favorites'),
+      (NamatIcons.package, l.myPackages, '/journey/packages'),
+      (NamatIcons.challenge, l.challengesTitle, '/journey/challenges'),
       (NamatIcons.profile, l.settings, null),
       (NamatIcons.search, l.privacy, null),
       (NamatIcons.use, l.language, null),
@@ -41,17 +49,23 @@ class ProfilePage extends StatelessWidget {
           children: [
             Row(
               children: [
-                const NamatAvatar(name: 'سارة', size: 64),
+                NamatAvatar(name: name, size: 64),
                 const SizedBox(width: NamatSpace.lg),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('سارة', style: text.titleLarge),
-                      Text(handle('sara'), style: text.bodySmall),
+                      // The member's own name, not a fixture. A profile that
+                      // greets everyone as the same person is the one screen
+                      // where placeholder data is unmissable.
+                      Text(
+                        name.isEmpty ? l.profileTitle : name,
+                        style: text.titleLarge,
+                      ),
                       const SizedBox(height: 4),
                       Text(
-                        l.namatLevel(context.n(8)),
+                        '${context.n(points)} ${l.pointsTitle} · '
+                        '${context.n(saved)} ${l.saved}',
                         style: text.labelSmall?.copyWith(
                           color: NamatColors.accent,
                         ),

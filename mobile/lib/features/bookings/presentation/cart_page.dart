@@ -35,7 +35,7 @@ class CartPage extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.canPop() ? context.pop() : context.go('/use'),
+            onPressed: () => context.canPop() ? context.pop() : context.go('/explore'),
             icon: const Icon(Icons.arrow_forward),
           ),
           title: Text(l.cartTitle),
@@ -50,7 +50,7 @@ class CartPage extends ConsumerWidget {
                 title: l.cartEmpty,
                 body: l.cartEmptyBody,
                 action: FilledButton(
-                  onPressed: () => context.go('/use'),
+                  onPressed: () => context.go('/explore'),
                   child: Text(l.cartBrowse),
                 ),
               )

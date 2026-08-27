@@ -49,6 +49,14 @@ extension NamatNumbers on BuildContext {
     return _isArabic ? _toArabicIndic(latin) : latin;
   }
 
+  /// Converts the digits inside an already-formatted string.
+  ///
+  /// For values that arrive pre-shaped — a clock time like "18:30", a version,
+  /// anything whose punctuation is part of its meaning. [n] cannot be used
+  /// there because it would reformat the number and lose the colon.
+  String digits(String formatted) =>
+      _isArabic ? _toArabicIndic(formatted) : formatted;
+
   /// Money, at the precision the currency actually has.
   ///
   /// The rial divides into 1000 baisa, so prices here carry three decimals and

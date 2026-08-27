@@ -45,19 +45,19 @@ Future<void> _pumpAt(WidgetTester tester, String location) async {
 
 void main() {
   testWidgets('the challenge flow resolves end to end', (tester) async {
-    await _pumpAt(tester, '/challenges');
+    await _pumpAt(tester, '/journey/challenges');
     expect(find.byType(ChallengesPage), findsOneWidget);
 
-    await _pumpAt(tester, '/challenges/find');
+    await _pumpAt(tester, '/journey/challenges/find');
     expect(find.byType(FindOpponentPage), findsOneWidget);
 
-    await _pumpAt(tester, '/challenges/new/ahmedfit');
+    await _pumpAt(tester, '/journey/challenges/new/ahmedfit');
     expect(find.byType(CreateDuelPage), findsOneWidget);
 
-    await _pumpAt(tester, '/challenges/sent/ahmedfit');
+    await _pumpAt(tester, '/journey/challenges/sent/ahmedfit');
     expect(find.byType(DuelSentPage), findsOneWidget);
 
-    await _pumpAt(tester, '/challenges/room');
+    await _pumpAt(tester, '/journey/challenges/room');
     expect(find.byType(DuelRoomPage), findsOneWidget);
   });
 
@@ -65,16 +65,16 @@ void main() {
     await _pumpAt(tester, '/journey/packages');
     expect(find.byType(PackagesPage), findsOneWidget);
 
-    await _pumpAt(tester, '/use/meals');
+    await _pumpAt(tester, '/explore/meals');
     expect(find.byType(FieldPage), findsOneWidget);
 
     // An unknown field must not crash; it falls through to the error state.
-    await _pumpAt(tester, '/use/nonsense');
+    await _pumpAt(tester, '/explore/nonsense');
     expect(find.byType(FieldPage), findsOneWidget);
   });
 
   testWidgets('a duel carries its opponent through the flow', (tester) async {
-    await _pumpAt(tester, '/challenges/new/maryam');
+    await _pumpAt(tester, '/journey/challenges/new/maryam');
     final page = tester.widget<CreateDuelPage>(find.byType(CreateDuelPage));
     expect(page.username, 'maryam');
   });
@@ -83,17 +83,17 @@ void main() {
     await _pumpAt(tester, '/home/notifications');
     expect(find.byType(NotificationsPage), findsOneWidget);
 
-    await _pumpAt(tester, '/use/meals/partner/healthy-lab');
+    await _pumpAt(tester, '/explore/meals/partner/healthy-lab');
     expect(find.byType(PartnerPage), findsOneWidget);
 
     // An unknown slug falls back rather than throwing — a stale link should
     // not crash the app.
-    await _pumpAt(tester, '/use/meals/partner/does-not-exist');
+    await _pumpAt(tester, '/explore/meals/partner/does-not-exist');
     expect(find.byType(PartnerPage), findsOneWidget);
   });
 
   testWidgets('the order flow resolves', (tester) async {
-    await _pumpAt(tester, '/home/bookings');
+    await _pumpAt(tester, '/bookings');
     expect(find.byType(BookingsPage), findsOneWidget);
 
     await _pumpAt(tester, '/cart');

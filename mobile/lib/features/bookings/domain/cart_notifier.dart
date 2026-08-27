@@ -40,6 +40,11 @@ class CartNotifier extends StateNotifier<List<CartItem>> {
   /// Merging rather than appending: two identical lines in a cart is a bug
   /// that members read as the app having double-charged them.
   void add(Offering offering, {int quantity = 1}) {
+    // Refused here as well as disabled in the sheet. The button is the only
+    // path today, but a cart that can hold a sold-out class is one deep link
+    // away from taking money for a place that does not exist.
+    if (!offering.canBuy) return;
+
     final partner = Catalogue.partnerOf(offering.id);
     final existing = state.indexWhere((i) => i.id == offering.id);
 

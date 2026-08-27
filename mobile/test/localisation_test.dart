@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:namat/core/l10n/numbers.dart';
 import 'package:namat/features/profile/presentation/profile_page.dart';
@@ -80,17 +81,52 @@ void main() {
     });
   });
 
-  testWidgets('the profile shows an Arabic level and an intact handle',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const Scaffold(body: ProfilePage())));
+  testWidgets('the profile carries no Latin digits', (tester) async {
+    await tester.pumpWidget(
+      const ProviderScope(child: _Wrapped(child: ProfilePage())),
+    );
     await tester.pump();
 
-    // The level placeholder is an int; without a format in the ARB it renders
-    // as a Latin numeral inside an Arabic sentence.
-    expect(find.textContaining('٨'), findsWidgets);
-    expect(find.textContaining('مستوى نمط 8'), findsNothing);
+    // The profile used to show a fixture member with a hardcoded level; it
+    // now shows the real balance and saved count, which are zero for a new
+    // member. The property under test is unchanged and is the one that
+    // matters: a Latin numeral inside an Arabic sentence reads as a foreign
+    // insert, and it is invisible in a code review.
+    final latin = find.byWidgetPredicate(
+      (w) => w is Text && (w.data ?? '').contains(RegExp(r'[0-9]')),
+    );
+    expect(latin, findsNothing);
 
-    // The handle is present and isolated.
-    expect(find.text(handle('sara')), findsOneWidget);
+    // And the digits it does render are the reader's.
+    expect(find.textContaining('٠'), findsWidgets);
   });
+
+  testWidgets('a handle survives bidi reordering', (tester) async {
+    // Bidi moves a leading at-sign to the far end of an Arabic line, so a
+    // handle renders back-to-front without the isolate around it.
+    expect(handle('sara').codeUnits.first, 0x2066);
+    expect(handle('sara').codeUnits.last, 0x2069);
+    expect(handle('sara').contains('@sara'), isTrue);
+  });
+}
+
+/// The same wrapper as [_wrap], as a const widget so it can sit inside a
+/// const ProviderScope.
+class _Wrapped extends StatelessWidget {
+  const _Wrapped({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        locale: const Locale('ar'),
+        supportedLocales: L.supportedLocales,
+        localizationsDelegates: const [
+          L.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: Scaffold(body: child),
+      );
 }

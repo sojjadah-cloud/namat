@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:namat/core/routing/router.dart';
+import 'package:namat/features/account/domain/session.dart';
 import 'package:namat/features/bookings/domain/cart_notifier.dart';
 import 'package:namat/features/bookings/domain/order.dart';
 import 'package:namat/features/bookings/presentation/cart_page.dart';
@@ -43,8 +44,12 @@ void main() {
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
 
-    final container = await _pumpAt(tester, '/use/meals/partner/healthy-lab');
+    final container = await _pumpAt(tester, '/explore/meals/partner/healthy-lab');
     expect(find.byType(PartnerPage), findsOneWidget);
+
+    // Browsing needs no account; placing the order does. Signed in here so
+    // this test stays about the journey — the gate itself is tested below.
+    container.read(sessionProvider.notifier).signIn(name: 'سارة');
 
     // --- choose -----------------------------------------------------------
     // Through the sheet rather than by calling the notifier, so the tap path
@@ -167,7 +172,7 @@ void main() {
 
   testWidgets('an unknown partner is an error, not another partner',
       (tester) async {
-    await _pumpAt(tester, '/use/meals/partner/no-such-place');
+    await _pumpAt(tester, '/explore/meals/partner/no-such-place');
     // The old page fell back to a fixed slug, so a bad link quietly showed a
     // different business's menu and prices.
     expect(find.text('ما قدرنا نحمّل البيانات'), findsOneWidget);

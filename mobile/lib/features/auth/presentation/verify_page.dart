@@ -9,6 +9,7 @@ import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../account/domain/session.dart';
 import '../domain/profile_draft.dart';
 
 /// Code entry.
@@ -66,6 +67,13 @@ class _VerifyPageState extends ConsumerState<VerifyPage> {
       });
       return;
     }
+    // The session starts here, not on the setup screen: a member who skips
+    // every question is still signed in, and gating on the answers would
+    // leave them a guest who cannot order.
+    ref.read(sessionProvider.notifier).signIn(
+          name: ref.read(profileDraftProvider).name,
+        );
+
     // Signing up continues into the questions; signing in already has answers.
     context.go(widget.mode == 'signup' ? '/setup' : '/home');
   }

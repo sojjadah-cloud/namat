@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/arabic.dart';
@@ -8,7 +9,11 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/domain/city.dart';
+import '../../account/domain/session.dart';
 import '../../catalogue/domain/catalogue.dart';
+import '../../favorites/domain/favorites.dart';
+import '../../favorites/presentation/favorites_page.dart' show FavouriteButton;
 import '../domain/field.dart';
 
 /// One field: search and filters scoped to it.
@@ -17,18 +22,22 @@ import '../domain/field.dart';
 /// queries this field, so "بروتين" inside meals finds kitchens and the same
 /// word inside stores finds supplements, with no way for an unrelated result
 /// to appear.
-class FieldPage extends StatefulWidget {
+class FieldPage extends ConsumerStatefulWidget {
   const FieldPage({super.key, required this.fieldKey});
 
   final String fieldKey;
 
   @override
-  State<FieldPage> createState() => _FieldPageState();
+  ConsumerState<FieldPage> createState() => _FieldPageState();
 }
 
-class _FieldPageState extends State<FieldPage> {
+class _FieldPageState extends ConsumerState<FieldPage> {
   final _search = TextEditingController();
   final _active = <String>{};
+
+  /// Set when the member asks to see a city that is not theirs, so the choice
+  /// lasts while they browse and does not follow them to the next field.
+  NamatCity? _viewing;
 
   @override
   void dispose() {
@@ -106,15 +115,23 @@ class _FieldPageState extends State<FieldPage> {
       );
     }
 
-    final all = Catalogue.byField(field);
+    final home = ref.watch(sessionProvider).city;
+    final city = _viewing ?? home;
+    final all = Catalogue.inCity(field, city);
     final results = _filter(all, l, arabic);
+
+    // Where else this field exists, for the member whose own city has nothing
+    // in it yet. Sohar is the launch market and the researched catalogue is
+    // Muscat, so this is a state members will actually meet.
+    final elsewhere =
+        Catalogue.citiesWith(field).where((c) => c != city).toList();
 
     return NamatBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/use'),
+            onPressed: () => context.go('/explore'),
             icon: const Icon(Icons.arrow_forward),
           ),
           title: Row(
@@ -125,25 +142,53 @@ class _FieldPageState extends State<FieldPage> {
                 child: NamatIcon(field.icon, size: 24, color: field.accent),
               ),
               const SizedBox(width: NamatSpace.sm),
-              Text(field.title(l)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(field.title(l)),
+                    // Only when it differs from theirs. Labelling every list
+                    // with the member's own city is noise.
+                    if (city != home)
+                      Text(
+                        l.inCity(city.label(l)),
+                        style: text.labelSmall,
+                      ),
+                  ],
+                ),
+              ),
+              if (city != home)
+                TextButton(
+                  onPressed: () => setState(() => _viewing = null),
+                  child: Text(home.label(l)),
+                ),
             ],
           ),
         ),
         body: all.isEmpty
             // A search box above an empty list looks broken rather than empty,
-            // so it is not rendered at all in this state.
+            // so it is not rendered at all in this state. And the member is
+            // told which city they are in and offered one that has something,
+            // rather than left to conclude the app is broken.
             ? NamatEmptyState(
                 illustration: NamatIcon(
                   field.icon,
                   size: 56,
                   color: NamatColors.inkSoft,
                 ),
-                title: l.noPartnersYet,
-                body: l.useSub,
-                action: FilledButton(
-                  onPressed: () => context.go('/use'),
-                  child: Text(l.useNamatCta),
-                ),
+                title: l.noPartnersInCity(city.label(l)),
+                body: l.noPartnersInCityBody,
+                action: elsewhere.isEmpty
+                    ? FilledButton(
+                        onPressed: () => context.go('/explore'),
+                        child: Text(l.useNamatCta),
+                      )
+                    : FilledButton(
+                        onPressed: () =>
+                            setState(() => _viewing = elsewhere.first),
+                        child:
+                            Text(l.showCity(elsewhere.first.label(l))),
+                      ),
               )
             : ListView(
                 padding: const EdgeInsets.fromLTRB(
@@ -283,7 +328,7 @@ class _ResultCard extends StatelessWidget {
 
     return NamatCard(
       padding: const EdgeInsets.all(NamatSpace.md),
-      onTap: () => context.go('/use/$fieldKey/partner/${partner.slug}'),
+      onTap: () => context.go('/explore/$fieldKey/partner/${partner.slug}'),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -305,11 +350,22 @@ class _ResultCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: text.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: text.titleMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    FavouriteButton(
+                      kind: FavouriteKind.partner,
+                      id: partner.slug,
+                      size: 18,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -319,7 +375,12 @@ class _ResultCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
-                Row(
+                // Wrap: distance, price and service count are three facts, and
+                // a Row drops the last one off the edge at 360dp.
+                Wrap(
+                  spacing: 0,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     const NamatIcon(
                       NamatIcons.location,
@@ -338,8 +399,24 @@ class _ResultCard extends StatelessWidget {
                         style: text.labelSmall,
                       ),
                     ],
+                    const SizedBox(width: 10),
+                    Text(
+                      l.serviceCount(context.n(partner.offerings.length)),
+                      style: text.labelSmall,
+                    ),
                   ],
                 ),
+                if (!partner.hasAnythingAvailable) ...[
+                  const SizedBox(height: 6),
+                  // Said on the list rather than discovered on the page. A
+                  // member should not have to open a partner to learn there
+                  // is nothing there to book.
+                  Text(
+                    l.everythingUnavailable,
+                    style: text.labelSmall
+                        ?.copyWith(color: NamatColors.danger),
+                  ),
+                ],
                 if (partner.inPackage) ...[
                   const SizedBox(height: 6),
                   Row(

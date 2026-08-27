@@ -44,7 +44,7 @@ class _CreateDuelPageState extends State<CreateDuelPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/challenges/find'),
+            onPressed: () => context.go('/journey/challenges/find'),
             icon: const Icon(Icons.arrow_forward),
           ),
           title: Text(l.chooseChallenge),
@@ -151,7 +151,7 @@ class _CreateDuelPageState extends State<CreateDuelPage> {
             NamatSpace.xxl,
           ),
           child: FilledButton(
-            onPressed: () => context.go('/challenges/sent/$name'),
+            onPressed: () => context.go('/journey/challenges/sent/$name'),
             child: Text(l.sendChallenge),
           ),
         ),

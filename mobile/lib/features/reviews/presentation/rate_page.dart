@@ -8,6 +8,7 @@ import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../bookings/domain/cart_notifier.dart';
+import '../../rewards/domain/points.dart';
 
 /// Rating an order.
 ///
@@ -38,6 +39,9 @@ class _RatePageState extends ConsumerState<RatePage> {
 
   void _submit() {
     ref.read(ordersProvider.notifier).rate(widget.reference, _stars);
+    ref
+        .read(pointsProvider.notifier)
+        .award(PointsReason.review, detail: widget.reference);
     setState(() => _sent = true);
   }
 
@@ -56,7 +60,7 @@ class _RatePageState extends ConsumerState<RatePage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             leading: IconButton(
-              onPressed: () => context.go('/home/bookings'),
+              onPressed: () => context.go('/bookings'),
               icon: const Icon(Icons.arrow_forward),
             ),
           ),
@@ -74,14 +78,14 @@ class _RatePageState extends ConsumerState<RatePage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/home/bookings'),
+            onPressed: () => context.go('/bookings'),
             icon: const Icon(Icons.arrow_forward),
           ),
           actions: [
             // Always available. A rating screen with no way out is how you
             // collect ratings nobody meant to give.
             TextButton(
-              onPressed: () => context.go('/home/bookings'),
+              onPressed: () => context.go('/bookings'),
               child: Text(l.rateLater),
             ),
           ],
@@ -326,7 +330,7 @@ class _Thanks extends StatelessWidget {
                 ),
                 const SizedBox(height: NamatSpace.section),
                 FilledButton(
-                  onPressed: () => context.go('/home/bookings'),
+                  onPressed: () => context.go('/bookings'),
                   child: Text(l.bookingsTitle),
                 ),
                 const SizedBox(height: NamatSpace.sm),

@@ -19,18 +19,26 @@ class AppShell extends StatelessWidget {
 
   final StatefulNavigationShell shell;
 
+  /// Five destinations, in the order a member moves through them: where they
+  /// are, what they could do, how it is going, what they have committed to,
+  /// and themselves.
+  ///
+  /// Challenges no longer holds one of these. It is a way of continuing rather
+  /// than a product of its own, so it sits inside رحلتي — and the slot it gave
+  /// up went to حجوزاتي, which members open far more often and which used to
+  /// be two taps down inside Home.
   static const _items = <({NamatIcons icon, String Function(L) label})>[
     (icon: NamatIcons.home, label: _homeLabel),
-    (icon: NamatIcons.use, label: _useLabel),
-    (icon: NamatIcons.challenge, label: _challengesLabel),
+    (icon: NamatIcons.use, label: _exploreLabel),
     (icon: NamatIcons.journey, label: _journeyLabel),
+    (icon: NamatIcons.package, label: _bookingsLabel),
     (icon: NamatIcons.profile, label: _profileLabel),
   ];
 
   static String _homeLabel(L l) => l.navHome;
-  static String _useLabel(L l) => l.navUse;
-  static String _challengesLabel(L l) => l.navChallenges;
+  static String _exploreLabel(L l) => l.navExplore;
   static String _journeyLabel(L l) => l.navJourney;
+  static String _bookingsLabel(L l) => l.navBookings;
   static String _profileLabel(L l) => l.navProfile;
 
   @override

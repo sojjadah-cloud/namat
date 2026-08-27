@@ -721,7 +721,7 @@ class LEn extends L {
   String get skipStep => 'Skip';
 
   @override
-  String get nextStep => 'Next';
+  String get nextStep => 'Your next step';
 
   @override
   String get km => 'km';
@@ -939,4 +939,314 @@ class LEn extends L {
 
   @override
   String get noResultsBody => 'Try a shorter word, or clear the filters';
+
+  @override
+  String get whatsIncluded => 'What\'s included';
+
+  @override
+  String get serviceLevel => 'Level';
+
+  @override
+  String get levelAny => 'All levels';
+
+  @override
+  String get levelBeginner => 'Beginner';
+
+  @override
+  String get levelIntermediate => 'Intermediate';
+
+  @override
+  String get levelAdvanced => 'Advanced';
+
+  @override
+  String get serviceFormat => 'Format';
+
+  @override
+  String get formatInPerson => 'In person';
+
+  @override
+  String get formatRemote => 'Remote';
+
+  @override
+  String get formatEither => 'In person or remote';
+
+  @override
+  String get cancellationTitle => 'Cancellation';
+
+  @override
+  String get cancelFree24h => 'Free cancellation up to 24 hours before';
+
+  @override
+  String get cancelFree2h => 'Free cancellation up to 2 hours before';
+
+  @override
+  String get cancelNonRefundable => 'Non-refundable';
+
+  @override
+  String get cancelUnknown => 'The partner has not given a cancellation policy';
+
+  @override
+  String spotsLeft(String count) {
+    return '$count places left';
+  }
+
+  @override
+  String lastSpots(String count) {
+    return 'Only $count left';
+  }
+
+  @override
+  String get soldOut => 'Full';
+
+  @override
+  String get outOfStock => 'Out of stock';
+
+  @override
+  String get soldOutBody => 'No places at this time. Try another time, or another class.';
+
+  @override
+  String get nextTimes => 'Next times';
+
+  @override
+  String get noFixedTimes => 'No fixed times — you choose when you book';
+
+  @override
+  String get openNow => 'Open now';
+
+  @override
+  String get closedNow => 'Closed now';
+
+  @override
+  String hoursLine(String from, String to) {
+    return '$from — $to';
+  }
+
+  @override
+  String get hoursUnknown => 'The partner has not published opening hours';
+
+  @override
+  String get allergensUnknown => 'No allergen information — check with the partner before ordering';
+
+  @override
+  String get everythingUnavailable => 'Everything here is fully booked right now';
+
+  @override
+  String serviceCount(String count) {
+    return '$count services';
+  }
+
+  @override
+  String get navExplore => 'Explore';
+
+  @override
+  String get navBookings => 'Bookings';
+
+  @override
+  String get searchEverything => 'Search NAMAT';
+
+  @override
+  String get searchHint => 'Kitchen, meal, gym, specialist, product';
+
+  @override
+  String get searchPartnersGroup => 'Places';
+
+  @override
+  String get searchServicesGroup => 'Services';
+
+  @override
+  String get searchNothing => 'Nothing found';
+
+  @override
+  String get searchNothingBody => 'Try a shorter word, or a different name';
+
+  @override
+  String get searchStart => 'What are you looking for?';
+
+  @override
+  String get searchStartBody => 'We search kitchens, gyms, specialists and products together';
+
+  @override
+  String get favoritesTitle => 'Saved';
+
+  @override
+  String get favoritesEmpty => 'Nothing saved yet';
+
+  @override
+  String get favoritesEmptyBody => 'Tap the heart on any place or service to keep it here';
+
+  @override
+  String get savedPartners => 'Places';
+
+  @override
+  String get savedServices => 'Services';
+
+  @override
+  String get saved => 'Saved';
+
+  @override
+  String get removedFromSaved => 'Removed from saved';
+
+  @override
+  String get pointsTitle => 'NAMAT points';
+
+  @override
+  String get pointsBalance => 'Your balance';
+
+  @override
+  String get pointsHow => 'How you earn';
+
+  @override
+  String get pointsEarnOrder => 'A completed order or booking';
+
+  @override
+  String get pointsEarnReview => 'A rating after the service';
+
+  @override
+  String get pointsEarnChallenge => 'Finishing a challenge';
+
+  @override
+  String get pointsEarnStreak => 'Another day without a gap';
+
+  @override
+  String get pointsEarnNewPartner => 'A partner you have not tried';
+
+  @override
+  String get pointsRedeemedLabel => 'Redeemed';
+
+  @override
+  String get pointsEmpty => 'No points yet';
+
+  @override
+  String get pointsEmptyBody => 'Your first order starts the balance';
+
+  @override
+  String get rewardsTitle => 'Spend your points';
+
+  @override
+  String get redeem => 'Redeem';
+
+  @override
+  String pointsCost(String cost) {
+    return '$cost points';
+  }
+
+  @override
+  String pointsShort(String count) {
+    return '$count points short';
+  }
+
+  @override
+  String get redeemed => 'Redeemed';
+
+  @override
+  String pointsEarned(String count) {
+    return '+$count points';
+  }
+
+  @override
+  String get signInToOrder => 'Sign in to place the order';
+
+  @override
+  String get signInToBook => 'Sign in to book';
+
+  @override
+  String get signInToJoin => 'Sign in to join';
+
+  @override
+  String get signInToSave => 'Sign in to save this';
+
+  @override
+  String get signInToChallenge => 'Sign in to challenge someone';
+
+  @override
+  String get signInBody => 'One minute with your phone number, and you carry on where you were';
+
+  @override
+  String get keepBrowsing => 'Keep browsing';
+
+  @override
+  String get cityTitle => 'Your city';
+
+  @override
+  String get changeCity => 'Change city';
+
+  @override
+  String get citySur => 'Sur';
+
+  @override
+  String get cityBarka => 'Barka';
+
+  @override
+  String noPartnersInCity(String city) {
+    return 'We are not in $city for this yet';
+  }
+
+  @override
+  String get noPartnersInCityBody => 'We are signing partners up. You can see what is available in another city.';
+
+  @override
+  String showCity(String city) {
+    return 'Show $city';
+  }
+
+  @override
+  String inCity(String city) {
+    return 'in $city';
+  }
+
+  @override
+  String get otherCity => 'Another city';
+
+  @override
+  String get thisWeek => 'Your week';
+
+  @override
+  String get viewJourney => 'Open my journey';
+
+  @override
+  String weekProgress(String percent) {
+    return '$percent% of this week\'s goals';
+  }
+
+  @override
+  String get recommendedForYou => 'For your goal';
+
+  @override
+  String get nearYou => 'Near you';
+
+  @override
+  String get namatPicks => 'NAMAT picks for you';
+
+  @override
+  String get bundlesPreview => 'NAMAT packages';
+
+  @override
+  String get seeAll => 'See all';
+
+  @override
+  String get noNextStep => 'Nothing scheduled today';
+
+  @override
+  String get noNextStepBody => 'Pick a service and it shows up here';
+
+  @override
+  String get loadingTitle => 'One moment…';
+
+  @override
+  String get offlineTitle => 'No connection';
+
+  @override
+  String get offlineBody => 'Check your internet and try again';
+
+  @override
+  String get paymentFailed => 'That did not go through';
+
+  @override
+  String get paymentFailedBody => 'Nothing was charged. Try another payment method.';
+
+  @override
+  String get unavailableTitle => 'That is no longer available';
+
+  @override
+  String get unavailableBody => 'It was taken a moment ago. Choose another time or service.';
 }

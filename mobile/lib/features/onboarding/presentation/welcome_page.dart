@@ -90,7 +90,7 @@ class _WelcomePageState extends State<WelcomePage>
                     ),
                     const SizedBox(height: NamatSpace.md),
                     TextButton(
-                      onPressed: () => context.go('/use'),
+                      onPressed: () => context.go('/explore'),
                       child: Text(
                         l.exploreAsGuest,
                         style: text.labelMedium?.copyWith(

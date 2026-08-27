@@ -8,6 +8,8 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/domain/city.dart';
+import '../../account/domain/session.dart';
 import '../domain/profile_draft.dart';
 
 /// Setting up: one question per screen.
@@ -42,6 +44,13 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     if (_step < _steps - 1) {
       setState(() => _step++);
     } else {
+      // The answers move from the draft into the session, which is what the
+      // rest of the app reads. A skipped city falls back to the launch market
+      // rather than to nothing.
+      final draft = ref.read(profileDraftProvider);
+      ref.read(sessionProvider.notifier)
+        ..signIn(name: draft.name)
+        ..setCity(NamatCity.byName(draft.city ?? '') ?? NamatCity.launch);
       context.go('/home');
     }
   }
@@ -152,16 +161,14 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                         body: l.qCityBody,
                         child: Column(
                           children: [
-                            for (final c in [
-                              l.cityMuscat,
-                              l.citySohar,
-                              l.citySalalah,
-                              l.cityNizwa,
-                            ])
+                            // Sohar first: it is the launch market, and the
+                            // order of a list is a recommendation whether or
+                            // not it is meant as one.
+                            for (final c in NamatCity.values)
                               _Choice(
-                                label: c,
-                                selected: draft.city == c,
-                                onTap: () => notifier.setCity(c),
+                                label: c.label(l),
+                                selected: draft.city == c.name,
+                                onTap: () => notifier.setCity(c.name),
                               ),
                           ],
                         ),

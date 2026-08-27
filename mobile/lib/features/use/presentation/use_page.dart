@@ -74,7 +74,7 @@ class _FieldCardState extends State<_FieldCard> {
       onTapDown: (_) => setState(() => _pressed = true),
       onTapCancel: () => setState(() => _pressed = false),
       onTapUp: (_) => setState(() => _pressed = false),
-      onTap: () => context.go('/use/${widget.field.name}'),
+      onTap: () => context.go('/explore/${widget.field.name}'),
       child: AnimatedScale(
         // A press that moves is the difference between a card and a picture.
         scale: _pressed ? 0.98 : 1,

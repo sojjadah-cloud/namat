@@ -1442,7 +1442,7 @@ abstract class L {
   /// No description provided for @nextStep.
   ///
   /// In ar, this message translates to:
-  /// **'التالي'**
+  /// **'خطوتك القادمة'**
   String get nextStep;
 
   /// No description provided for @km.
@@ -1846,6 +1846,582 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'جرّب كلمة أقصر، أو شِل الفلاتر'**
   String get noResultsBody;
+
+  /// No description provided for @whatsIncluded.
+  ///
+  /// In ar, this message translates to:
+  /// **'وش يشمل'**
+  String get whatsIncluded;
+
+  /// No description provided for @serviceLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستوى'**
+  String get serviceLevel;
+
+  /// No description provided for @levelAny.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل المستويات'**
+  String get levelAny;
+
+  /// No description provided for @levelBeginner.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبتدئ'**
+  String get levelBeginner;
+
+  /// No description provided for @levelIntermediate.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط'**
+  String get levelIntermediate;
+
+  /// No description provided for @levelAdvanced.
+  ///
+  /// In ar, this message translates to:
+  /// **'متقدم'**
+  String get levelAdvanced;
+
+  /// No description provided for @serviceFormat.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الحضور'**
+  String get serviceFormat;
+
+  /// No description provided for @formatInPerson.
+  ///
+  /// In ar, this message translates to:
+  /// **'حضور في المكان'**
+  String get formatInPerson;
+
+  /// No description provided for @formatRemote.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن بُعد'**
+  String get formatRemote;
+
+  /// No description provided for @formatEither.
+  ///
+  /// In ar, this message translates to:
+  /// **'حضوراً أو عن بُعد'**
+  String get formatEither;
+
+  /// No description provided for @cancellationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإلغاء'**
+  String get cancellationTitle;
+
+  /// No description provided for @cancelFree24h.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء مجاني قبل ٢٤ ساعة'**
+  String get cancelFree24h;
+
+  /// No description provided for @cancelFree2h.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء مجاني قبل ساعتين'**
+  String get cancelFree2h;
+
+  /// No description provided for @cancelNonRefundable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير قابل للاسترداد'**
+  String get cancelNonRefundable;
+
+  /// No description provided for @cancelUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما زوّدنا الشريك بسياسة الإلغاء'**
+  String get cancelUnknown;
+
+  /// No description provided for @spotsLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي {count} أماكن'**
+  String spotsLeft(String count);
+
+  /// No description provided for @lastSpots.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي {count} فقط'**
+  String lastSpots(String count);
+
+  /// No description provided for @soldOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get soldOut;
+
+  /// No description provided for @outOfStock.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متوفر حالياً'**
+  String get outOfStock;
+
+  /// No description provided for @soldOutBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فيه أماكن في هذا الموعد. جرّب موعداً ثانياً أو حصة غيرها.'**
+  String get soldOutBody;
+
+  /// No description provided for @nextTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواعيد القادمة'**
+  String get nextTimes;
+
+  /// No description provided for @noFixedTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون موعد ثابت — تختار الوقت عند الطلب'**
+  String get noFixedTimes;
+
+  /// No description provided for @openNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح الآن'**
+  String get openNow;
+
+  /// No description provided for @closedNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق الآن'**
+  String get closedNow;
+
+  /// No description provided for @hoursLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'{from} — {to}'**
+  String hoursLine(String from, String to);
+
+  /// No description provided for @hoursUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما زوّدنا الشريك بأوقات العمل'**
+  String get hoursUnknown;
+
+  /// No description provided for @allergensUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات الحساسية غير متوفرة — راجع الشريك قبل الطلب'**
+  String get allergensUnknown;
+
+  /// No description provided for @everythingUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الخدمات هنا مكتملة حالياً'**
+  String get everythingUnavailable;
+
+  /// No description provided for @serviceCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} خدمات'**
+  String serviceCount(String count);
+
+  /// No description provided for @navExplore.
+  ///
+  /// In ar, this message translates to:
+  /// **'استكشف'**
+  String get navExplore;
+
+  /// No description provided for @navBookings.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجوزاتي'**
+  String get navBookings;
+
+  /// No description provided for @searchEverything.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في نمط'**
+  String get searchEverything;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مطعم، وجبة، ناد، مختص، منتج'**
+  String get searchHint;
+
+  /// No description provided for @searchPartnersGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأماكن'**
+  String get searchPartnersGroup;
+
+  /// No description provided for @searchServicesGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات'**
+  String get searchServicesGroup;
+
+  /// No description provided for @searchNothing.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لقينا شي'**
+  String get searchNothing;
+
+  /// No description provided for @searchNothingBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب كلمة أقصر أو اسم مختلف'**
+  String get searchNothingBody;
+
+  /// No description provided for @searchStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب وش تدور عليه'**
+  String get searchStart;
+
+  /// No description provided for @searchStartBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نبحث في المطاعم والأندية والمختصين والمنتجات كلها'**
+  String get searchStartBody;
+
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحفوظات'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoritesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما حفظت شي بعد'**
+  String get favoritesEmpty;
+
+  /// No description provided for @favoritesEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط القلب على أي مكان أو خدمة عشان تلقاها هنا'**
+  String get favoritesEmptyBody;
+
+  /// No description provided for @savedPartners.
+  ///
+  /// In ar, this message translates to:
+  /// **'أماكن'**
+  String get savedPartners;
+
+  /// No description provided for @savedServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات'**
+  String get savedServices;
+
+  /// No description provided for @saved.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفوظ'**
+  String get saved;
+
+  /// No description provided for @removedFromSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيلناه من المحفوظات'**
+  String get removedFromSaved;
+
+  /// No description provided for @pointsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقاط نمط'**
+  String get pointsTitle;
+
+  /// No description provided for @pointsBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيدك'**
+  String get pointsBalance;
+
+  /// No description provided for @pointsHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف تجمع نقاط'**
+  String get pointsHow;
+
+  /// No description provided for @pointsEarnOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب أو حجز مكتمل'**
+  String get pointsEarnOrder;
+
+  /// No description provided for @pointsEarnReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييم بعد الخدمة'**
+  String get pointsEarnReview;
+
+  /// No description provided for @pointsEarnChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكمال تحدٍ'**
+  String get pointsEarnChallenge;
+
+  /// No description provided for @pointsEarnStreak.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم جديد بدون انقطاع'**
+  String get pointsEarnStreak;
+
+  /// No description provided for @pointsEarnNewPartner.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول مرة عند شريك'**
+  String get pointsEarnNewPartner;
+
+  /// No description provided for @pointsRedeemedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدال'**
+  String get pointsRedeemedLabel;
+
+  /// No description provided for @pointsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما جمعت نقاط بعد'**
+  String get pointsEmpty;
+
+  /// No description provided for @pointsEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول طلب يبدأ الرصيد'**
+  String get pointsEmptyBody;
+
+  /// No description provided for @rewardsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدل نقاطك'**
+  String get rewardsTitle;
+
+  /// No description provided for @redeem.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدل'**
+  String get redeem;
+
+  /// No description provided for @pointsCost.
+  ///
+  /// In ar, this message translates to:
+  /// **'{cost} نقطة'**
+  String pointsCost(String cost);
+
+  /// No description provided for @pointsShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي {count} نقطة'**
+  String pointsShort(String count);
+
+  /// No description provided for @redeemed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاستبدال'**
+  String get redeemed;
+
+  /// No description provided for @pointsEarned.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{count} نقطة'**
+  String pointsEarned(String count);
+
+  /// No description provided for @signInToOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تكمل الطلب'**
+  String get signInToOrder;
+
+  /// No description provided for @signInToBook.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تحجز'**
+  String get signInToBook;
+
+  /// No description provided for @signInToJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تنضم'**
+  String get signInToJoin;
+
+  /// No description provided for @signInToSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تحفظ'**
+  String get signInToSave;
+
+  /// No description provided for @signInToChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تتحدى'**
+  String get signInToChallenge;
+
+  /// No description provided for @signInBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقيقة وحدة برقم جوالك، وتكمل من نفس المكان'**
+  String get signInBody;
+
+  /// No description provided for @keepBrowsing.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل التصفح'**
+  String get keepBrowsing;
+
+  /// No description provided for @cityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدينتك'**
+  String get cityTitle;
+
+  /// No description provided for @changeCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر المدينة'**
+  String get changeCity;
+
+  /// No description provided for @citySur.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور'**
+  String get citySur;
+
+  /// No description provided for @cityBarka.
+  ///
+  /// In ar, this message translates to:
+  /// **'بركاء'**
+  String get cityBarka;
+
+  /// No description provided for @noPartnersInCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما وصلنا {city} في هذا المجال بعد'**
+  String noPartnersInCity(String city);
+
+  /// No description provided for @noPartnersInCityBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشتغل على إضافة شركاء. تقدر تشوف المتاح في مدينة ثانية.'**
+  String get noPartnersInCityBody;
+
+  /// No description provided for @showCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض {city}'**
+  String showCity(String city);
+
+  /// No description provided for @inCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'في {city}'**
+  String inCity(String city);
+
+  /// No description provided for @otherCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدينة ثانية'**
+  String get otherCity;
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلتك هذا الأسبوع'**
+  String get thisWeek;
+
+  /// No description provided for @viewJourney.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض رحلتي'**
+  String get viewJourney;
+
+  /// No description provided for @weekProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'{percent}% من أهداف الأسبوع'**
+  String weekProgress(String percent);
+
+  /// No description provided for @recommendedForYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'مناسب لهدفك'**
+  String get recommendedForYou;
+
+  /// No description provided for @nearYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريب منك'**
+  String get nearYou;
+
+  /// No description provided for @namatPicks.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيارات نمط لك'**
+  String get namatPicks;
+
+  /// No description provided for @bundlesPreview.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقات نمط'**
+  String get bundlesPreview;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get seeAll;
+
+  /// No description provided for @noNextStep.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك شي مجدول اليوم'**
+  String get noNextStep;
+
+  /// No description provided for @noNextStepBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر خدمة وتلقاها هنا'**
+  String get noNextStepBody;
+
+  /// No description provided for @loadingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لحظة…'**
+  String get loadingTitle;
+
+  /// No description provided for @offlineTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فيه اتصال'**
+  String get offlineTitle;
+
+  /// No description provided for @offlineBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكد من الإنترنت وجرّب مرة ثانية'**
+  String get offlineBody;
+
+  /// No description provided for @paymentFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما تمت العملية'**
+  String get paymentFailed;
+
+  /// No description provided for @paymentFailedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما انخصم أي مبلغ. جرّب طريقة دفع ثانية.'**
+  String get paymentFailedBody;
+
+  /// No description provided for @unavailableTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة ما عادت متاحة'**
+  String get unavailableTitle;
+
+  /// No description provided for @unavailableBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'انحجزت قبل شوي. اختر موعداً أو خدمة ثانية.'**
+  String get unavailableBody;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

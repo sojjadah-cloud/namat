@@ -40,7 +40,7 @@ class _DuelRoomPageState extends State<DuelRoomPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/challenges'),
+            onPressed: () => context.go('/journey/challenges'),
             icon: const Icon(Icons.arrow_forward),
           ),
           title: Text(l.metricSteps),

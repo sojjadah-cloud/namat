@@ -41,7 +41,7 @@ class ChallengesPage extends StatelessWidget {
             ),
             const SizedBox(height: NamatSpace.xl),
             FilledButton.icon(
-              onPressed: () => context.go('/challenges/find'),
+              onPressed: () => context.go('/journey/challenges/find'),
               icon: const NamatIcon(
                 NamatIcons.challenge,
                 size: 20,
@@ -78,7 +78,7 @@ class _VersusCard extends StatelessWidget {
 
     return NamatCard(
       organic: true,
-      onTap: () => context.go('/challenges/room'),
+      onTap: () => context.go('/journey/challenges/room'),
       child: Column(
         children: [
           Row(

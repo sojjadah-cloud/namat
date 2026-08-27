@@ -8,7 +8,10 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../core/widgets/namat_states.dart';
+import '../../account/domain/session.dart';
 import '../../catalogue/domain/catalogue.dart';
+import '../../rewards/domain/points.dart';
 import '../domain/booking.dart';
 import '../domain/cart_notifier.dart';
 import '../domain/order.dart';
@@ -64,19 +67,77 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
         (i) => Catalogue.offeringById(i.id)?.kind.needsSlot ?? false,
       );
 
-  /// The next few plausible times, on the half hour.
+  /// The times a member can actually be given.
   ///
-  /// Real availability comes from the partner and does not exist yet. These
-  /// are offered as choices rather than presented as confirmed slots, and the
-  /// screen says so.
-  List<DateTime> _slots() {
+  /// Taken from the timetable of whatever in the cart needs a time, so a
+  /// Tuesday-and-Thursday class offers Tuesdays and Thursdays rather than the
+  /// next six hours. Where several booked things have timetables, only the
+  /// times they all share are offered — a slot that suits one and clashes
+  /// with the other is not a slot.
+  List<DateTime> _slots(List<CartItem> items) {
     final now = DateTime.now();
-    var first = DateTime(now.year, now.month, now.day, now.hour + 2);
-    first = first.add(Duration(minutes: 30 - (first.minute % 30)));
-    return [for (var i = 0; i < 6; i++) first.add(Duration(hours: i * 3))];
+
+    final timetabled = <List<DateTime>>[];
+    var anyNeedsSlot = false;
+    for (final i in items) {
+      final o = Catalogue.offeringById(i.id);
+      if (o == null || !o.kind.needsSlot) continue;
+      anyNeedsSlot = true;
+      final times = o.availability?.upcoming(now, count: 8) ?? const [];
+      if (times.isNotEmpty) timetabled.add(times);
+    }
+    if (!anyNeedsSlot) return const [];
+
+    // Nothing booked publishes a timetable, so fall back to open hours on the
+    // half hour. Offered as choices, and the screen says they are not
+    // confirmed until the partner accepts.
+    if (timetabled.isEmpty) {
+      var first = DateTime(now.year, now.month, now.day, now.hour + 2);
+      first = first.add(Duration(minutes: 30 - (first.minute % 30)));
+      return [for (var i = 0; i < 6; i++) first.add(Duration(hours: i * 3))];
+    }
+
+    var shared = timetabled.first.toSet();
+    for (final other in timetabled.skip(1)) {
+      shared = shared.intersection(other.toSet());
+    }
+    // No overlap at all: rather than offering nothing, offer the soonest
+    // service's times and let the member book the other separately.
+    final chosen = shared.isEmpty ? timetabled.first.toSet() : shared;
+    return chosen.toList()..sort();
+  }
+
+  /// The prompt a guest meets here and nowhere earlier.
+  ///
+  /// Everything up to this point — every partner, every price, every
+  /// timetable — was readable without an account. Placing the order is the
+  /// first thing that creates an obligation, so it is the first thing that
+  /// asks who is doing it.
+  void _promptSignIn() {
+    final l = L.of(context)!;
+    showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      backgroundColor: NamatColors.canvas,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(NamatRadius.organic),
+        ),
+      ),
+      builder: (sheet) => NamatSignInPrompt(
+        title: l.signInToOrder,
+        onSignIn: () {
+          Navigator.of(sheet).pop();
+          context.go('/login');
+        },
+        onDismiss: () => Navigator.of(sheet).pop(),
+      ),
+    );
   }
 
   void _place(List<CartItem> items, CartTotals totals) {
+    if (ref.read(sessionProvider).isGuest) return _promptSignIn();
+
     final needsAddress = _fulfilment == Fulfilment.delivery;
     if (needsAddress && _address.text.trim().isEmpty) {
       setState(() => _addressMissing = true);
@@ -96,6 +157,12 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
     );
 
     ref.read(ordersProvider.notifier).place(order);
+    // Earned for finishing something, not for spending. Awarding by value
+    // would make the programme a discount on large orders, which rewards a
+    // burst rather than the continuing this product is about.
+    ref
+        .read(pointsProvider.notifier)
+        .award(PointsReason.order, detail: order.reference);
     ref.read(cartProvider.notifier).clear();
     context.go('/cart/done/${order.reference}');
   }
@@ -118,7 +185,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
             title: l.cartEmpty,
             body: l.cartEmptyBody,
             action: FilledButton(
-              onPressed: () => context.go('/use'),
+              onPressed: () => context.go('/explore'),
               child: Text(l.cartBrowse),
             ),
           ),
@@ -198,7 +265,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  for (final s in _slots())
+                  for (final s in _slots(items))
                     _SlotPill(
                       label: context.dateTime(s),
                       selected: _slot == s,

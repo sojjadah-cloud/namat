@@ -721,7 +721,7 @@ class LAr extends L {
   String get skipStep => 'تخطٍ';
 
   @override
-  String get nextStep => 'التالي';
+  String get nextStep => 'خطوتك القادمة';
 
   @override
   String get km => 'كم';
@@ -939,4 +939,314 @@ class LAr extends L {
 
   @override
   String get noResultsBody => 'جرّب كلمة أقصر، أو شِل الفلاتر';
+
+  @override
+  String get whatsIncluded => 'وش يشمل';
+
+  @override
+  String get serviceLevel => 'المستوى';
+
+  @override
+  String get levelAny => 'لكل المستويات';
+
+  @override
+  String get levelBeginner => 'مبتدئ';
+
+  @override
+  String get levelIntermediate => 'متوسط';
+
+  @override
+  String get levelAdvanced => 'متقدم';
+
+  @override
+  String get serviceFormat => 'طريقة الحضور';
+
+  @override
+  String get formatInPerson => 'حضور في المكان';
+
+  @override
+  String get formatRemote => 'عن بُعد';
+
+  @override
+  String get formatEither => 'حضوراً أو عن بُعد';
+
+  @override
+  String get cancellationTitle => 'الإلغاء';
+
+  @override
+  String get cancelFree24h => 'إلغاء مجاني قبل ٢٤ ساعة';
+
+  @override
+  String get cancelFree2h => 'إلغاء مجاني قبل ساعتين';
+
+  @override
+  String get cancelNonRefundable => 'غير قابل للاسترداد';
+
+  @override
+  String get cancelUnknown => 'ما زوّدنا الشريك بسياسة الإلغاء';
+
+  @override
+  String spotsLeft(String count) {
+    return 'باقي $count أماكن';
+  }
+
+  @override
+  String lastSpots(String count) {
+    return 'باقي $count فقط';
+  }
+
+  @override
+  String get soldOut => 'مكتمل';
+
+  @override
+  String get outOfStock => 'غير متوفر حالياً';
+
+  @override
+  String get soldOutBody => 'ما فيه أماكن في هذا الموعد. جرّب موعداً ثانياً أو حصة غيرها.';
+
+  @override
+  String get nextTimes => 'المواعيد القادمة';
+
+  @override
+  String get noFixedTimes => 'بدون موعد ثابت — تختار الوقت عند الطلب';
+
+  @override
+  String get openNow => 'مفتوح الآن';
+
+  @override
+  String get closedNow => 'مغلق الآن';
+
+  @override
+  String hoursLine(String from, String to) {
+    return '$from — $to';
+  }
+
+  @override
+  String get hoursUnknown => 'ما زوّدنا الشريك بأوقات العمل';
+
+  @override
+  String get allergensUnknown => 'معلومات الحساسية غير متوفرة — راجع الشريك قبل الطلب';
+
+  @override
+  String get everythingUnavailable => 'كل الخدمات هنا مكتملة حالياً';
+
+  @override
+  String serviceCount(String count) {
+    return '$count خدمات';
+  }
+
+  @override
+  String get navExplore => 'استكشف';
+
+  @override
+  String get navBookings => 'حجوزاتي';
+
+  @override
+  String get searchEverything => 'ابحث في نمط';
+
+  @override
+  String get searchHint => 'مطعم، وجبة، ناد، مختص، منتج';
+
+  @override
+  String get searchPartnersGroup => 'الأماكن';
+
+  @override
+  String get searchServicesGroup => 'الخدمات';
+
+  @override
+  String get searchNothing => 'ما لقينا شي';
+
+  @override
+  String get searchNothingBody => 'جرّب كلمة أقصر أو اسم مختلف';
+
+  @override
+  String get searchStart => 'اكتب وش تدور عليه';
+
+  @override
+  String get searchStartBody => 'نبحث في المطاعم والأندية والمختصين والمنتجات كلها';
+
+  @override
+  String get favoritesTitle => 'المحفوظات';
+
+  @override
+  String get favoritesEmpty => 'ما حفظت شي بعد';
+
+  @override
+  String get favoritesEmptyBody => 'اضغط القلب على أي مكان أو خدمة عشان تلقاها هنا';
+
+  @override
+  String get savedPartners => 'أماكن';
+
+  @override
+  String get savedServices => 'خدمات';
+
+  @override
+  String get saved => 'محفوظ';
+
+  @override
+  String get removedFromSaved => 'شيلناه من المحفوظات';
+
+  @override
+  String get pointsTitle => 'نقاط نمط';
+
+  @override
+  String get pointsBalance => 'رصيدك';
+
+  @override
+  String get pointsHow => 'كيف تجمع نقاط';
+
+  @override
+  String get pointsEarnOrder => 'طلب أو حجز مكتمل';
+
+  @override
+  String get pointsEarnReview => 'تقييم بعد الخدمة';
+
+  @override
+  String get pointsEarnChallenge => 'إكمال تحدٍ';
+
+  @override
+  String get pointsEarnStreak => 'يوم جديد بدون انقطاع';
+
+  @override
+  String get pointsEarnNewPartner => 'أول مرة عند شريك';
+
+  @override
+  String get pointsRedeemedLabel => 'استبدال';
+
+  @override
+  String get pointsEmpty => 'ما جمعت نقاط بعد';
+
+  @override
+  String get pointsEmptyBody => 'أول طلب يبدأ الرصيد';
+
+  @override
+  String get rewardsTitle => 'استبدل نقاطك';
+
+  @override
+  String get redeem => 'استبدل';
+
+  @override
+  String pointsCost(String cost) {
+    return '$cost نقطة';
+  }
+
+  @override
+  String pointsShort(String count) {
+    return 'باقي $count نقطة';
+  }
+
+  @override
+  String get redeemed => 'تم الاستبدال';
+
+  @override
+  String pointsEarned(String count) {
+    return '+$count نقطة';
+  }
+
+  @override
+  String get signInToOrder => 'سجّل دخولك عشان تكمل الطلب';
+
+  @override
+  String get signInToBook => 'سجّل دخولك عشان تحجز';
+
+  @override
+  String get signInToJoin => 'سجّل دخولك عشان تنضم';
+
+  @override
+  String get signInToSave => 'سجّل دخولك عشان تحفظ';
+
+  @override
+  String get signInToChallenge => 'سجّل دخولك عشان تتحدى';
+
+  @override
+  String get signInBody => 'دقيقة وحدة برقم جوالك، وتكمل من نفس المكان';
+
+  @override
+  String get keepBrowsing => 'أكمل التصفح';
+
+  @override
+  String get cityTitle => 'مدينتك';
+
+  @override
+  String get changeCity => 'غيّر المدينة';
+
+  @override
+  String get citySur => 'صور';
+
+  @override
+  String get cityBarka => 'بركاء';
+
+  @override
+  String noPartnersInCity(String city) {
+    return 'ما وصلنا $city في هذا المجال بعد';
+  }
+
+  @override
+  String get noPartnersInCityBody => 'نشتغل على إضافة شركاء. تقدر تشوف المتاح في مدينة ثانية.';
+
+  @override
+  String showCity(String city) {
+    return 'اعرض $city';
+  }
+
+  @override
+  String inCity(String city) {
+    return 'في $city';
+  }
+
+  @override
+  String get otherCity => 'مدينة ثانية';
+
+  @override
+  String get thisWeek => 'رحلتك هذا الأسبوع';
+
+  @override
+  String get viewJourney => 'عرض رحلتي';
+
+  @override
+  String weekProgress(String percent) {
+    return '$percent% من أهداف الأسبوع';
+  }
+
+  @override
+  String get recommendedForYou => 'مناسب لهدفك';
+
+  @override
+  String get nearYou => 'قريب منك';
+
+  @override
+  String get namatPicks => 'اختيارات نمط لك';
+
+  @override
+  String get bundlesPreview => 'باقات نمط';
+
+  @override
+  String get seeAll => 'الكل';
+
+  @override
+  String get noNextStep => 'ما عندك شي مجدول اليوم';
+
+  @override
+  String get noNextStepBody => 'اختر خدمة وتلقاها هنا';
+
+  @override
+  String get loadingTitle => 'لحظة…';
+
+  @override
+  String get offlineTitle => 'ما فيه اتصال';
+
+  @override
+  String get offlineBody => 'تأكد من الإنترنت وجرّب مرة ثانية';
+
+  @override
+  String get paymentFailed => 'ما تمت العملية';
+
+  @override
+  String get paymentFailedBody => 'ما انخصم أي مبلغ. جرّب طريقة دفع ثانية.';
+
+  @override
+  String get unavailableTitle => 'الخدمة ما عادت متاحة';
+
+  @override
+  String get unavailableBody => 'انحجزت قبل شوي. اختر موعداً أو خدمة ثانية.';
 }
