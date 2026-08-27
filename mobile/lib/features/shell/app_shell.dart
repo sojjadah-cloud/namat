@@ -119,9 +119,10 @@ class _Tab extends StatelessWidget {
         child: AnimatedContainer(
           duration: NamatMotion.base,
           curve: NamatMotion.enter,
-          // 48 tall keeps every tab above the 44pt touch-target floor even
-          // when the label is a single short word.
-          height: 48,
+          // 52 rather than 48: the label is permanent now, and 48 left the
+          // two lines pressed against the capsule's edges. Still well clear of
+          // the 44pt touch-target floor.
+          height: 52,
           decoration: BoxDecoration(
             color: selected ? NamatColors.greenSoft : Colors.transparent,
             borderRadius: BorderRadius.circular(NamatRadius.md),
@@ -140,24 +141,31 @@ class _Tab extends StatelessWidget {
                   color: selected ? NamatColors.deep : NamatColors.inkSoft,
                 ),
               ),
-              AnimatedSize(
-                duration: NamatMotion.fast,
-                curve: NamatMotion.enter,
-                child: selected
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: Text(
-                          label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: NamatColors.deep,
-                          ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
+              // Always legible, selected or not. Hiding the label until a tab
+              // is chosen means every destination a member has not visited is
+              // an unlabelled glyph they have to guess at — and the tabs they
+              // most need to find are exactly the ones they have not opened.
+              // The selected one deepens rather than appears, so the bar does
+              // not resize on every tap.
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: AnimatedDefaultTextStyle(
+                  duration: NamatMotion.base,
+                  curve: NamatMotion.enter,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    color: selected
+                        ? NamatColors.deep
+                        : NamatColors.inkSoft,
+                  ),
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ],
           ),

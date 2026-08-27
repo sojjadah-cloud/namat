@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
+import '../../../core/widgets/namat_nav.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
@@ -43,6 +44,15 @@ class _DuelSentPageState extends ConsumerState<DuelSentPage>
     return NamatBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        // A bare back bar: the page's own display heading names it, so an
+        // AppBar title would say it twice. Every screen a member navigates
+        // into now has one — a page you can enter and not leave is the fault
+        // people report as the app being stuck.
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: const NamatBack(fallback: '/journey/challenges'),
+        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(NamatSpace.gutter),

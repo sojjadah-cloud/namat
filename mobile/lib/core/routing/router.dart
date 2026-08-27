@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/addresses_page.dart';
+import '../../features/account/presentation/edit_profile_page.dart';
 import '../../features/auth/presentation/phone_page.dart';
 import '../../features/auth/presentation/setup_page.dart';
 import '../../features/auth/presentation/verify_page.dart';
@@ -194,6 +195,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: '/profile',
                 builder: (_, __) => const ProfilePage(),
                 routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (_, __) => const EditProfilePage(),
+                  ),
                   GoRoute(
                     path: 'favorites',
                     builder: (_, __) => const FavoritesPage(),

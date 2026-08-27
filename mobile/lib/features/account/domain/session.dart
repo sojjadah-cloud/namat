@@ -28,12 +28,20 @@ class Session {
   const Session({
     this.kind = SessionKind.guest,
     this.name = '',
+    this.username = '',
     this.city = NamatCity.launch,
     this.hasPackage = false,
   });
 
   final SessionKind kind;
   final String name;
+
+  /// The handle other members can find them by, without the at-sign.
+  ///
+  /// Latin and lowercase, because it is transcribed rather than read — someone
+  /// types it into a search box to challenge them, and a handle that has to be
+  /// spelled in two scripts is a handle nobody can pass on.
+  final String username;
 
   /// Where the member is. Defaults to the launch market rather than to
   /// nothing, so a guest who has not chosen sees a real city's supply.
@@ -49,12 +57,14 @@ class Session {
   Session copyWith({
     SessionKind? kind,
     String? name,
+    String? username,
     NamatCity? city,
     bool? hasPackage,
   }) =>
       Session(
         kind: kind ?? this.kind,
         name: name ?? this.name,
+        username: username ?? this.username,
         city: city ?? this.city,
         hasPackage: hasPackage ?? this.hasPackage,
       );
@@ -75,6 +85,7 @@ class SessionNotifier extends StateNotifier<Session> with Persisted<Session> {
   Object encode(Session value) => {
         'kind': value.kind.name,
         'name': value.name,
+        'username': value.username,
         'city': value.city.name,
         'hasPackage': value.hasPackage,
       };
@@ -88,6 +99,7 @@ class SessionNotifier extends StateNotifier<Session> with Persisted<Session> {
               .firstOrNull ??
           SessionKind.guest,
       name: map['name'] as String? ?? '',
+      username: map['username'] as String? ?? '',
       city: NamatCity.byName(map['city'] as String? ?? '') ?? NamatCity.launch,
       hasPackage: map['hasPackage'] as bool? ?? false,
     );
@@ -111,12 +123,23 @@ class SessionNotifier extends StateNotifier<Session> with Persisted<Session> {
 
   void setName(String name) => state = state.copyWith(name: name);
 
+  void setUsername(String username) =>
+      state = state.copyWith(username: username.trim().toLowerCase());
+
   void setPackage(bool active) => state = state.copyWith(hasPackage: active);
 }
 
 final sessionProvider = StateNotifierProvider<SessionNotifier, Session>(
   (ref) => SessionNotifier(ref.watch(storeProvider)),
 );
+
+/// Whether a handle fits the rules.
+///
+/// Checked locally only. Whether it is already taken cannot be known without a
+/// server, and the edit screen says so rather than implying the name has been
+/// reserved.
+bool isValidUsername(String value) =>
+    RegExp(r'^[a-z0-9_]{3,20}$').hasMatch(value.trim().toLowerCase());
 
 /// The name to greet with, from whichever source has it.
 ///

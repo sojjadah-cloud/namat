@@ -1544,4 +1544,40 @@ class LEn extends L {
 
   @override
   String get guestProfileBody => 'Sign in to keep your journey and your points';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get nameLabel => 'Name';
+
+  @override
+  String get nameHint => 'What should we call you?';
+
+  @override
+  String get usernameLabel => 'Username';
+
+  @override
+  String get usernameHint => 'Latin letters, no spaces';
+
+  @override
+  String get usernameRules => 'Letters, digits and underscores, 3 to 20 characters';
+
+  @override
+  String get usernameInvalid => 'That username does not fit the rules';
+
+  @override
+  String get usernameNotChecked => 'We cannot check whether it is taken until the server is connected';
+
+  @override
+  String get saveChanges => 'Save';
+
+  @override
+  String get saved2 => 'Saved';
+
+  @override
+  String get noUsername => 'No username yet';
+
+  @override
+  String get pickUsername => 'Pick a username';
 }

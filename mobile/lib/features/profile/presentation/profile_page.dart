@@ -74,6 +74,20 @@ class ProfilePage extends ConsumerWidget {
                         name.isEmpty ? l.profileTitle : name,
                         style: text.titleLarge,
                       ),
+                      const SizedBox(height: 2),
+                      // The handle, Latin and isolated, or an invitation to
+                      // pick one. It is how another member finds you, so it
+                      // belongs on the profile rather than buried in settings.
+                      Text(
+                        session.username.isEmpty
+                            ? l.noUsername
+                            : handle(session.username),
+                        style: text.bodySmall?.copyWith(
+                          color: session.username.isEmpty
+                              ? NamatColors.inkSoft
+                              : NamatColors.ink,
+                        ),
+                      ),
                       const SizedBox(height: 4),
                       // The city, not a second copy of the numbers that sit
                       // in the card directly below. Two zeros stacked above
@@ -94,6 +108,15 @@ class ProfilePage extends ConsumerWidget {
                         ],
                       ),
                     ],
+                  ),
+                ),
+                IconButton(
+                  tooltip: l.editProfile,
+                  onPressed: () => context.go('/profile/edit'),
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    size: 20,
+                    color: NamatColors.inkSoft,
                   ),
                 ),
               ],
@@ -180,6 +203,25 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 onTap: route == null ? null : () => context.go(route),
               ),
+            if (session.isMember) ...[
+              const SizedBox(height: NamatSpace.xl),
+              // At the bottom of the profile, not only inside settings. It is
+              // where people look for it, and making them hunt for the exit is
+              // the same discourtesy as hiding the cancel button.
+              OutlinedButton.icon(
+                onPressed: () {
+                  ref.read(sessionProvider.notifier).signOut();
+                  context.go('/welcome');
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: NamatColors.danger,
+                  side: const BorderSide(color: NamatColors.line),
+                  minimumSize: const Size.fromHeight(48),
+                ),
+                icon: const Icon(Icons.logout, size: 18),
+                label: Text(l.signOut),
+              ),
+            ],
           ],
         ),
       ),

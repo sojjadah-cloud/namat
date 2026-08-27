@@ -1544,4 +1544,40 @@ class LAr extends L {
 
   @override
   String get guestProfileBody => 'سجّل دخولك عشان تحفظ رحلتك ونقاطك';
+
+  @override
+  String get editProfile => 'تعديل الملف';
+
+  @override
+  String get nameLabel => 'الاسم';
+
+  @override
+  String get nameHint => 'وش نناديك؟';
+
+  @override
+  String get usernameLabel => 'اسم المستخدم';
+
+  @override
+  String get usernameHint => 'بالإنجليزي، بدون مسافات';
+
+  @override
+  String get usernameRules => 'حروف إنجليزية وأرقام وشرطة سفلية، من ٣ إلى ٢٠ خانة';
+
+  @override
+  String get usernameInvalid => 'اسم المستخدم ما يناسب الشروط';
+
+  @override
+  String get usernameNotChecked => 'ما نقدر نتأكد إنه غير محجوز قبل ما نربط الخادم';
+
+  @override
+  String get saveChanges => 'احفظ';
+
+  @override
+  String get saved2 => 'انحفظ';
+
+  @override
+  String get noUsername => 'ما اخترت اسم مستخدم';
+
+  @override
+  String get pickUsername => 'اختر اسم مستخدم';
 }

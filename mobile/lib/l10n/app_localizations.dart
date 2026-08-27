@@ -2980,6 +2980,78 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'سجّل دخولك عشان تحفظ رحلتك ونقاطك'**
   String get guestProfileBody;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الملف'**
+  String get editProfile;
+
+  /// No description provided for @nameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get nameLabel;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وش نناديك؟'**
+  String get nameHint;
+
+  /// No description provided for @usernameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم'**
+  String get usernameLabel;
+
+  /// No description provided for @usernameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالإنجليزي، بدون مسافات'**
+  String get usernameHint;
+
+  /// No description provided for @usernameRules.
+  ///
+  /// In ar, this message translates to:
+  /// **'حروف إنجليزية وأرقام وشرطة سفلية، من ٣ إلى ٢٠ خانة'**
+  String get usernameRules;
+
+  /// No description provided for @usernameInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستخدم ما يناسب الشروط'**
+  String get usernameInvalid;
+
+  /// No description provided for @usernameNotChecked.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما نقدر نتأكد إنه غير محجوز قبل ما نربط الخادم'**
+  String get usernameNotChecked;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In ar, this message translates to:
+  /// **'احفظ'**
+  String get saveChanges;
+
+  /// No description provided for @saved2.
+  ///
+  /// In ar, this message translates to:
+  /// **'انحفظ'**
+  String get saved2;
+
+  /// No description provided for @noUsername.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما اخترت اسم مستخدم'**
+  String get noUsername;
+
+  /// No description provided for @pickUsername.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر اسم مستخدم'**
+  String get pickUsername;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

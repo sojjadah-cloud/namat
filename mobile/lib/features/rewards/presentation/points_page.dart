@@ -10,12 +10,17 @@ import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/points.dart';
 
-/// Namat Points: the balance, what it can buy, and where it came from.
+/// Namat Points: the balance, what it buys, and where it came from.
 ///
-/// The ledger is the point of the screen. A member who cannot see why their
-/// balance moved does not trust it — and a balance shown alone answers a
-/// question nobody asked, while the two they do ask are "what is this worth"
-/// and "what did I do to get it".
+/// Rebuilt after the reward cards rendered as blank boxes. The cause was a Row
+/// with an unbounded button beside an Expanded column — the button asked for
+/// its intrinsic width, the column took the rest, and at 360dp the text had
+/// nowhere to go. Every card here now lays out as a column, so nothing
+/// competes for width with anything else.
+///
+/// The order answers the two questions a member actually has, in the order
+/// they have them: what is this worth, and what did I do to get it. A balance
+/// shown alone answers neither.
 class PointsPage extends ConsumerWidget {
   const PointsPage({super.key});
 
@@ -26,6 +31,13 @@ class PointsPage extends ConsumerWidget {
     final arabic = Localizations.localeOf(context).languageCode == 'ar';
     final entries = ref.watch(pointsProvider);
     final balance = ref.watch(pointsBalanceProvider);
+
+    // The next thing within reach, so the balance means something. Null once
+    // everything is affordable, which is a good problem and needs no prompt.
+    final next = namatRewards.where((r) => r.cost > balance).fold<Reward?>(
+          null,
+          (best, r) => best == null || r.cost < best.cost ? r : best,
+        );
 
     return NamatBackground(
       child: Scaffold(
@@ -42,119 +54,122 @@ class PointsPage extends ConsumerWidget {
             120,
           ),
           children: revealAll([
-            NamatCard(
-              color: NamatColors.goldSoft,
-              elevated: false,
-              padding: const EdgeInsets.all(NamatSpace.xl),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l.pointsBalance, style: text.labelSmall),
-                  const SizedBox(height: 4),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(context.n(balance), style: text.displayMedium),
-                      const SizedBox(width: 6),
-                      Text(l.pointsTitle, style: text.bodySmall),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: NamatSpace.xxl),
+            _Balance(balance: balance, next: next, arabic: arabic),
 
-            Text(l.rewardsTitle, style: text.labelMedium),
+            const SizedBox(height: NamatSpace.xxl),
+            Text(l.rewardsTitle, style: text.titleMedium),
             const SizedBox(height: NamatSpace.md),
             for (final r in namatRewards)
               Padding(
-                padding: const EdgeInsets.only(bottom: NamatSpace.sm),
-                child: _RewardCard(reward: r, balance: balance, arabic: arabic),
-              ),
-
-            const SizedBox(height: NamatSpace.xxl),
-            Text(l.pointsHow, style: text.labelMedium),
-            const SizedBox(height: NamatSpace.md),
-            // Stated as a rate, not as a mystery. A programme whose rules are
-            // hidden reads as arbitrary, and arbitrary rewards do not change
-            // behaviour.
-            for (final reason in [
-              PointsReason.order,
-              PointsReason.review,
-              PointsReason.challenge,
-              PointsReason.newPartner,
-              PointsReason.streak,
-            ])
-              Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(_reasonLabel(reason, l), style: text.bodySmall),
-                    ),
-                    Text(
-                      l.pointsEarned(context.n(pointsFor[reason] ?? 0)),
-                      style: text.labelSmall
-                          ?.copyWith(color: NamatColors.accent),
-                    ),
-                  ],
+                padding: const EdgeInsets.only(bottom: NamatSpace.md),
+                child: _RewardCard(
+                  reward: r,
+                  balance: balance,
+                  arabic: arabic,
                 ),
               ),
 
             const SizedBox(height: NamatSpace.xxl),
-            Text(l.myOrders, style: text.labelMedium),
+            Text(l.pointsHow, style: text.titleMedium),
+            const SizedBox(height: NamatSpace.md),
+            // Stated as a rate. A programme whose rules are hidden reads as
+            // arbitrary, and arbitrary rewards change nobody's behaviour.
+            NamatCard(
+              padding: const EdgeInsets.all(NamatSpace.lg),
+              child: Column(
+                children: [
+                  for (final reason in const [
+                    PointsReason.order,
+                    PointsReason.review,
+                    PointsReason.challenge,
+                    PointsReason.newPartner,
+                    PointsReason.streak,
+                  ])
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _reasonLabel(reason, l),
+                              style: text.bodySmall,
+                            ),
+                          ),
+                          const SizedBox(width: NamatSpace.sm),
+                          Text(
+                            l.pointsEarned(
+                              context.n(pointsFor[reason] ?? 0),
+                            ),
+                            style: text.labelMedium
+                                ?.copyWith(color: NamatColors.accent),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: NamatSpace.xxl),
+            Text(l.recentOrders, style: text.titleMedium),
             const SizedBox(height: NamatSpace.md),
             if (entries.isEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: NamatSpace.lg),
-                child: NamatEmptyState(
-                  illustration: const NamatIcon(
-                    NamatIcons.reward,
-                    size: 44,
-                    color: NamatColors.inkSoft,
-                  ),
-                  title: l.pointsEmpty,
-                  body: l.pointsEmptyBody,
+              NamatCard(
+                padding: const EdgeInsets.all(NamatSpace.xl),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l.pointsEmpty, style: text.bodyMedium),
+                    const SizedBox(height: 2),
+                    Text(l.pointsEmptyBody, style: text.labelSmall),
+                  ],
                 ),
               )
             else
-              for (final e in entries)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: NamatSpace.sm),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              NamatCard(
+                padding: const EdgeInsets.all(NamatSpace.lg),
+                child: Column(
+                  children: [
+                    for (final e in entries)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: NamatSpace.md),
+                        child: Row(
                           children: [
-                            Text(
-                              _reasonLabel(e.reason, l),
-                              style: text.bodySmall,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _reasonLabel(e.reason, l),
+                                    style: text.bodySmall,
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    context.dateTime(e.at),
+                                    style: text.labelSmall,
+                                  ),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 2),
+                            const SizedBox(width: NamatSpace.sm),
                             Text(
-                              context.dateTime(e.at),
-                              style: text.labelSmall,
+                              // The sign is carried, so a redemption reads as
+                              // a subtraction rather than as another award.
+                              e.amount >= 0
+                                  ? l.pointsEarned(context.n(e.amount))
+                                  : '−${context.n(-e.amount)}',
+                              style: text.labelMedium?.copyWith(
+                                color: e.amount >= 0
+                                    ? NamatColors.accent
+                                    : NamatColors.inkSoft,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      Text(
-                        // The sign is carried, so a redemption reads as a
-                        // subtraction rather than as another award.
-                        e.amount >= 0
-                            ? l.pointsEarned(context.n(e.amount))
-                            : '−${context.n(-e.amount)}',
-                        style: text.labelMedium?.copyWith(
-                          color: e.amount >= 0
-                              ? NamatColors.accent
-                              : NamatColors.inkSoft,
-                        ),
-                      ),
-                    ],
-                  ),
+                  ],
                 ),
+              ),
           ]),
         ),
       ),
@@ -169,6 +184,85 @@ class PointsPage extends ConsumerWidget {
         PointsReason.newPartner => l.pointsEarnNewPartner,
         PointsReason.redeemed => l.pointsRedeemedLabel,
       };
+}
+
+/// The balance, and how far it is from the next thing worth having.
+class _Balance extends StatelessWidget {
+  const _Balance({
+    required this.balance,
+    required this.next,
+    required this.arabic,
+  });
+
+  final int balance;
+  final Reward? next;
+  final bool arabic;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = L.of(context)!;
+    final text = Theme.of(context).textTheme;
+    final target = next;
+    final progress = target == null ? 1.0 : (balance / target.cost).clamp(0.0, 1.0);
+
+    return NamatCard(
+      organic: true,
+      color: NamatColors.goldSoft,
+      elevated: false,
+      padding: const EdgeInsets.all(NamatSpace.xl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const NamatIcon(
+                NamatIcons.reward,
+                size: 22,
+                color: NamatColors.gold,
+              ),
+              const SizedBox(width: NamatSpace.sm),
+              Text(l.pointsBalance, style: text.labelMedium),
+            ],
+          ),
+          const SizedBox(height: NamatSpace.sm),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(context.n(balance), style: text.displayLarge),
+              const SizedBox(width: 6),
+              Text(l.pointsTitle, style: text.bodySmall),
+            ],
+          ),
+          if (target != null) ...[
+            const SizedBox(height: NamatSpace.lg),
+            // A bar toward one specific reward, not toward "more points". A
+            // balance with nothing to measure it against is a number.
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: progress),
+                duration: NamatMotion.slow,
+                curve: NamatMotion.enter,
+                builder: (context, v, _) => LinearProgressIndicator(
+                  value: v,
+                  minHeight: 7,
+                  backgroundColor: Colors.white.withOpacity(0.6),
+                  valueColor: const AlwaysStoppedAnimation(NamatColors.gold),
+                ),
+              ),
+            ),
+            const SizedBox(height: NamatSpace.sm),
+            Text(
+              '${target.localisedTitle(arabic)} · '
+              '${l.pointsShort(context.n(target.cost - balance))}',
+              style: text.labelSmall,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 class _RewardCard extends ConsumerWidget {
@@ -191,48 +285,71 @@ class _RewardCard extends ConsumerWidget {
 
     return NamatCard(
       padding: const EdgeInsets.all(NamatSpace.lg),
-      child: Row(
+      // A column, not a row. The old layout put an unbounded button beside an
+      // Expanded column, which at 360dp left the text no width at all and drew
+      // an empty card.
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(reward.localisedTitle(arabic), style: text.bodyMedium),
-                const SizedBox(height: 2),
-                Text(reward.localisedDetail(arabic), style: text.labelSmall),
-                const SizedBox(height: 6),
-                Text(
-                  // How far off, rather than a bare price. "400 points" tells
-                  // a member with 260 nothing they can act on.
-                  affordable
-                      ? l.pointsCost(context.n(reward.cost))
-                      : l.pointsShort(context.n(short)),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  reward.localisedTitle(arabic),
+                  style: text.titleMedium,
+                ),
+              ),
+              const SizedBox(width: NamatSpace.sm),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                  color: affordable
+                      ? NamatColors.greenSoft
+                      : NamatColors.warmSoft,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Text(
+                  l.pointsCost(context.n(reward.cost)),
                   style: text.labelSmall?.copyWith(
-                    color:
-                        affordable ? NamatColors.accent : NamatColors.inkSoft,
+                    color: affordable
+                        ? NamatColors.accent
+                        : NamatColors.inkSoft,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(width: NamatSpace.sm),
-          FilledButton(
-            onPressed: affordable
-                ? () {
-                    final ok = ref.read(pointsProvider.notifier).redeem(
-                          reward.cost,
-                          detail: reward.id,
-                        );
-                    if (!ok) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(l.redeemed),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  }
-                : null,
-            child: Text(l.redeem),
+          const SizedBox(height: 4),
+          Text(reward.localisedDetail(arabic), style: text.bodySmall),
+          const SizedBox(height: NamatSpace.lg),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: affordable
+                  ? () {
+                      final ok = ref
+                          .read(pointsProvider.notifier)
+                          .redeem(reward.cost, detail: reward.id);
+                      if (!ok) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(l.redeemed),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  : null,
+              child: Text(
+                // How far off, rather than a dead button with no explanation.
+                // "Redeem" greyed out tells a member with 60 points nothing
+                // they can act on.
+                affordable ? l.redeem : l.pointsShort(context.n(short)),
+              ),
+            ),
           ),
         ],
       ),

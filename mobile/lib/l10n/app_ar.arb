@@ -864,5 +864,18 @@
   "statStreak": "السلسلة",
   "statChallengesDone": "تحديات",
   "guestProfile": "تتصفح كزائر",
-  "guestProfileBody": "سجّل دخولك عشان تحفظ رحلتك ونقاطك"
+  "guestProfileBody": "سجّل دخولك عشان تحفظ رحلتك ونقاطك",
+
+  "editProfile": "تعديل الملف",
+  "nameLabel": "الاسم",
+  "nameHint": "وش نناديك؟",
+  "usernameLabel": "اسم المستخدم",
+  "usernameHint": "بالإنجليزي، بدون مسافات",
+  "usernameRules": "حروف إنجليزية وأرقام وشرطة سفلية، من ٣ إلى ٢٠ خانة",
+  "usernameInvalid": "اسم المستخدم ما يناسب الشروط",
+  "usernameNotChecked": "ما نقدر نتأكد إنه غير محجوز قبل ما نربط الخادم",
+  "saveChanges": "احفظ",
+  "saved2": "انحفظ",
+  "noUsername": "ما اخترت اسم مستخدم",
+  "pickUsername": "اختر اسم مستخدم"
 }

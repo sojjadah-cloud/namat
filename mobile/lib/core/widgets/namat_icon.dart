@@ -134,15 +134,23 @@ class _NamatIconPainter extends CustomPainter {
         );
 
       case NamatIcons.journey:
-        // A winding path with a marker: progress, not a destination.
+        // A climbing route with waypoints behind you and a marker where you
+        // are. The old glyph was a single thin squiggle with one dot, which at
+        // 22px in a tab bar read as an ambiguous curve rather than as
+        // progress — and a member cannot pick a destination they cannot name.
         canvas.drawPath(
           Path()
-            ..moveTo(6, 20)
-            ..cubicTo(6, 15, 18, 15, 18, 10)
-            ..cubicTo(18, 6.5, 14.5, 5, 12, 5),
+            ..moveTo(5.5, 19)
+            ..cubicTo(9, 19, 9.5, 12.6, 13, 12)
+            ..cubicTo(16.5, 11.4, 17.2, 8.2, 18.5, 6.5),
           stroke,
         );
-        canvas.drawCircle(const Offset(6, 20), 1.8, filled ? fill : stroke);
+        // The two behind are outlines; the one you are standing on is solid,
+        // so the eye lands on the present rather than on the route.
+        canvas
+          ..drawCircle(const Offset(5.5, 19), 1.5, stroke)
+          ..drawCircle(const Offset(13, 12), 1.5, stroke)
+          ..drawCircle(const Offset(18.5, 6.5), 2.4, fill);
 
       case NamatIcons.profile:
         canvas.drawCircle(const Offset(12, 8.5), 3.6, stroke);

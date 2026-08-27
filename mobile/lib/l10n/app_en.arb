@@ -627,5 +627,18 @@
   "statStreak": "Streak",
   "statChallengesDone": "Challenges",
   "guestProfile": "Browsing as a guest",
-  "guestProfileBody": "Sign in to keep your journey and your points"
+  "guestProfileBody": "Sign in to keep your journey and your points",
+
+  "editProfile": "Edit profile",
+  "nameLabel": "Name",
+  "nameHint": "What should we call you?",
+  "usernameLabel": "Username",
+  "usernameHint": "Latin letters, no spaces",
+  "usernameRules": "Letters, digits and underscores, 3 to 20 characters",
+  "usernameInvalid": "That username does not fit the rules",
+  "usernameNotChecked": "We cannot check whether it is taken until the server is connected",
+  "saveChanges": "Save",
+  "saved2": "Saved",
+  "noUsername": "No username yet",
+  "pickUsername": "Pick a username"
 }

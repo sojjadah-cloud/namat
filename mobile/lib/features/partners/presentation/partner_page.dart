@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
+import '../../../core/widgets/namat_art.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_nav.dart';
@@ -67,18 +68,23 @@ class PartnerPage extends ConsumerWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 76,
-                  height: 76,
+                Stack(
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: field.tint,
-                    borderRadius: BorderRadius.circular(NamatRadius.sm),
-                  ),
-                  child: Text(
-                    monogram(p.localisedName(arabic)),
-                    style: text.displayMedium?.copyWith(color: field.accent),
-                  ),
+                  children: [
+                    NamatArt(
+                      seed: p.slug,
+                      accent: field.accent,
+                      tint: field.tint,
+                      size: 76,
+                      radius: NamatRadius.sm,
+                    ),
+                    // The monogram stays on top: initials identify a business
+                    // in a way an abstract mark cannot.
+                    Text(
+                      monogram(p.localisedName(arabic)),
+                      style: text.displayMedium?.copyWith(color: field.accent),
+                    ),
+                  ],
                 ),
                 const SizedBox(width: NamatSpace.lg),
                 Expanded(
@@ -330,6 +336,18 @@ class _OfferingRow extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // A mark rather than a photograph. There is no photography for any
+            // of this, and stock would be a claim about the partner's own
+            // dish — so each item gets a composition drawn from its own id:
+            // stable, distinct, and depicting nothing.
+            NamatArt(
+              seed: o.id,
+              accent: partner.field.accent,
+              tint: partner.field.tint,
+              icon: partner.field.icon,
+              size: 52,
+            ),
+            const SizedBox(width: NamatSpace.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
