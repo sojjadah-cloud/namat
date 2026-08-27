@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../core/widgets/namat_motion.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../auth/domain/profile_draft.dart';
+import '../../bookings/domain/cart_notifier.dart';
 
 /// Home: what today looks like.
 ///
 /// The daily status leads because it answers the question people open a
 /// wellness app with — "am I on track?" — before offering anything to browse.
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
     final evening = DateTime.now().hour >= 16;
+
+    // The name the member gave during setup. Empty for anyone who skipped it
+    // or came in through sign-in, so the greeting drops the name rather than
+    // addressing them as a blank.
+    final name = ref.watch(profileDraftProvider).name;
+    final cartCount = ref.watch(cartCountProvider);
+    final unrated = ref.watch(unratedOrderProvider);
 
     return NamatBackground(
       child: SafeArea(
@@ -33,22 +44,63 @@ class HomePage extends StatelessWidget {
           children: revealAll([
             Row(
               children: [
-                const NamatAvatar(name: 'سارة'),
+                NamatAvatar(name: name),
                 const SizedBox(width: NamatSpace.md),
                 Expanded(
                   child: Text(
-                    evening
-                        ? l.greetingEvening('سارة')
-                        : l.greetingMorning('سارة'),
+                    name.isEmpty
+                        ? l.useGreeting
+                        : evening
+                            ? l.greetingEvening(name)
+                            : l.greetingMorning(name),
                     style: text.titleMedium,
+                    maxLines: 2,
                   ),
                 ),
+                // Only once there is something in it. A permanently visible
+                // empty cart is a button that never does anything.
+                if (cartCount > 0)
+                  _CartButton(count: cartCount),
                 IconButton(
                   onPressed: () => context.go('/home/notifications'),
                   icon: const NamatIcon(NamatIcons.bell, size: 22),
                 ),
               ],
             ),
+            if (unrated != null) ...[
+              const SizedBox(height: NamatSpace.xl),
+              // Asked once, about the most recent order only. A backlog of
+              // rating prompts is a chore, and chores get dismissed unread.
+              NamatCard(
+                color: NamatColors.goldSoft,
+                elevated: false,
+                padding: const EdgeInsets.all(NamatSpace.lg),
+                onTap: () => context.go('/rate/${unrated.reference}'),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.star_rounded,
+                      color: NamatColors.gold,
+                      size: 22,
+                    ),
+                    const SizedBox(width: NamatSpace.md),
+                    Expanded(
+                      child: Text(
+                        '${l.rateTitle} ${unrated.leadTitle}',
+                        style: text.bodySmall,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const Icon(
+                      Icons.chevron_left,
+                      size: 18,
+                      color: NamatColors.inkSoft,
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: NamatSpace.xl),
             const _DailyStatus(),
             const SizedBox(height: NamatSpace.xxl),
@@ -243,6 +295,48 @@ class NamatAvatar extends StatelessWidget {
           color: ink,
         ),
       ),
+    );
+  }
+}
+
+class _CartButton extends StatelessWidget {
+  const _CartButton({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        IconButton(
+          onPressed: () => context.go('/cart'),
+          icon: const NamatIcon(NamatIcons.store, size: 22),
+        ),
+        Positioned(
+          top: 6,
+          // Placed by direction rather than by side, so the badge stays on the
+          // outer corner of the icon in both layouts.
+          right: Directionality.of(context) == TextDirection.rtl ? null : 6,
+          left: Directionality.of(context) == TextDirection.rtl ? 6 : null,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            decoration: BoxDecoration(
+              color: NamatColors.deep,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Text(
+              context.n(count),
+              style: text.labelSmall?.copyWith(
+                color: Colors.white,
+                fontSize: 10,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

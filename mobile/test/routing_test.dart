@@ -6,6 +6,7 @@ import 'package:namat/features/auth/presentation/setup_page.dart';
 import 'package:namat/features/auth/presentation/verify_page.dart';
 import 'package:namat/features/bookings/presentation/bookings_page.dart';
 import 'package:namat/features/bookings/presentation/cart_page.dart';
+import 'package:namat/features/bookings/presentation/checkout_page.dart';
 import 'package:namat/features/bookings/presentation/order_done_page.dart';
 import 'package:namat/features/challenges/presentation/challenges_page.dart';
 import 'package:namat/features/challenges/presentation/create_duel_page.dart';
@@ -15,6 +16,7 @@ import 'package:namat/features/challenges/presentation/find_opponent_page.dart';
 import 'package:namat/features/notifications/presentation/notifications_page.dart';
 import 'package:namat/features/packages/presentation/packages_page.dart';
 import 'package:namat/features/partners/presentation/partner_page.dart';
+import 'package:namat/features/reviews/presentation/rate_page.dart';
 import 'package:namat/features/use/presentation/field_page.dart';
 import 'package:namat/main.dart';
 
@@ -97,8 +99,20 @@ void main() {
     await _pumpAt(tester, '/cart');
     expect(find.byType(CartPage), findsOneWidget);
 
-    await _pumpAt(tester, '/cart/done');
+    await _pumpAt(tester, '/cart/checkout');
+    expect(find.byType(CheckoutPage), findsOneWidget);
+
+    // The reference is part of the path now: the confirmation screen shows
+    // the order it names rather than whatever was bought most recently.
+    await _pumpAt(tester, '/cart/done/NM-4K7Q2');
     expect(find.byType(OrderDonePage), findsOneWidget);
+    expect(
+      tester.widget<OrderDonePage>(find.byType(OrderDonePage)).reference,
+      'NM-4K7Q2',
+    );
+
+    await _pumpAt(tester, '/rate/NM-4K7Q2');
+    expect(find.byType(RatePage), findsOneWidget);
   });
 
   testWidgets('the sign-up flow resolves end to end', (tester) async {

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/l10n/arabic.dart';
+import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
+import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
-import '../../../core/l10n/numbers.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../catalogue/domain/catalogue.dart';
 import '../domain/field.dart';
 
 /// One field: search and filters scoped to it.
@@ -23,8 +26,6 @@ class FieldPage extends StatefulWidget {
   State<FieldPage> createState() => _FieldPageState();
 }
 
-typedef _Result = (String name, String meta, double km, bool inPackage);
-
 class _FieldPageState extends State<FieldPage> {
   final _search = TextEditingController();
   final _active = <String>{};
@@ -35,25 +36,67 @@ class _FieldPageState extends State<FieldPage> {
     super.dispose();
   }
 
-  /// Stand-in results until the API is wired. Two fields are genuinely empty
-  /// in the real catalogue, and that is represented rather than papered over.
-  static const Map<NamatField, List<_Result>> _sample = {
-    NamatField.meals: [
-      ('مطعم المعمل الصحي', 'عالي البروتين واشتراكات · الغبرة الشمالية', 0.3, true),
-      ('Nourish Kitchen', 'اشتراكات ووجبات صحية · شارع العلم', 4.5, true),
-      ('مطبخ هيلدا كيتو', 'كيتو وقليل الكربوهيدرات · الخوير', 4.7, false),
-      ('Macro Boost', 'عالي البروتين واشتراكات · الخوير', 5.0, false),
-    ],
-    NamatField.stores: [
-      ('Tree of Life', 'منتجات صحية · غلا', 6.2, false),
-      ('Nefisorganic', 'منتجات عضوية · مسقط', 8.1, false),
-    ],
-  };
+  /// Matches a partner on its own name, its area, its tags, and the names of
+  /// the things it sells.
+  ///
+  /// The last one matters more than it looks: nobody searches for "Macro
+  /// Boost", they search for "بروتين", and a partner whose only protein
+  /// reference is on its menu would otherwise be unfindable.
+  List<Partner> _filter(List<Partner> partners, L l, bool arabic) {
+    final q = _search.text.trim();
+
+    var results = q.isEmpty
+        ? partners
+        : partners.where((p) {
+            final haystack = [
+              p.name,
+              p.nameEn,
+              p.area,
+              p.areaEn,
+              ...p.tags,
+              ...p.tagsEn,
+              for (final o in p.offerings) ...[o.name, o.nameEn],
+            ].join(' ');
+            return matchesArabic(haystack, q);
+          }).toList();
+
+    // Filters narrow; they do not reorder, except the two that are explicitly
+    // about order.
+    if (_active.contains(l.filterSubscriptions)) {
+      results = results
+          .where((p) => p.offerings.any((o) =>
+              o.kind == OfferingKind.plan || o.kind == OfferingKind.pass))
+          .toList();
+    }
+    if (_active.contains(l.filterHighProtein)) {
+      results = results
+          .where((p) => p.offerings
+              .any((o) => (o.nutrition?.protein ?? 0) >= 30))
+          .toList();
+    }
+    if (_active.contains(l.filterNearest)) {
+      results = [...results]
+        ..sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+    }
+    if (_active.contains(l.filterTopRated)) {
+      // Partners with no rating go last rather than being treated as zero:
+      // unrated is not badly rated.
+      results = [...results]..sort((a, b) {
+          final ra = a.rating, rb = b.rating;
+          if (ra == null && rb == null) return 0;
+          if (ra == null) return 1;
+          if (rb == null) return -1;
+          return rb.compareTo(ra);
+        });
+    }
+    return results;
+  }
 
   @override
   Widget build(BuildContext context) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
+    final arabic = Localizations.localeOf(context).languageCode == 'ar';
     final field = NamatField.byKey(widget.fieldKey);
 
     if (field == null) {
@@ -63,7 +106,8 @@ class _FieldPageState extends State<FieldPage> {
       );
     }
 
-    final results = _sample[field] ?? const <_Result>[];
+    final all = Catalogue.byField(field);
+    final results = _filter(all, l, arabic);
 
     return NamatBackground(
       child: Scaffold(
@@ -85,7 +129,7 @@ class _FieldPageState extends State<FieldPage> {
             ],
           ),
         ),
-        body: results.isEmpty
+        body: all.isEmpty
             // A search box above an empty list looks broken rather than empty,
             // so it is not rendered at all in this state.
             ? NamatEmptyState(
@@ -122,6 +166,12 @@ class _FieldPageState extends State<FieldPage> {
                           color: NamatColors.inkSoft,
                         ),
                       ),
+                      suffixIcon: _search.text.isEmpty
+                          ? null
+                          : IconButton(
+                              icon: const Icon(Icons.close, size: 18),
+                              onPressed: () => setState(_search.clear),
+                            ),
                     ),
                   ),
                   const SizedBox(height: NamatSpace.md),
@@ -166,11 +216,42 @@ class _FieldPageState extends State<FieldPage> {
                     ),
                   ),
                   const SizedBox(height: NamatSpace.xl),
-                  Text(l.resultCount(context.n(results.length)), style: text.bodySmall),
-                  const SizedBox(height: NamatSpace.md),
-                  for (final r in results) ...[
-                    _ResultCard(result: r, field: field, fieldKey: widget.fieldKey),
+                  if (results.isEmpty)
+                    // A search that found nothing is a different state from a
+                    // field with no partners, and says so.
+                    Padding(
+                      padding: const EdgeInsets.only(top: NamatSpace.section),
+                      child: NamatEmptyState(
+                        illustration: const NamatIcon(
+                          NamatIcons.search,
+                          size: 48,
+                          color: NamatColors.inkSoft,
+                        ),
+                        title: l.noResults,
+                        body: l.noResultsBody,
+                      ),
+                    )
+                  else ...[
+                    Text(
+                      l.resultCount(context.n(results.length)),
+                      style: text.bodySmall,
+                    ),
                     const SizedBox(height: NamatSpace.md),
+                    for (final (i, p) in results.indexed) ...[
+                      Reveal(
+                        index: i,
+                        // Re-keyed on the query so filtering re-animates
+                        // rather than swapping text inside stationary cards.
+                        key: ValueKey('${p.slug}-${_search.text}'),
+                        child: _ResultCard(
+                          partner: p,
+                          field: field,
+                          fieldKey: widget.fieldKey,
+                          arabic: arabic,
+                        ),
+                      ),
+                      const SizedBox(height: NamatSpace.md),
+                    ],
                   ],
                 ],
               ),
@@ -181,43 +262,28 @@ class _FieldPageState extends State<FieldPage> {
 
 class _ResultCard extends StatelessWidget {
   const _ResultCard({
-    required this.result,
+    required this.partner,
     required this.field,
     required this.fieldKey,
+    required this.arabic,
   });
 
-  final _Result result;
+  final Partner partner;
   final NamatField field;
   final String fieldKey;
-
-  /// Initials stand in for a logo. A partner's trademark is theirs to give,
-  /// and a stock photo pretending to be their shopfront is a false claim.
-  String get _monogram {
-    final words = result.$1.split(' ').where((w) => w.length > 1).toList();
-    if (words.isEmpty) return '؟';
-    final first = words.first;
-    final isArabic = RegExp(r'[؀-ۿ]').hasMatch(first);
-    if (isArabic) {
-      // Skip the definite article, or every name beginning "ال" monograms to
-      // the same alef.
-      final stem =
-          first.startsWith('ال') && first.length > 3 ? first.substring(2) : first;
-      return stem.substring(0, 1);
-    }
-    return words.length > 1
-        ? (first[0] + words[1][0]).toUpperCase()
-        : first.substring(0, 2).toUpperCase();
-  }
+  final bool arabic;
 
   @override
   Widget build(BuildContext context) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
-    final (name, meta, km, inPackage) = result;
+    final name = partner.localisedName(arabic);
+    final tags = partner.localisedTags(arabic);
+    final from = partner.fromPrice;
 
     return NamatCard(
       padding: const EdgeInsets.all(NamatSpace.md),
-      onTap: () => context.go('/use/$fieldKey/partner/${_slug(name)}'),
+      onTap: () => context.go('/use/$fieldKey/partner/${partner.slug}'),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -230,7 +296,7 @@ class _ResultCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(NamatRadius.xs),
             ),
             child: Text(
-              _monogram,
+              monogram(name),
               style: text.titleLarge?.copyWith(color: field.accent),
             ),
           ),
@@ -247,7 +313,7 @@ class _ResultCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  meta,
+                  '${tags.join(' · ')} · ${partner.localisedArea(arabic)}',
                   style: text.bodySmall,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -261,9 +327,23 @@ class _ResultCard extends StatelessWidget {
                       color: NamatColors.inkSoft,
                     ),
                     const SizedBox(width: 4),
-                    Text('${context.n(km)} كم', style: text.labelSmall),
-                    if (inPackage) ...[
+                    Text(
+                      '${context.n(partner.distanceKm)} ${l.km}',
+                      style: text.labelSmall,
+                    ),
+                    if (from != null) ...[
                       const SizedBox(width: 10),
+                      Text(
+                        l.fromPrice(context.money(from), l.omr),
+                        style: text.labelSmall,
+                      ),
+                    ],
+                  ],
+                ),
+                if (partner.inPackage) ...[
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
                       const NamatIcon(
                         NamatIcons.leaf,
                         size: 13,
@@ -278,8 +358,8 @@ class _ResultCard extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ],
-                ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -289,10 +369,20 @@ class _ResultCard extends StatelessWidget {
   }
 }
 
-/// Until the API supplies real identifiers, the slug is derived from the name
-/// so a tap still lands on the right partner.
-String _slug(String name) => switch (name) {
-      'مطعم المعمل الصحي' => 'healthy-lab',
-      'Nourish Kitchen' => 'nourish-kitchen',
-      _ => 'healthy-lab',
-    };
+/// Initials stand in for a logo. A partner's trademark is theirs to give, and
+/// a stock photo pretending to be their shopfront is a false claim.
+String monogram(String name) {
+  final words = name.split(' ').where((w) => w.length > 1).toList();
+  if (words.isEmpty) return '؟';
+  final first = words.first;
+  if (RegExp(r'[؀-ۿ]').hasMatch(first)) {
+    // Skip the definite article, or every name beginning "ال" monograms to
+    // the same alef.
+    final stem =
+        first.startsWith('ال') && first.length > 3 ? first.substring(2) : first;
+    return stem.substring(0, 1);
+  }
+  return words.length > 1
+      ? (first[0] + words[1][0]).toUpperCase()
+      : first.substring(0, 2).toUpperCase();
+}

@@ -49,6 +49,26 @@ extension NamatNumbers on BuildContext {
     return _isArabic ? _toArabicIndic(latin) : latin;
   }
 
+  /// Money, at the precision the currency actually has.
+  ///
+  /// The rial divides into 1000 baisa, so prices here carry three decimals and
+  /// not the two that most currency formatting assumes. `3.2` rendered as
+  /// "3.20" is not a rounding nicety — it is a different price, and a member
+  /// comparing it against a partner's own menu would find it wrong.
+  ///
+  /// The currency word is not appended here: it comes from the ARB, so that
+  /// this returns a bare number the caller places on whichever side of it the
+  /// layout wants.
+  String money(num value) {
+    final fixed = value.toStringAsFixed(3);
+    final dot = fixed.indexOf('.');
+    // Grouped on the whole part only; three decimals never take a separator.
+    final whole = NumberFormat.decimalPattern('en')
+        .format(int.parse(fixed.substring(0, dot)));
+    final latin = '$whole.${fixed.substring(dot + 1)}';
+    return _isArabic ? _toArabicIndic(latin) : latin;
+  }
+
   /// A phone number as a reader sees it: "+٩٦٨ ٩١٢٣ ٤٥٦٧".
   ///
   /// Grouped and converted, unlike the number in the entry field — that one is

@@ -7,6 +7,7 @@ import '../../../core/widgets/namat_scaffold.dart';
 import '../../../core/l10n/numbers.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../catalogue/domain/catalogue.dart';
 import '../domain/field.dart';
 
 /// "Use NAMAT" — the question before the catalogue.
@@ -21,15 +22,6 @@ import '../domain/field.dart';
 /// business repeated.
 class UsePage extends StatelessWidget {
   const UsePage({super.key});
-
-  /// Stand-in counts until the API is wired. Zero is a real state here and is
-  /// rendered as such, not hidden.
-  static const _counts = {
-    NamatField.meals: 34,
-    NamatField.fitness: 0,
-    NamatField.consult: 0,
-    NamatField.stores: 4,
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +41,7 @@ class UsePage extends StatelessWidget {
             Text(l.useSub, style: text.bodySmall),
             const SizedBox(height: NamatSpace.xxl),
             for (final field in NamatField.values) ...[
-              _FieldCard(field: field, count: _counts[field] ?? 0),
+              _FieldCard(field: field, count: Catalogue.byField(field).length),
               const SizedBox(height: NamatSpace.lg),
             ],
           ]),

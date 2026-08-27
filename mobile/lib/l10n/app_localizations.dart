@@ -1444,6 +1444,408 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'التالي'**
   String get nextStep;
+
+  /// No description provided for @km.
+  ///
+  /// In ar, this message translates to:
+  /// **'كم'**
+  String get km;
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} دقيقة'**
+  String minutesShort(String count);
+
+  /// No description provided for @fromPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبدأ من {price} {currency}'**
+  String fromPrice(String price, String currency);
+
+  /// No description provided for @ratingWithCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{rating} · {count} تقييم'**
+  String ratingWithCount(String rating, String count);
+
+  /// No description provided for @partnerMenu.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتوفر'**
+  String get partnerMenu;
+
+  /// No description provided for @firstPartyNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة من نمط'**
+  String get firstPartyNote;
+
+  /// No description provided for @perServing.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل حصة'**
+  String get perServing;
+
+  /// No description provided for @calories.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعرة'**
+  String get calories;
+
+  /// No description provided for @protein.
+  ///
+  /// In ar, this message translates to:
+  /// **'بروتين'**
+  String get protein;
+
+  /// No description provided for @carbs.
+  ///
+  /// In ar, this message translates to:
+  /// **'كربوهيدرات'**
+  String get carbs;
+
+  /// No description provided for @fat.
+  ///
+  /// In ar, this message translates to:
+  /// **'دهون'**
+  String get fat;
+
+  /// No description provided for @gramsShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} غ'**
+  String gramsShort(String value);
+
+  /// No description provided for @nutritionUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يزوّدنا الشريك بالقيم الغذائية'**
+  String get nutritionUnknown;
+
+  /// No description provided for @addToCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف إلى السلة'**
+  String get addToCart;
+
+  /// No description provided for @addedToCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُضيف إلى السلة'**
+  String get addedToCart;
+
+  /// No description provided for @viewCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض السلة'**
+  String get viewCart;
+
+  /// No description provided for @quantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get quantity;
+
+  /// No description provided for @checkoutTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتمام الطلب'**
+  String get checkoutTitle;
+
+  /// No description provided for @howToReceive.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف تستلمه؟'**
+  String get howToReceive;
+
+  /// No description provided for @fulfilDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'توصيل'**
+  String get fulfilDelivery;
+
+  /// No description provided for @fulfilPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام من المتجر'**
+  String get fulfilPickup;
+
+  /// No description provided for @fulfilAtPartner.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحضور إلى المكان'**
+  String get fulfilAtPartner;
+
+  /// No description provided for @fulfilOnline.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن بُعد'**
+  String get fulfilOnline;
+
+  /// No description provided for @deliveryAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان التوصيل'**
+  String get deliveryAddress;
+
+  /// No description provided for @addressHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبنى، الشارع، الولاية'**
+  String get addressHint;
+
+  /// No description provided for @addressRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'نحتاج العنوان قبل التوصيل'**
+  String get addressRequired;
+
+  /// No description provided for @chooseTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الوقت'**
+  String get chooseTime;
+
+  /// No description provided for @payWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get payWith;
+
+  /// No description provided for @payCard.
+  ///
+  /// In ar, this message translates to:
+  /// **'بطاقة'**
+  String get payCard;
+
+  /// No description provided for @payApplePay.
+  ///
+  /// In ar, this message translates to:
+  /// **'Apple Pay'**
+  String get payApplePay;
+
+  /// No description provided for @payCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقداً عند الاستلام'**
+  String get payCash;
+
+  /// No description provided for @payAllowance.
+  ///
+  /// In ar, this message translates to:
+  /// **'من رصيد باقتك'**
+  String get payAllowance;
+
+  /// No description provided for @nothingDue.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا مبلغ مستحق — باقتك تغطي الطلب بالكامل'**
+  String get nothingDue;
+
+  /// No description provided for @demoPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع غير مفعّل بعد. لن يُخصم أي مبلغ.'**
+  String get demoPayment;
+
+  /// No description provided for @orderSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخّص الطلب'**
+  String get orderSummary;
+
+  /// No description provided for @payNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادفع {amount} {currency}'**
+  String payNow(String amount, String currency);
+
+  /// No description provided for @confirmOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد الطلب'**
+  String get confirmOrder;
+
+  /// No description provided for @orderReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الطلب'**
+  String get orderReference;
+
+  /// No description provided for @rateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف كانت التجربة؟'**
+  String get rateTitle;
+
+  /// No description provided for @rateBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمك يظهر للشريك وللأعضاء الآخرين'**
+  String get rateBody;
+
+  /// No description provided for @rateOrderLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'{title} · من {partner}'**
+  String rateOrderLine(String title, String partner);
+
+  /// No description provided for @rateSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرسل التقييم'**
+  String get rateSubmit;
+
+  /// No description provided for @rateLater.
+  ///
+  /// In ar, this message translates to:
+  /// **'لاحقاً'**
+  String get rateLater;
+
+  /// No description provided for @rateThanks.
+  ///
+  /// In ar, this message translates to:
+  /// **'شكراً لك'**
+  String get rateThanks;
+
+  /// No description provided for @rateThanksBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل تقييمك، ويساعد غيرك على الاختيار'**
+  String get rateThanksBody;
+
+  /// No description provided for @rateThisOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم هذا الطلب'**
+  String get rateThisOrder;
+
+  /// No description provided for @yourRating.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمك'**
+  String get yourRating;
+
+  /// No description provided for @star1.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيئة'**
+  String get star1;
+
+  /// No description provided for @star2.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبولة'**
+  String get star2;
+
+  /// No description provided for @star3.
+  ///
+  /// In ar, this message translates to:
+  /// **'جيدة'**
+  String get star3;
+
+  /// No description provided for @star4.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممتازة'**
+  String get star4;
+
+  /// No description provided for @star5.
+  ///
+  /// In ar, this message translates to:
+  /// **'رائعة'**
+  String get star5;
+
+  /// No description provided for @rateNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف ملاحظة (اختياري)'**
+  String get rateNoteHint;
+
+  /// No description provided for @rateWhatWorked.
+  ///
+  /// In ar, this message translates to:
+  /// **'وش اللي عجبك؟'**
+  String get rateWhatWorked;
+
+  /// No description provided for @tagTaste.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطعم'**
+  String get tagTaste;
+
+  /// No description provided for @tagPortion.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get tagPortion;
+
+  /// No description provided for @tagOnTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الالتزام بالوقت'**
+  String get tagOnTime;
+
+  /// No description provided for @tagStaff.
+  ///
+  /// In ar, this message translates to:
+  /// **'التعامل'**
+  String get tagStaff;
+
+  /// No description provided for @tagCleanliness.
+  ///
+  /// In ar, this message translates to:
+  /// **'النظافة'**
+  String get tagCleanliness;
+
+  /// No description provided for @tagValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر مقابل القيمة'**
+  String get tagValue;
+
+  /// No description provided for @itemsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} عنصر'**
+  String itemsCount(String count);
+
+  /// No description provided for @andMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'و{count} غيره'**
+  String andMore(String count);
+
+  /// No description provided for @noOrdersYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك طلبات بعد'**
+  String get noOrdersYet;
+
+  /// No description provided for @noOrdersYetBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول طلب يبدأ من قسم استخدم نمط'**
+  String get noOrdersYetBody;
+
+  /// No description provided for @recentOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتك'**
+  String get recentOrders;
+
+  /// No description provided for @noResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لقينا نتائج'**
+  String get noResults;
+
+  /// No description provided for @noResultsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب كلمة أقصر، أو شِل الفلاتر'**
+  String get noResultsBody;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

@@ -380,5 +380,146 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "km": "كم",
+  "minutesShort": "{count} دقيقة",
+  "@minutesShort": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "fromPrice": "يبدأ من {price} {currency}",
+  "@fromPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "ratingWithCount": "{rating} · {count} تقييم",
+  "@ratingWithCount": {
+    "placeholders": {
+      "rating": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "partnerMenu": "المتوفر",
+  "firstPartyNote": "خدمة من نمط",
+
+  "perServing": "لكل حصة",
+  "calories": "سعرة",
+  "protein": "بروتين",
+  "carbs": "كربوهيدرات",
+  "fat": "دهون",
+  "gramsShort": "{value} غ",
+  "@gramsShort": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "nutritionUnknown": "لم يزوّدنا الشريك بالقيم الغذائية",
+
+  "addToCart": "أضف إلى السلة",
+  "addedToCart": "أُضيف إلى السلة",
+  "viewCart": "عرض السلة",
+  "quantity": "الكمية",
+
+  "checkoutTitle": "إتمام الطلب",
+  "howToReceive": "كيف تستلمه؟",
+  "fulfilDelivery": "توصيل",
+  "fulfilPickup": "استلام من المتجر",
+  "fulfilAtPartner": "الحضور إلى المكان",
+  "fulfilOnline": "عن بُعد",
+  "deliveryAddress": "عنوان التوصيل",
+  "addressHint": "المبنى، الشارع، الولاية",
+  "addressRequired": "نحتاج العنوان قبل التوصيل",
+  "chooseTime": "اختر الوقت",
+  "payWith": "طريقة الدفع",
+  "payCard": "بطاقة",
+  "payApplePay": "Apple Pay",
+  "payCash": "نقداً عند الاستلام",
+  "payAllowance": "من رصيد باقتك",
+  "nothingDue": "لا مبلغ مستحق — باقتك تغطي الطلب بالكامل",
+  "demoPayment": "الدفع غير مفعّل بعد. لن يُخصم أي مبلغ.",
+  "orderSummary": "ملخّص الطلب",
+  "payNow": "ادفع {amount} {currency}",
+  "@payNow": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmOrder": "أكّد الطلب",
+  "orderReference": "رقم الطلب",
+
+  "rateTitle": "كيف كانت التجربة؟",
+  "rateBody": "تقييمك يظهر للشريك وللأعضاء الآخرين",
+  "rateOrderLine": "{title} · من {partner}",
+  "@rateOrderLine": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "partner": {
+        "type": "String"
+      }
+    }
+  },
+  "rateSubmit": "أرسل التقييم",
+  "rateLater": "لاحقاً",
+  "rateThanks": "شكراً لك",
+  "rateThanksBody": "وصل تقييمك، ويساعد غيرك على الاختيار",
+  "rateThisOrder": "قيّم هذا الطلب",
+  "yourRating": "تقييمك",
+  "star1": "سيئة",
+  "star2": "مقبولة",
+  "star3": "جيدة",
+  "star4": "ممتازة",
+  "star5": "رائعة",
+  "rateNoteHint": "أضف ملاحظة (اختياري)",
+  "rateWhatWorked": "وش اللي عجبك؟",
+  "tagTaste": "الطعم",
+  "tagPortion": "الكمية",
+  "tagOnTime": "الالتزام بالوقت",
+  "tagStaff": "التعامل",
+  "tagCleanliness": "النظافة",
+  "tagValue": "السعر مقابل القيمة",
+
+  "itemsCount": "{count} عنصر",
+  "@itemsCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "andMore": "و{count} غيره",
+  "@andMore": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "noOrdersYet": "ما عندك طلبات بعد",
+  "noOrdersYetBody": "أول طلب يبدأ من قسم استخدم نمط",
+  "recentOrders": "طلباتك",
+  "noResults": "ما لقينا نتائج",
+  "noResultsBody": "جرّب كلمة أقصر، أو شِل الفلاتر"
 }

@@ -11,6 +11,7 @@ import '../../features/auth/presentation/setup_page.dart';
 import '../../features/auth/presentation/verify_page.dart';
 import '../../features/bookings/presentation/bookings_page.dart';
 import '../../features/bookings/presentation/cart_page.dart';
+import '../../features/bookings/presentation/checkout_page.dart';
 import '../../features/bookings/presentation/order_done_page.dart';
 import '../../features/notifications/presentation/notifications_page.dart';
 import '../../features/packages/presentation/packages_page.dart';
@@ -21,6 +22,7 @@ import '../../features/onboarding/presentation/splash_page.dart';
 import '../../features/onboarding/presentation/onboarding_page.dart';
 import '../../features/onboarding/presentation/welcome_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
+import '../../features/reviews/presentation/rate_page.dart';
 import '../../features/shell/app_shell.dart';
 import '../../features/use/presentation/use_page.dart';
 import '../../features/use/presentation/field_page.dart';
@@ -54,8 +56,25 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       GoRoute(path: '/setup', builder: (_, __) => const SetupPage()),
 
+      // The order flow sits outside the tab shell: once a member is paying,
+      // the bottom bar is a way to lose the cart, not a way to navigate.
       GoRoute(path: '/cart', builder: (_, __) => const CartPage()),
-      GoRoute(path: '/cart/done', builder: (_, __) => const OrderDonePage()),
+      GoRoute(
+        path: '/cart/checkout',
+        builder: (_, __) => const CheckoutPage(),
+      ),
+      GoRoute(
+        path: '/cart/done/:reference',
+        builder: (_, state) => OrderDonePage(
+          reference: state.pathParameters['reference']!,
+        ),
+      ),
+      GoRoute(
+        path: '/rate/:reference',
+        builder: (_, state) => RatePage(
+          reference: state.pathParameters['reference']!,
+        ),
+      ),
 
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(shell: shell),

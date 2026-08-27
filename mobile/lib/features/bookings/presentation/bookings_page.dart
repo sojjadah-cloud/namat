@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
@@ -8,22 +9,26 @@ import '../../../core/widgets/namat_motion.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../domain/booking.dart';
+import '../domain/cart_notifier.dart';
+import '../domain/order.dart';
 
 /// Everything NAMAT owes the member, in one place.
 ///
 /// Three tabs rather than one list, because the questions differ: "what is
 /// happening next", "what am I still paying for", and "what did I do". A
 /// single chronological list answers the first well and the other two badly.
-class BookingsPage extends StatefulWidget {
+class BookingsPage extends ConsumerStatefulWidget {
   const BookingsPage({super.key});
 
   @override
-  State<BookingsPage> createState() => _BookingsPageState();
+  ConsumerState<BookingsPage> createState() => _BookingsPageState();
 }
 
-class _BookingsPageState extends State<BookingsPage>
+class _BookingsPageState extends ConsumerState<BookingsPage>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabs = TabController(length: 3, vsync: this);
+  // Four, not three. An order placed a minute ago is neither upcoming nor
+  // past, and filing it under either makes the member distrust both lists.
+  late final TabController _tabs = TabController(length: 4, vsync: this);
 
   /// Stand-in until the API exists.
   static final _all = <Booking>[
@@ -108,6 +113,7 @@ class _BookingsPageState extends State<BookingsPage>
               Tab(text: l.tabUpcoming),
               Tab(text: l.tabSubscriptions),
               Tab(text: l.tabPast),
+              Tab(text: l.recentOrders),
             ],
           ),
         ),
@@ -121,6 +127,7 @@ class _BookingsPageState extends State<BookingsPage>
             ),
             _List(bookings: subs, emptyTitle: l.noSubscriptions),
             _List(bookings: past, emptyTitle: l.noPast),
+            _Orders(orders: ref.watch(ordersProvider)),
           ],
         ),
       ),
@@ -328,6 +335,115 @@ class _Action extends StatelessWidget {
               ?.copyWith(color: colour),
         ),
       ),
+    );
+  }
+}
+
+/// What the member has actually bought, newest first.
+///
+/// Kept apart from the three booking tabs because it answers a different
+/// question — not "what is coming" but "what did I pay for, and what did I
+/// think of it". It is also the only place a rating can be left after the
+/// confirmation screen is gone.
+class _Orders extends StatelessWidget {
+  const _Orders({required this.orders});
+
+  final List<PlacedOrder> orders;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = L.of(context)!;
+    final text = Theme.of(context).textTheme;
+
+    if (orders.isEmpty) {
+      return NamatEmptyState(
+        illustration: const NamatIcon(
+          NamatIcons.store,
+          size: 52,
+          color: NamatColors.inkSoft,
+        ),
+        title: l.noOrdersYet,
+        body: l.noOrdersYetBody,
+        action: FilledButton(
+          onPressed: () => context.go('/use'),
+          child: Text(l.useNamatCta),
+        ),
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        NamatSpace.gutter,
+        NamatSpace.lg,
+        NamatSpace.gutter,
+        120,
+      ),
+      children: revealAll([
+        for (final o in orders)
+          Padding(
+            padding: const EdgeInsets.only(bottom: NamatSpace.md),
+            child: NamatCard(
+              padding: const EdgeInsets.all(NamatSpace.lg),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(o.leadTitle, style: text.titleMedium),
+                      ),
+                      Text(
+                        '${context.money(o.total)} ${l.omr}',
+                        style: text.labelMedium,
+                      ),
+                    ],
+                  ),
+                  if (o.extraCount > 0) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      l.andMore(context.n(o.extraCount)),
+                      style: text.labelSmall,
+                    ),
+                  ],
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      // Latin, isolated: the reference is transcribed, not
+                      // read as a quantity.
+                      Text(
+                        ltrIsolate(o.reference),
+                        style: text.labelSmall,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(context.dateTime(o.placedAt), style: text.labelSmall),
+                    ],
+                  ),
+                  const SizedBox(height: NamatSpace.md),
+                  if (o.isRated)
+                    Row(
+                      children: [
+                        Text(l.yourRating, style: text.labelSmall),
+                        const SizedBox(width: 8),
+                        for (var i = 1; i <= 5; i++)
+                          Icon(
+                            i <= o.rating! ? Icons.star_rounded : Icons.star_border_rounded,
+                            size: 16,
+                            color: i <= o.rating!
+                                ? NamatColors.gold
+                                : NamatColors.line,
+                          ),
+                      ],
+                    )
+                  else
+                    OutlinedButton(
+                      onPressed: () => context.go('/rate/${o.reference}'),
+                      child: Text(l.rateThisOrder),
+                    ),
+                ],
+              ),
+            ),
+          ),
+      ]),
     );
   }
 }

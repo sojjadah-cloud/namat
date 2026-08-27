@@ -722,4 +722,221 @@ class LAr extends L {
 
   @override
   String get nextStep => 'التالي';
+
+  @override
+  String get km => 'كم';
+
+  @override
+  String minutesShort(String count) {
+    return '$count دقيقة';
+  }
+
+  @override
+  String fromPrice(String price, String currency) {
+    return 'يبدأ من $price $currency';
+  }
+
+  @override
+  String ratingWithCount(String rating, String count) {
+    return '$rating · $count تقييم';
+  }
+
+  @override
+  String get partnerMenu => 'المتوفر';
+
+  @override
+  String get firstPartyNote => 'خدمة من نمط';
+
+  @override
+  String get perServing => 'لكل حصة';
+
+  @override
+  String get calories => 'سعرة';
+
+  @override
+  String get protein => 'بروتين';
+
+  @override
+  String get carbs => 'كربوهيدرات';
+
+  @override
+  String get fat => 'دهون';
+
+  @override
+  String gramsShort(String value) {
+    return '$value غ';
+  }
+
+  @override
+  String get nutritionUnknown => 'لم يزوّدنا الشريك بالقيم الغذائية';
+
+  @override
+  String get addToCart => 'أضف إلى السلة';
+
+  @override
+  String get addedToCart => 'أُضيف إلى السلة';
+
+  @override
+  String get viewCart => 'عرض السلة';
+
+  @override
+  String get quantity => 'الكمية';
+
+  @override
+  String get checkoutTitle => 'إتمام الطلب';
+
+  @override
+  String get howToReceive => 'كيف تستلمه؟';
+
+  @override
+  String get fulfilDelivery => 'توصيل';
+
+  @override
+  String get fulfilPickup => 'استلام من المتجر';
+
+  @override
+  String get fulfilAtPartner => 'الحضور إلى المكان';
+
+  @override
+  String get fulfilOnline => 'عن بُعد';
+
+  @override
+  String get deliveryAddress => 'عنوان التوصيل';
+
+  @override
+  String get addressHint => 'المبنى، الشارع، الولاية';
+
+  @override
+  String get addressRequired => 'نحتاج العنوان قبل التوصيل';
+
+  @override
+  String get chooseTime => 'اختر الوقت';
+
+  @override
+  String get payWith => 'طريقة الدفع';
+
+  @override
+  String get payCard => 'بطاقة';
+
+  @override
+  String get payApplePay => 'Apple Pay';
+
+  @override
+  String get payCash => 'نقداً عند الاستلام';
+
+  @override
+  String get payAllowance => 'من رصيد باقتك';
+
+  @override
+  String get nothingDue => 'لا مبلغ مستحق — باقتك تغطي الطلب بالكامل';
+
+  @override
+  String get demoPayment => 'الدفع غير مفعّل بعد. لن يُخصم أي مبلغ.';
+
+  @override
+  String get orderSummary => 'ملخّص الطلب';
+
+  @override
+  String payNow(String amount, String currency) {
+    return 'ادفع $amount $currency';
+  }
+
+  @override
+  String get confirmOrder => 'أكّد الطلب';
+
+  @override
+  String get orderReference => 'رقم الطلب';
+
+  @override
+  String get rateTitle => 'كيف كانت التجربة؟';
+
+  @override
+  String get rateBody => 'تقييمك يظهر للشريك وللأعضاء الآخرين';
+
+  @override
+  String rateOrderLine(String title, String partner) {
+    return '$title · من $partner';
+  }
+
+  @override
+  String get rateSubmit => 'أرسل التقييم';
+
+  @override
+  String get rateLater => 'لاحقاً';
+
+  @override
+  String get rateThanks => 'شكراً لك';
+
+  @override
+  String get rateThanksBody => 'وصل تقييمك، ويساعد غيرك على الاختيار';
+
+  @override
+  String get rateThisOrder => 'قيّم هذا الطلب';
+
+  @override
+  String get yourRating => 'تقييمك';
+
+  @override
+  String get star1 => 'سيئة';
+
+  @override
+  String get star2 => 'مقبولة';
+
+  @override
+  String get star3 => 'جيدة';
+
+  @override
+  String get star4 => 'ممتازة';
+
+  @override
+  String get star5 => 'رائعة';
+
+  @override
+  String get rateNoteHint => 'أضف ملاحظة (اختياري)';
+
+  @override
+  String get rateWhatWorked => 'وش اللي عجبك؟';
+
+  @override
+  String get tagTaste => 'الطعم';
+
+  @override
+  String get tagPortion => 'الكمية';
+
+  @override
+  String get tagOnTime => 'الالتزام بالوقت';
+
+  @override
+  String get tagStaff => 'التعامل';
+
+  @override
+  String get tagCleanliness => 'النظافة';
+
+  @override
+  String get tagValue => 'السعر مقابل القيمة';
+
+  @override
+  String itemsCount(String count) {
+    return '$count عنصر';
+  }
+
+  @override
+  String andMore(String count) {
+    return 'و$count غيره';
+  }
+
+  @override
+  String get noOrdersYet => 'ما عندك طلبات بعد';
+
+  @override
+  String get noOrdersYetBody => 'أول طلب يبدأ من قسم استخدم نمط';
+
+  @override
+  String get recentOrders => 'طلباتك';
+
+  @override
+  String get noResults => 'ما لقينا نتائج';
+
+  @override
+  String get noResultsBody => 'جرّب كلمة أقصر، أو شِل الفلاتر';
 }

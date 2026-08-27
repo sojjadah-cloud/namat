@@ -722,4 +722,221 @@ class LEn extends L {
 
   @override
   String get nextStep => 'Next';
+
+  @override
+  String get km => 'km';
+
+  @override
+  String minutesShort(String count) {
+    return '$count min';
+  }
+
+  @override
+  String fromPrice(String price, String currency) {
+    return 'From $price $currency';
+  }
+
+  @override
+  String ratingWithCount(String rating, String count) {
+    return '$rating · $count reviews';
+  }
+
+  @override
+  String get partnerMenu => 'Available';
+
+  @override
+  String get firstPartyNote => 'A NAMAT service';
+
+  @override
+  String get perServing => 'Per serving';
+
+  @override
+  String get calories => 'Calories';
+
+  @override
+  String get protein => 'Protein';
+
+  @override
+  String get carbs => 'Carbs';
+
+  @override
+  String get fat => 'Fat';
+
+  @override
+  String gramsShort(String value) {
+    return '$value g';
+  }
+
+  @override
+  String get nutritionUnknown => 'The partner has not supplied nutrition figures';
+
+  @override
+  String get addToCart => 'Add to cart';
+
+  @override
+  String get addedToCart => 'Added to cart';
+
+  @override
+  String get viewCart => 'View cart';
+
+  @override
+  String get quantity => 'Quantity';
+
+  @override
+  String get checkoutTitle => 'Checkout';
+
+  @override
+  String get howToReceive => 'How do you want it?';
+
+  @override
+  String get fulfilDelivery => 'Delivery';
+
+  @override
+  String get fulfilPickup => 'Collect from the shop';
+
+  @override
+  String get fulfilAtPartner => 'Come to the venue';
+
+  @override
+  String get fulfilOnline => 'Remote';
+
+  @override
+  String get deliveryAddress => 'Delivery address';
+
+  @override
+  String get addressHint => 'Building, street, wilayat';
+
+  @override
+  String get addressRequired => 'We need an address before we can deliver';
+
+  @override
+  String get chooseTime => 'Choose a time';
+
+  @override
+  String get payWith => 'Payment method';
+
+  @override
+  String get payCard => 'Card';
+
+  @override
+  String get payApplePay => 'Apple Pay';
+
+  @override
+  String get payCash => 'Cash on delivery';
+
+  @override
+  String get payAllowance => 'From your package';
+
+  @override
+  String get nothingDue => 'Nothing to pay — your package covers this order';
+
+  @override
+  String get demoPayment => 'Payments are not connected yet. Nothing will be charged.';
+
+  @override
+  String get orderSummary => 'Order summary';
+
+  @override
+  String payNow(String amount, String currency) {
+    return 'Pay $amount $currency';
+  }
+
+  @override
+  String get confirmOrder => 'Confirm order';
+
+  @override
+  String get orderReference => 'Order reference';
+
+  @override
+  String get rateTitle => 'How was it?';
+
+  @override
+  String get rateBody => 'Your rating is shown to the partner and to other members';
+
+  @override
+  String rateOrderLine(String title, String partner) {
+    return '$title · from $partner';
+  }
+
+  @override
+  String get rateSubmit => 'Submit rating';
+
+  @override
+  String get rateLater => 'Later';
+
+  @override
+  String get rateThanks => 'Thank you';
+
+  @override
+  String get rateThanksBody => 'Your rating is in, and it helps the next person choose';
+
+  @override
+  String get rateThisOrder => 'Rate this order';
+
+  @override
+  String get yourRating => 'Your rating';
+
+  @override
+  String get star1 => 'Poor';
+
+  @override
+  String get star2 => 'Fair';
+
+  @override
+  String get star3 => 'Good';
+
+  @override
+  String get star4 => 'Very good';
+
+  @override
+  String get star5 => 'Excellent';
+
+  @override
+  String get rateNoteHint => 'Add a note (optional)';
+
+  @override
+  String get rateWhatWorked => 'What worked?';
+
+  @override
+  String get tagTaste => 'Taste';
+
+  @override
+  String get tagPortion => 'Portion';
+
+  @override
+  String get tagOnTime => 'On time';
+
+  @override
+  String get tagStaff => 'Staff';
+
+  @override
+  String get tagCleanliness => 'Cleanliness';
+
+  @override
+  String get tagValue => 'Value';
+
+  @override
+  String itemsCount(String count) {
+    return '$count items';
+  }
+
+  @override
+  String andMore(String count) {
+    return 'and $count more';
+  }
+
+  @override
+  String get noOrdersYet => 'No orders yet';
+
+  @override
+  String get noOrdersYetBody => 'Your first order starts in Use NAMAT';
+
+  @override
+  String get recentOrders => 'Your orders';
+
+  @override
+  String get noResults => 'No results';
+
+  @override
+  String get noResultsBody => 'Try a shorter word, or clear the filters';
 }
