@@ -11,6 +11,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
 import '../../bookings/domain/cart_notifier.dart';
 import '../../catalogue/domain/catalogue.dart';
+import '../../journey/domain/habits.dart';
 import '../../use/domain/field.dart';
 import '../domain/home_feed.dart';
 
@@ -91,9 +92,11 @@ class HomePage extends ConsumerWidget {
                   onPressed: () => context.go('/search'),
                   icon: const NamatIcon(NamatIcons.search, size: 22),
                 ),
-                // Only once there is something in it. A permanently visible
-                // empty cart is a button that never does anything.
-                if (cartCount > 0) _CartButton(count: cartCount),
+                // Always visible, badge or not. Hiding it until something is
+                // in it means the one moment a member goes looking for the
+                // cart — right after adding to it — is the moment they have
+                // never seen where it lives.
+                _CartButton(count: cartCount),
                 IconButton(
                   onPressed: () => context.go('/home/notifications'),
                   icon: const NamatIcon(NamatIcons.bell, size: 22),
@@ -281,6 +284,16 @@ class _WeekCard extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final progress = ref.watch(weekProgressProvider);
     final percent = (progress * 100).round();
+    final today = ref.watch(todayProvider);
+    final streak = ref.watch(streakProvider);
+
+    // Movement is the better of walking and a workout: a member who trained
+    // has moved, and a member who walked has too. Requiring both would read
+    // as a failure on a day that went fine.
+    final movement = [
+      today.of(Habit.workout) / Habit.workout.target,
+      today.of(Habit.steps) / Habit.steps.target,
+    ].reduce((a, b) => a > b ? a : b).clamp(0.0, 1.0);
 
     return NamatCard(
       organic: true,
@@ -310,18 +323,32 @@ class _WeekCard extends ConsumerWidget {
             style: text.bodySmall?.copyWith(color: NamatColors.accent),
             textAlign: TextAlign.center,
           ),
+          if (streak > 0) ...[
+            const SizedBox(height: 4),
+            Text(
+              l.streakDays(context.n(streak)),
+              style: text.labelSmall?.copyWith(color: NamatColors.gold),
+            ),
+          ],
           const SizedBox(height: NamatSpace.xl),
           Row(
             children: [
-              _Arc(label: l.arcNutrition, value: 0.6, color: NamatColors.food),
+              _Arc(
+                label: l.arcNutrition,
+                value: (today.of(Habit.healthyMeal) /
+                        Habit.healthyMeal.target)
+                    .clamp(0.0, 1.0),
+                color: NamatColors.food,
+              ),
               _Arc(
                 label: l.arcMovement,
-                value: 0.8,
+                value: movement,
                 color: NamatColors.fitness,
               ),
               _Arc(
                 label: l.arcHydration,
-                value: 0.75,
+                value: (today.of(Habit.water) / Habit.water.target)
+                    .clamp(0.0, 1.0),
                 color: NamatColors.nutrition,
               ),
             ],
@@ -600,29 +627,30 @@ class _CartButton extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () => context.go('/cart'),
-          icon: const NamatIcon(NamatIcons.store, size: 22),
+          icon: const NamatIcon(NamatIcons.cart, size: 22),
         ),
-        Positioned(
-          top: 6,
-          // Placed by direction rather than by side, so the badge stays on the
-          // outer corner of the icon in both layouts.
-          right: Directionality.of(context) == TextDirection.rtl ? null : 6,
-          left: Directionality.of(context) == TextDirection.rtl ? 6 : null,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-            decoration: BoxDecoration(
-              color: NamatColors.deep,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Text(
-              context.n(count),
-              style: text.labelSmall?.copyWith(
-                color: Colors.white,
-                fontSize: 10,
+        if (count > 0)
+          Positioned(
+            top: 6,
+            // Placed by direction rather than by side, so the badge stays on
+            // the outer corner of the icon in both layouts.
+            right: Directionality.of(context) == TextDirection.rtl ? null : 6,
+            left: Directionality.of(context) == TextDirection.rtl ? 6 : null,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: NamatColors.deep,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Text(
+                context.n(count),
+                style: text.labelSmall?.copyWith(
+                  color: Colors.white,
+                  fontSize: 10,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }

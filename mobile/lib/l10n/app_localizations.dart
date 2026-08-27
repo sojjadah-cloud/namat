@@ -2422,6 +2422,468 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'انحجزت قبل شوي. اختر موعداً أو خدمة ثانية.'**
   String get unavailableBody;
+
+  /// No description provided for @todayTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get todayTitle;
+
+  /// No description provided for @habitWater.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماء'**
+  String get habitWater;
+
+  /// No description provided for @habitSteps.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشي'**
+  String get habitSteps;
+
+  /// No description provided for @habitWorkout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمرين'**
+  String get habitWorkout;
+
+  /// No description provided for @habitMeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجبة صحية'**
+  String get habitMeal;
+
+  /// No description provided for @habitSleep.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوم'**
+  String get habitSleep;
+
+  /// No description provided for @habitsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط عشان تسجّل. اضغط مرة ثانية لو غلط.'**
+  String get habitsHint;
+
+  /// No description provided for @glassesOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'{done} من {total}'**
+  String glassesOf(String done, String total);
+
+  /// No description provided for @streakDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} يوم متواصل'**
+  String streakDays(String count);
+
+  /// No description provided for @streakNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ اليوم'**
+  String get streakNone;
+
+  /// No description provided for @upcomingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'القادم'**
+  String get upcomingTitle;
+
+  /// No description provided for @nothingUpcoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فيه شي مجدول'**
+  String get nothingUpcoming;
+
+  /// No description provided for @lastSevenDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر سبعة أيام'**
+  String get lastSevenDays;
+
+  /// No description provided for @membershipTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشتراكك'**
+  String get membershipTitle;
+
+  /// No description provided for @noMembership.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك باقة'**
+  String get noMembership;
+
+  /// No description provided for @noMembershipBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقة تغطي وجباتك وحصصك واستشاراتك بسعر واحد'**
+  String get noMembershipBody;
+
+  /// No description provided for @allowanceMeals.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجبات'**
+  String get allowanceMeals;
+
+  /// No description provided for @allowanceSessions.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصص'**
+  String get allowanceSessions;
+
+  /// No description provided for @allowanceConsults.
+  ///
+  /// In ar, this message translates to:
+  /// **'استشارات'**
+  String get allowanceConsults;
+
+  /// No description provided for @usedOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'{used} من {total}'**
+  String usedOf(String used, String total);
+
+  /// No description provided for @renewsIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتجدد بعد {days} يوم'**
+  String renewsIn(String days);
+
+  /// No description provided for @pauseMembership.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوقف مؤقتاً'**
+  String get pauseMembership;
+
+  /// No description provided for @resumeMembership.
+  ///
+  /// In ar, this message translates to:
+  /// **'استأنف'**
+  String get resumeMembership;
+
+  /// No description provided for @cancelMembership.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الاشتراك'**
+  String get cancelMembership;
+
+  /// No description provided for @cancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلغي الاشتراك؟'**
+  String get cancelConfirm;
+
+  /// No description provided for @cancelConfirmBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ينتهي فوراً، وتقدر ترجع أي وقت. الإيقاف المؤقت يحفظ لك مكانك.'**
+  String get cancelConfirmBody;
+
+  /// No description provided for @cancelKeep.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّه'**
+  String get cancelKeep;
+
+  /// No description provided for @membershipPaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقوف مؤقتاً'**
+  String get membershipPaused;
+
+  /// No description provided for @startPackage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الباقة'**
+  String get startPackage;
+
+  /// No description provided for @upgradeMembership.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر الباقة'**
+  String get upgradeMembership;
+
+  /// No description provided for @allowanceSpent.
+  ///
+  /// In ar, this message translates to:
+  /// **'استهلكت هذه الباقة'**
+  String get allowanceSpent;
+
+  /// No description provided for @savedThisMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّرت {amount} {currency} هذا الشهر'**
+  String savedThisMonth(String amount, String currency);
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get settingsTitle;
+
+  /// No description provided for @account.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب'**
+  String get account;
+
+  /// No description provided for @preferences.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفضيلات'**
+  String get preferences;
+
+  /// No description provided for @notificationPrefs.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notificationPrefs;
+
+  /// No description provided for @notifyBookings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجوزات والطلبات'**
+  String get notifyBookings;
+
+  /// No description provided for @notifyJourney.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلتي والعادات'**
+  String get notifyJourney;
+
+  /// No description provided for @notifyChallenges.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحديات'**
+  String get notifyChallenges;
+
+  /// No description provided for @notifyOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض'**
+  String get notifyOffers;
+
+  /// No description provided for @notifyOffersNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'نرسل أقل ما يمكن. تقدر توقفها كلها.'**
+  String get notifyOffersNote;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصوصية'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع'**
+  String get privacyLocation;
+
+  /// No description provided for @privacyLocationNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'نستخدمه عشان نرتب النتائج بالقرب. تقدر تختار مدينتك يدوياً.'**
+  String get privacyLocationNote;
+
+  /// No description provided for @privacyPersonalisation.
+  ///
+  /// In ar, this message translates to:
+  /// **'التخصيص'**
+  String get privacyPersonalisation;
+
+  /// No description provided for @privacyPersonalisationNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'نرتب الاقتراحات حسب هدفك ونشاطك داخل نمط.'**
+  String get privacyPersonalisationNote;
+
+  /// No description provided for @privacyChallengeVisibility.
+  ///
+  /// In ar, this message translates to:
+  /// **'ظهورك في التحديات'**
+  String get privacyChallengeVisibility;
+
+  /// No description provided for @privacyChallengeNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما توقفه، ما يقدر أحد يتحداك باسم المستخدم.'**
+  String get privacyChallengeNote;
+
+  /// No description provided for @privacyData.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك'**
+  String get privacyData;
+
+  /// No description provided for @privacyDataNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدر تطلب نسخة أو تحذف حسابك.'**
+  String get privacyDataNote;
+
+  /// No description provided for @downloadData.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب نسخة'**
+  String get downloadData;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'احذف حسابي'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُحذف حسابك وكل بياناتك. ما ينرجع.'**
+  String get deleteAccountBody;
+
+  /// No description provided for @supportTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة'**
+  String get supportTitle;
+
+  /// No description provided for @supportOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في طلب'**
+  String get supportOrder;
+
+  /// No description provided for @supportBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في حجز'**
+  String get supportBooking;
+
+  /// No description provided for @supportPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في الدفع'**
+  String get supportPayment;
+
+  /// No description provided for @supportAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في الحساب'**
+  String get supportAccount;
+
+  /// No description provided for @supportOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'شي ثاني'**
+  String get supportOther;
+
+  /// No description provided for @supportChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثة'**
+  String get supportChat;
+
+  /// No description provided for @supportWhatsapp.
+  ///
+  /// In ar, this message translates to:
+  /// **'واتساب'**
+  String get supportWhatsapp;
+
+  /// No description provided for @supportFaq.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسئلة شائعة'**
+  String get supportFaq;
+
+  /// No description provided for @languageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get languageTitle;
+
+  /// No description provided for @languageArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get languageArabic;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'نمط مصمّم بالعربية أولاً، والإنجليزية كاملة.'**
+  String get languageNote;
+
+  /// No description provided for @signOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get signOut;
+
+  /// No description provided for @notConnectedYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما ربطناها بعد'**
+  String get notConnectedYet;
+
+  /// No description provided for @addressesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العناوين'**
+  String get addressesTitle;
+
+  /// No description provided for @addAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف عنواناً'**
+  String get addAddress;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get addressLabel;
+
+  /// No description provided for @addressLabelHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البيت، الشغل'**
+  String get addressLabelHint;
+
+  /// No description provided for @addressDetail.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفاصيل'**
+  String get addressDetail;
+
+  /// No description provided for @noAddresses.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك عناوين محفوظة'**
+  String get noAddresses;
+
+  /// No description provided for @useThisAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم هذا'**
+  String get useThisAddress;
+
+  /// No description provided for @saveAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'احفظ'**
+  String get saveAddress;
+
+  /// No description provided for @deleteAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'احذف'**
+  String get deleteAddress;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

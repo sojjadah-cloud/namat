@@ -29,6 +29,7 @@ enum NamatIcons {
   package,
   partner,
   leaf,
+  cart,
 }
 
 class NamatIcon extends StatelessWidget {
@@ -217,6 +218,45 @@ class _NamatIconPainter extends CustomPainter {
           stroke,
         );
         _leaf(canvas, filled ? fill : stroke, const Offset(12, 3.2), 4.4);
+
+      case NamatIcons.cart:
+        // A basket, not the store's bag. The two were the same glyph, which
+        // meant the cart in the header and the shops tab were indistinguishable
+        // — and the cart is the one that has to be found in a hurry.
+        canvas
+          ..drawPath(
+            Path()
+              ..moveTo(4.2, 7.4)
+              ..lineTo(19.8, 7.4)
+              ..lineTo(17.9, 18.2)
+              ..cubicTo(17.8, 18.9, 17.2, 19.4, 16.5, 19.4)
+              ..lineTo(7.5, 19.4)
+              ..cubicTo(6.8, 19.4, 6.2, 18.9, 6.1, 18.2)
+              ..close(),
+            stroke,
+          )
+          // The two handles rise from the rim, so the shape reads as a basket
+          // at 20px rather than as a bucket.
+          ..drawPath(
+            Path()
+              ..moveTo(8.6, 7.4)
+              ..cubicTo(8.6, 4.9, 10.1, 3.6, 12, 3.6)
+              ..cubicTo(13.9, 3.6, 15.4, 4.9, 15.4, 7.4),
+            stroke,
+          );
+        if (filled) {
+          canvas.drawPath(
+            Path()
+              ..moveTo(4.2, 7.4)
+              ..lineTo(19.8, 7.4)
+              ..lineTo(17.9, 18.2)
+              ..cubicTo(17.8, 18.9, 17.2, 19.4, 16.5, 19.4)
+              ..lineTo(7.5, 19.4)
+              ..cubicTo(6.8, 19.4, 6.2, 18.9, 6.1, 18.2)
+              ..close(),
+            fill,
+          );
+        }
 
       case NamatIcons.bell:
         canvas.drawPath(

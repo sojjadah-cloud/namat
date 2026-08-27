@@ -5,6 +5,7 @@ import '../../auth/domain/profile_draft.dart';
 import '../../bookings/domain/cart_notifier.dart';
 import '../../bookings/domain/order.dart';
 import '../../catalogue/domain/catalogue.dart';
+import '../../journey/domain/habits.dart';
 import '../../use/domain/field.dart';
 
 /// What Home puts in front of a member, and why.
@@ -148,17 +149,13 @@ final nearbyProvider = Provider<List<Partner>>((ref) {
 
 /// How far through the week's goals the member is.
 ///
-/// Placeholder arithmetic over placed orders until habits and bookings are
-/// tracked properly. It is deliberately derived from something real rather
-/// than hardcoded, so it reads zero for a new member instead of showing a
-/// stranger a 72% they did not earn.
+/// The average of the last seven days' habit completion. Derived, never
+/// hardcoded: a new member reads zero rather than being shown a stranger's
+/// 72%, and the number goes up because they did something rather than because
+/// a designer picked a flattering figure.
 final weekProgressProvider = Provider<double>((ref) {
-  final now = DateTime.now();
-  final weekAgo = now.subtract(const Duration(days: 7));
-  final thisWeek = ref
-      .watch(ordersProvider)
-      .where((o) => o.placedAt.isAfter(weekAgo))
-      .length;
-  // Five is the working target: roughly one engagement per weekday.
-  return (thisWeek / 5).clamp(0.0, 1.0);
+  final week = ref.watch(weekProvider);
+  if (week.isEmpty) return 0;
+  final total = week.fold<double>(0, (sum, d) => sum + d.completion);
+  return (total / week.length).clamp(0.0, 1.0);
 });

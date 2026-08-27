@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
@@ -9,22 +10,23 @@ import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 import '../domain/duel.dart';
+import '../domain/duels_provider.dart';
 
 /// Composing a challenge: what, and for how long.
 ///
 /// Both choices are on one screen rather than a wizard. There are four metrics
 /// and four durations; splitting that across two steps adds a transition and
 /// removes the ability to see the whole decision at once.
-class CreateDuelPage extends StatefulWidget {
+class CreateDuelPage extends ConsumerStatefulWidget {
   const CreateDuelPage({super.key, required this.username});
 
   final String username;
 
   @override
-  State<CreateDuelPage> createState() => _CreateDuelPageState();
+  ConsumerState<CreateDuelPage> createState() => _CreateDuelPageState();
 }
 
-class _CreateDuelPageState extends State<CreateDuelPage> {
+class _CreateDuelPageState extends ConsumerState<CreateDuelPage> {
   DuelMetric _metric = DuelMetric.steps;
   int _days = 7;
 
@@ -151,7 +153,18 @@ class _CreateDuelPageState extends State<CreateDuelPage> {
             NamatSpace.xxl,
           ),
           child: FilledButton(
-            onPressed: () => context.go('/journey/challenges/sent/$name'),
+            onPressed: () {
+              // The challenge is recorded here, not on the confirmation
+              // screen: a member who backs out of that screen would otherwise
+              // have sent nothing while being told they had.
+              ref.read(duelsProvider.notifier).send(
+                    opponent: name,
+                    metric: _metric,
+                    target: _metric.defaultTarget,
+                    days: _days,
+                  );
+              context.go('/journey/challenges/sent/$name');
+            },
             child: Text(l.sendChallenge),
           ),
         ),

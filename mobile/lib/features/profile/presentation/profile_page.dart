@@ -31,9 +31,10 @@ class ProfilePage extends ConsumerWidget {
       (NamatIcons.leaf, l.favoritesTitle, '/profile/favorites'),
       (NamatIcons.package, l.myPackages, '/journey/packages'),
       (NamatIcons.challenge, l.challengesTitle, '/journey/challenges'),
-      (NamatIcons.profile, l.settings, null),
-      (NamatIcons.search, l.privacy, null),
-      (NamatIcons.use, l.language, null),
+      (NamatIcons.profile, l.settingsTitle, '/profile/settings'),
+      (NamatIcons.search, l.privacyTitle, '/profile/settings/privacy'),
+      (NamatIcons.use, l.languageTitle, '/profile/settings/language'),
+      (NamatIcons.partner, l.supportTitle, '/profile/settings/support'),
     ];
 
     return NamatBackground(

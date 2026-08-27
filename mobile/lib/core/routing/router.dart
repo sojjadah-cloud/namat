@@ -23,7 +23,9 @@ import '../../features/onboarding/presentation/welcome_page.dart';
 import '../../features/packages/presentation/packages_page.dart';
 import '../../features/partners/presentation/partner_page.dart';
 import '../../features/profile/presentation/profile_page.dart';
+import '../../features/account/presentation/addresses_page.dart';
 import '../../features/rewards/presentation/points_page.dart';
+import '../../features/settings/presentation/settings_pages.dart';
 import '../../features/reviews/presentation/rate_page.dart';
 import '../../features/search/presentation/search_page.dart';
 import '../../features/shell/app_shell.dart';
@@ -199,6 +201,36 @@ final routerProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'points',
                     builder: (_, __) => const PointsPage(),
+                  ),
+                  GoRoute(
+                    path: 'settings',
+                    builder: (_, __) => const SettingsPage(),
+                    routes: [
+                      GoRoute(
+                        path: 'addresses',
+                        builder: (_, __) => const AddressesPage(),
+                      ),
+                      GoRoute(
+                        path: 'city',
+                        builder: (_, __) => const CityPage(),
+                      ),
+                      GoRoute(
+                        path: 'notifications',
+                        builder: (_, __) => const NotificationPrefsPage(),
+                      ),
+                      GoRoute(
+                        path: 'language',
+                        builder: (_, __) => const LanguagePage(),
+                      ),
+                      GoRoute(
+                        path: 'privacy',
+                        builder: (_, __) => const PrivacyPage(),
+                      ),
+                      GoRoute(
+                        path: 'support',
+                        builder: (_, __) => const SupportPage(),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -30,56 +30,40 @@ class _BookingsPageState extends ConsumerState<BookingsPage>
   // past, and filing it under either makes the member distrust both lists.
   late final TabController _tabs = TabController(length: 4, vsync: this);
 
-  /// Stand-in until the API exists.
-  static final _all = <Booking>[
-    Booking(
-      id: '1',
-      kind: BookingKind.session,
-      title: 'حصة ريفورمر',
-      partner: 'ريفورم بيلاتس مسقط',
-      state: BookingState.upcoming,
-      at: DateTime.now().add(const Duration(hours: 5)),
-      coveredByPackage: true,
-    ),
-    Booking(
-      id: '2',
-      kind: BookingKind.consultation,
-      title: 'استشارة تغذية',
-      partner: 'عيادة دانة للتغذية',
-      state: BookingState.upcoming,
-      at: DateTime.now().add(const Duration(days: 3)),
-    ),
-    const Booking(
-      id: '3',
-      kind: BookingKind.subscription,
-      title: 'خطة وجبات أسبوعية',
-      partner: 'Nourish Kitchen',
-      state: BookingState.active,
-      daysRemaining: 18,
-      coveredByPackage: true,
-    ),
-    Booking(
-      id: '4',
-      kind: BookingKind.session,
-      title: 'حصة لياقة',
-      partner: 'نادي أطلس للياقة',
-      state: BookingState.completed,
-      at: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    Booking(
-      id: '5',
-      kind: BookingKind.order,
-      title: 'وجبة غداء متوازنة',
-      partner: 'مطعم المعمل الصحي',
-      state: BookingState.cancelled,
-      at: DateTime.now().subtract(const Duration(days: 6)),
-    ),
-  ];
-
   @override
   void dispose() {
     _tabs.dispose();
     super.dispose();
+  }
+
+  /// One booking per line of every order.
+  ///
+  /// An order is one act of paying; a booking is one thing NAMAT owes. Buying
+  /// a week of meals and a class in a single checkout is one order and two
+  /// bookings, and collapsing them would leave the member unable to see what
+  /// is happening on Tuesday.
+  static List<Booking> _fromOrders(List<PlacedOrder> orders) {
+    final now = DateTime.now();
+    return [
+      for (final o in orders)
+        for (final item in o.items)
+          Booking(
+            id: '${o.reference}-${item.id}',
+            kind: item.kind,
+            title: item.title,
+            partner: item.partner,
+            at: o.slot,
+            state: switch (item.kind) {
+              // A subscription runs rather than happening at a moment.
+              BookingKind.subscription => BookingState.active,
+              // Anything with a time is upcoming until that time passes.
+              _ when o.slot != null && o.slot!.isAfter(now) =>
+                BookingState.upcoming,
+              _ => BookingState.completed,
+            },
+            coveredByPackage: item.coveredByPackage,
+          ),
+    ];
   }
 
   @override
@@ -87,11 +71,16 @@ class _BookingsPageState extends ConsumerState<BookingsPage>
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
 
-    final upcoming = _all
+    // Derived from what the member actually placed. There used to be five
+    // sample bookings here, which meant a brand-new account opened onto
+    // someone else's reformer class — the single most confusing thing an
+    // empty app can do.
+    final bookings = _fromOrders(ref.watch(ordersProvider));
+    final upcoming = bookings
         .where((b) => !b.isSubscription && b.state == BookingState.upcoming)
         .toList();
-    final subs = _all.where((b) => b.isSubscription).toList();
-    final past = _all.where((b) => b.isPast).toList();
+    final subs = bookings.where((b) => b.isSubscription).toList();
+    final past = bookings.where((b) => b.isPast).toList();
 
     return NamatBackground(
       child: Scaffold(

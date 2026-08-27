@@ -700,5 +700,127 @@
   "paymentFailed": "ما تمت العملية",
   "paymentFailedBody": "ما انخصم أي مبلغ. جرّب طريقة دفع ثانية.",
   "unavailableTitle": "الخدمة ما عادت متاحة",
-  "unavailableBody": "انحجزت قبل شوي. اختر موعداً أو خدمة ثانية."
+  "unavailableBody": "انحجزت قبل شوي. اختر موعداً أو خدمة ثانية.",
+
+  "todayTitle": "اليوم",
+  "habitWater": "ماء",
+  "habitSteps": "مشي",
+  "habitWorkout": "تمرين",
+  "habitMeal": "وجبة صحية",
+  "habitSleep": "نوم",
+  "habitsHint": "اضغط عشان تسجّل. اضغط مرة ثانية لو غلط.",
+  "glassesOf": "{done} من {total}",
+  "@glassesOf": {
+      "placeholders": {
+          "done": {
+              "type": "String"
+          },
+          "total": {
+              "type": "String"
+          }
+      }
+  },
+  "streakDays": "{count} يوم متواصل",
+  "@streakDays": {
+      "placeholders": {
+          "count": {
+              "type": "String"
+          }
+      }
+  },
+  "streakNone": "ابدأ اليوم",
+  "upcomingTitle": "القادم",
+  "nothingUpcoming": "ما فيه شي مجدول",
+  "lastSevenDays": "آخر سبعة أيام",
+  "membershipTitle": "اشتراكك",
+  "noMembership": "ما عندك باقة",
+  "noMembershipBody": "الباقة تغطي وجباتك وحصصك واستشاراتك بسعر واحد",
+  "allowanceMeals": "وجبات",
+  "allowanceSessions": "حصص",
+  "allowanceConsults": "استشارات",
+  "usedOf": "{used} من {total}",
+  "@usedOf": {
+      "placeholders": {
+          "used": {
+              "type": "String"
+          },
+          "total": {
+              "type": "String"
+          }
+      }
+  },
+  "renewsIn": "يتجدد بعد {days} يوم",
+  "@renewsIn": {
+      "placeholders": {
+          "days": {
+              "type": "String"
+          }
+      }
+  },
+  "pauseMembership": "أوقف مؤقتاً",
+  "resumeMembership": "استأنف",
+  "cancelMembership": "إلغاء الاشتراك",
+  "cancelConfirm": "تلغي الاشتراك؟",
+  "cancelConfirmBody": "ينتهي فوراً، وتقدر ترجع أي وقت. الإيقاف المؤقت يحفظ لك مكانك.",
+  "cancelKeep": "خلّه",
+  "membershipPaused": "موقوف مؤقتاً",
+  "startPackage": "ابدأ الباقة",
+  "upgradeMembership": "غيّر الباقة",
+  "allowanceSpent": "استهلكت هذه الباقة",
+  "savedThisMonth": "وفّرت {amount} {currency} هذا الشهر",
+  "@savedThisMonth": {
+      "placeholders": {
+          "amount": {
+              "type": "String"
+          },
+          "currency": {
+              "type": "String"
+          }
+      }
+  },
+  "settingsTitle": "الإعدادات",
+  "account": "الحساب",
+  "preferences": "التفضيلات",
+  "notificationPrefs": "الإشعارات",
+  "notifyBookings": "الحجوزات والطلبات",
+  "notifyJourney": "رحلتي والعادات",
+  "notifyChallenges": "التحديات",
+  "notifyOffers": "العروض",
+  "notifyOffersNote": "نرسل أقل ما يمكن. تقدر توقفها كلها.",
+  "privacyTitle": "الخصوصية",
+  "privacyLocation": "الموقع",
+  "privacyLocationNote": "نستخدمه عشان نرتب النتائج بالقرب. تقدر تختار مدينتك يدوياً.",
+  "privacyPersonalisation": "التخصيص",
+  "privacyPersonalisationNote": "نرتب الاقتراحات حسب هدفك ونشاطك داخل نمط.",
+  "privacyChallengeVisibility": "ظهورك في التحديات",
+  "privacyChallengeNote": "لما توقفه، ما يقدر أحد يتحداك باسم المستخدم.",
+  "privacyData": "بياناتك",
+  "privacyDataNote": "تقدر تطلب نسخة أو تحذف حسابك.",
+  "downloadData": "اطلب نسخة",
+  "deleteAccount": "احذف حسابي",
+  "deleteAccountBody": "يُحذف حسابك وكل بياناتك. ما ينرجع.",
+  "supportTitle": "المساعدة",
+  "supportOrder": "مشكلة في طلب",
+  "supportBooking": "مشكلة في حجز",
+  "supportPayment": "مشكلة في الدفع",
+  "supportAccount": "مشكلة في الحساب",
+  "supportOther": "شي ثاني",
+  "supportChat": "محادثة",
+  "supportWhatsapp": "واتساب",
+  "supportFaq": "أسئلة شائعة",
+  "languageTitle": "اللغة",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "languageNote": "نمط مصمّم بالعربية أولاً، والإنجليزية كاملة.",
+  "signOut": "تسجيل الخروج",
+  "notConnectedYet": "ما ربطناها بعد",
+  "addressesTitle": "العناوين",
+  "addAddress": "أضف عنواناً",
+  "addressLabel": "الاسم",
+  "addressLabelHint": "البيت، الشغل",
+  "addressDetail": "التفاصيل",
+  "noAddresses": "ما عندك عناوين محفوظة",
+  "useThisAddress": "استخدم هذا",
+  "saveAddress": "احفظ",
+  "deleteAddress": "احذف"
 }

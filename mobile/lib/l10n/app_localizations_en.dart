@@ -1249,4 +1249,245 @@ class LEn extends L {
 
   @override
   String get unavailableBody => 'It was taken a moment ago. Choose another time or service.';
+
+  @override
+  String get todayTitle => 'Today';
+
+  @override
+  String get habitWater => 'Water';
+
+  @override
+  String get habitSteps => 'Walking';
+
+  @override
+  String get habitWorkout => 'Workout';
+
+  @override
+  String get habitMeal => 'Healthy meal';
+
+  @override
+  String get habitSleep => 'Sleep';
+
+  @override
+  String get habitsHint => 'Tap to log. Tap again if you did not mean to.';
+
+  @override
+  String glassesOf(String done, String total) {
+    return '$done of $total';
+  }
+
+  @override
+  String streakDays(String count) {
+    return '$count days running';
+  }
+
+  @override
+  String get streakNone => 'Start today';
+
+  @override
+  String get upcomingTitle => 'Coming up';
+
+  @override
+  String get nothingUpcoming => 'Nothing scheduled';
+
+  @override
+  String get lastSevenDays => 'The last seven days';
+
+  @override
+  String get membershipTitle => 'Your membership';
+
+  @override
+  String get noMembership => 'No package';
+
+  @override
+  String get noMembershipBody => 'A package covers your meals, classes and consultations for one price';
+
+  @override
+  String get allowanceMeals => 'meals';
+
+  @override
+  String get allowanceSessions => 'classes';
+
+  @override
+  String get allowanceConsults => 'consultations';
+
+  @override
+  String usedOf(String used, String total) {
+    return '$used of $total';
+  }
+
+  @override
+  String renewsIn(String days) {
+    return 'Renews in $days days';
+  }
+
+  @override
+  String get pauseMembership => 'Pause';
+
+  @override
+  String get resumeMembership => 'Resume';
+
+  @override
+  String get cancelMembership => 'Cancel membership';
+
+  @override
+  String get cancelConfirm => 'Cancel your membership?';
+
+  @override
+  String get cancelConfirmBody => 'It ends now, and you can come back any time. Pausing keeps your place.';
+
+  @override
+  String get cancelKeep => 'Keep it';
+
+  @override
+  String get membershipPaused => 'Paused';
+
+  @override
+  String get startPackage => 'Start this package';
+
+  @override
+  String get upgradeMembership => 'Change package';
+
+  @override
+  String get allowanceSpent => 'Used from this package';
+
+  @override
+  String savedThisMonth(String amount, String currency) {
+    return 'You saved $amount $currency this month';
+  }
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get preferences => 'Preferences';
+
+  @override
+  String get notificationPrefs => 'Notifications';
+
+  @override
+  String get notifyBookings => 'Bookings and orders';
+
+  @override
+  String get notifyJourney => 'Journey and habits';
+
+  @override
+  String get notifyChallenges => 'Challenges';
+
+  @override
+  String get notifyOffers => 'Offers';
+
+  @override
+  String get notifyOffersNote => 'We send as few as we can. You can turn them all off.';
+
+  @override
+  String get privacyTitle => 'Privacy';
+
+  @override
+  String get privacyLocation => 'Location';
+
+  @override
+  String get privacyLocationNote => 'Used to sort results by distance. You can pick your city by hand instead.';
+
+  @override
+  String get privacyPersonalisation => 'Personalisation';
+
+  @override
+  String get privacyPersonalisationNote => 'We order suggestions by your goal and what you do inside NAMAT.';
+
+  @override
+  String get privacyChallengeVisibility => 'Challenge visibility';
+
+  @override
+  String get privacyChallengeNote => 'With this off, nobody can challenge you by username.';
+
+  @override
+  String get privacyData => 'Your data';
+
+  @override
+  String get privacyDataNote => 'You can request a copy, or delete your account.';
+
+  @override
+  String get downloadData => 'Request a copy';
+
+  @override
+  String get deleteAccount => 'Delete my account';
+
+  @override
+  String get deleteAccountBody => 'Your account and everything in it is deleted. This cannot be undone.';
+
+  @override
+  String get supportTitle => 'Help';
+
+  @override
+  String get supportOrder => 'A problem with an order';
+
+  @override
+  String get supportBooking => 'A problem with a booking';
+
+  @override
+  String get supportPayment => 'A problem with a payment';
+
+  @override
+  String get supportAccount => 'A problem with my account';
+
+  @override
+  String get supportOther => 'Something else';
+
+  @override
+  String get supportChat => 'Chat';
+
+  @override
+  String get supportWhatsapp => 'WhatsApp';
+
+  @override
+  String get supportFaq => 'Common questions';
+
+  @override
+  String get languageTitle => 'Language';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageNote => 'NAMAT is designed in Arabic first, with a full English version.';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get notConnectedYet => 'Not connected yet';
+
+  @override
+  String get addressesTitle => 'Addresses';
+
+  @override
+  String get addAddress => 'Add an address';
+
+  @override
+  String get addressLabel => 'Name';
+
+  @override
+  String get addressLabelHint => 'Home, work';
+
+  @override
+  String get addressDetail => 'Details';
+
+  @override
+  String get noAddresses => 'No saved addresses';
+
+  @override
+  String get useThisAddress => 'Use this';
+
+  @override
+  String get saveAddress => 'Save';
+
+  @override
+  String get deleteAddress => 'Delete';
 }

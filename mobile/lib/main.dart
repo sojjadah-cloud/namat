@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/routing/router.dart';
 import 'core/theme/namat_colors.dart';
 import 'core/theme/namat_theme.dart';
+import 'features/settings/domain/preferences.dart';
 import 'l10n/app_localizations.dart';
 
 void main() {
@@ -26,7 +27,12 @@ void main() {
 ///
 /// Arabic is the default rather than a fallback: NAMAT is an Omani product and
 /// the Arabic layout is the designed one. English is the translation.
-final localeProvider = StateProvider<Locale>((ref) => const Locale('ar'));
+///
+/// Derived from the member's own setting so the language screen actually
+/// changes the app, rather than recording a preference nothing reads.
+final localeProvider = Provider<Locale>(
+  (ref) => ref.watch(preferencesProvider).locale ?? const Locale('ar'),
+);
 
 class NamatApp extends ConsumerWidget {
   const NamatApp({super.key});

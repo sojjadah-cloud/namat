@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
@@ -6,72 +7,48 @@ import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../membership/domain/membership.dart';
 
-/// Packages, as cards you move through rather than a pricing table.
+/// NAMAT packages, and the one the member is on.
 ///
-/// A table invites comparison by number, which is the wrong question — the
-/// three differ by who they suit, not by how much they cost. One card at a
-/// time, each with its own colour and its own growing mark, asks the reader
-/// which one sounds like them.
-class PackagesPage extends StatefulWidget {
+/// A member can move between them from here — up, down, or off entirely. A
+/// subscription screen that can only be joined is a trap, and members can tell
+/// the difference before they subscribe, not after.
+///
+/// Cancelling is never made harder than pausing. Pausing is offered first
+/// because someone taking a month off mostly does not come back if the only
+/// door is cancellation — but that is a reason to offer a better option, not
+/// to hide the exit.
+class PackagesPage extends ConsumerStatefulWidget {
   const PackagesPage({super.key});
 
   @override
-  State<PackagesPage> createState() => _PackagesPageState();
+  ConsumerState<PackagesPage> createState() => _PackagesPageState();
 }
 
-class _PackagesPageState extends State<PackagesPage> {
-  int _index = 1;
+class _PackagesPageState extends ConsumerState<PackagesPage> {
+  late final PageController _controller;
+  int _index = 0;
 
-  static const _packages = [
-    (
-      name: 'نشِط',
-      bestFor: 'لمن يتدرّب ويريد للغذاء أن يواكبه',
-      price: 39,
-      icon: NamatIcons.fitness,
-      accent: NamatColors.fitness,
-      tint: NamatColors.fitnessSoft,
-      benefits: [
-        '٨ جلسات نادٍ أو حصص شهرياً',
-        '٤ جلسات لياقة في الهواء الطلق',
-        'جلستا استشفاء',
-      ],
-      current: false,
-    ),
-    (
-      name: 'توازن',
-      bestFor: 'لمن يبني عادات أفضل، أسبوعاً بعد أسبوع',
-      price: 55,
-      icon: NamatIcons.leaf,
-      accent: NamatColors.accent,
-      tint: NamatColors.greenSoft,
-      benefits: [
-        '١٢ وجبة من مطابخ الشركاء',
-        '٤ جلسات لياقة وحصتا بيلاتس',
-        'استشارة تغذية واحدة',
-      ],
-      current: true,
-    ),
-    (
-      name: 'متكامل',
-      bestFor: 'لمن يريد المنظومة كاملة، دون حساب',
-      price: 89,
-      icon: NamatIcons.reward,
-      accent: NamatColors.products,
-      tint: NamatColors.productsSoft,
-      benefits: [
-        '٢٠ وجبة من مطابخ الشركاء',
-        '١٢ جلسة نادٍ شهرياً',
-        'استشارتا تغذية مع متابعة',
-      ],
-      current: false,
-    ),
-  ];
+  /// The look of each package. Kept next to the screen rather than in the
+  /// domain: a colour is a presentation decision, and the allowances are not.
+  static const _looks = <String, (NamatIcons, Color, Color)>{
+    'active': (NamatIcons.fitness, NamatColors.fitness, NamatColors.fitnessSoft),
+    'balance': (NamatIcons.leaf, NamatColors.accent, NamatColors.greenSoft),
+    'complete': (NamatIcons.reward, NamatColors.products, NamatColors.productsSoft),
+  };
 
-  /// Opens on the middle card so both neighbours are visible, and the reader
-  /// can see there is a choice without scrolling to discover it.
-  late final PageController _controller =
-      PageController(viewportFraction: 0.86, initialPage: 1);
+  @override
+  void initState() {
+    super.initState();
+    // Opens on the member's own package when they have one, so the screen
+    // answers "what am I on" before it answers "what else is there".
+    final current = ref.read(membershipProvider)?.packageId;
+    _index = current == null
+        ? 1
+        : namatPackages.indexWhere((p) => p.id == current).clamp(0, 2);
+    _controller = PageController(initialPage: _index, viewportFraction: 0.88);
+  }
 
   @override
   void dispose() {
@@ -79,17 +56,47 @@ class _PackagesPageState extends State<PackagesPage> {
     super.dispose();
   }
 
+  Future<void> _confirmCancel() async {
+    final l = L.of(context)!;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(l.cancelConfirm),
+        content: Text(l.cancelConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialog).pop(false),
+            child: Text(l.cancelKeep),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialog).pop(true),
+            child: Text(
+              l.cancelMembership,
+              style: const TextStyle(color: NamatColors.danger),
+            ),
+          ),
+        ],
+      ),
+    );
+    // One confirmation, not a survey. Asking why on the way out is a dark
+    // pattern wearing a research hat.
+    if (ok ?? false) ref.read(membershipProvider.notifier).cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
+    final arabic = Localizations.localeOf(context).languageCode == 'ar';
+    final membership = ref.watch(membershipProvider);
 
     return NamatBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => context.go('/journey'),
+            onPressed: () =>
+                context.canPop() ? context.pop() : context.go('/journey'),
             icon: const Icon(Icons.arrow_forward),
           ),
           title: Text(l.packagesTitle),
@@ -109,10 +116,12 @@ class _PackagesPageState extends State<PackagesPage> {
             Expanded(
               child: PageView.builder(
                 controller: _controller,
-                itemCount: _packages.length,
+                itemCount: namatPackages.length,
                 onPageChanged: (i) => setState(() => _index = i),
                 itemBuilder: (context, i) {
-                  final p = _packages[i];
+                  final p = namatPackages[i];
+                  final look = _looks[p.id]!;
+                  final current = membership?.packageId == p.id;
                   return AnimatedScale(
                     // The focused card sits slightly forward, so the eye knows
                     // which one it is reading.
@@ -122,14 +131,24 @@ class _PackagesPageState extends State<PackagesPage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: _PackageCard(
-                        name: p.name,
-                        bestFor: p.bestFor,
-                        price: p.price,
-                        icon: p.icon,
-                        accent: p.accent,
-                        tint: p.tint,
-                        benefits: p.benefits,
-                        current: p.current,
+                        package: p,
+                        icon: look.$1,
+                        accent: look.$2,
+                        tint: look.$3,
+                        arabic: arabic,
+                        current: current,
+                        hasOther: membership != null && !current,
+                        onChoose: () {
+                          ref
+                              .read(membershipProvider.notifier)
+                              .start(p.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(p.localisedName(arabic)),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        },
                       ),
                     ),
                   );
@@ -140,7 +159,7 @@ class _PackagesPageState extends State<PackagesPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (var i = 0; i < _packages.length; i++)
+                for (var i = 0; i < namatPackages.length; i++)
                   AnimatedContainer(
                     duration: NamatMotion.base,
                     curve: NamatMotion.enter,
@@ -148,15 +167,40 @@ class _PackagesPageState extends State<PackagesPage> {
                     height: 6,
                     width: i == _index ? 22 : 6,
                     decoration: BoxDecoration(
-                      color: i == _index
-                          ? NamatColors.deep
-                          : NamatColors.line,
+                      color:
+                          i == _index ? NamatColors.deep : NamatColors.line,
                       borderRadius: BorderRadius.circular(100),
                     ),
                   ),
               ],
             ),
-            const SizedBox(height: NamatSpace.section),
+            if (membership != null) ...[
+              const SizedBox(height: NamatSpace.md),
+              // Both exits, side by side and equally weighted.
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => membership.paused
+                        ? ref.read(membershipProvider.notifier).resume()
+                        : ref.read(membershipProvider.notifier).pause(),
+                    child: Text(
+                      membership.paused
+                          ? l.resumeMembership
+                          : l.pauseMembership,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: _confirmCancel,
+                    child: Text(
+                      l.cancelMembership,
+                      style: const TextStyle(color: NamatColors.danger),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: NamatSpace.xl),
           ],
         ),
       ),
@@ -166,24 +210,28 @@ class _PackagesPageState extends State<PackagesPage> {
 
 class _PackageCard extends StatelessWidget {
   const _PackageCard({
-    required this.name,
-    required this.bestFor,
-    required this.price,
+    required this.package,
     required this.icon,
     required this.accent,
     required this.tint,
-    required this.benefits,
+    required this.arabic,
     required this.current,
+    required this.hasOther,
+    required this.onChoose,
   });
 
-  final String name;
-  final String bestFor;
-  final int price;
+  final NamatPackage package;
   final NamatIcons icon;
   final Color accent;
   final Color tint;
-  final List<String> benefits;
+  final bool arabic;
   final bool current;
+
+  /// The member is on a different package, so this button is a switch rather
+  /// than a first subscription — and it says so.
+  final bool hasOther;
+
+  final VoidCallback onChoose;
 
   @override
   Widget build(BuildContext context) {
@@ -219,47 +267,62 @@ class _PackageCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: NamatSpace.xl),
-          Text(name, style: text.displayMedium),
+          Text(package.localisedName(arabic), style: text.displayMedium),
           const SizedBox(height: 4),
-          Text(bestFor, style: text.bodySmall),
+          Text(package.localisedBestFor(arabic), style: text.bodySmall),
           const SizedBox(height: NamatSpace.xl),
-          for (final b in benefits)
-            Padding(
-              padding: const EdgeInsets.only(bottom: NamatSpace.sm),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 5,
-                    height: 5,
-                    margin: const EdgeInsets.only(top: 8),
-                    decoration: BoxDecoration(
-                      color: accent,
-                      shape: BoxShape.circle,
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                for (final b in package.localisedBenefits(arabic))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: NamatSpace.sm),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 5,
+                          height: 5,
+                          margin: const EdgeInsets.only(top: 8),
+                          decoration: BoxDecoration(
+                            color: accent,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: NamatSpace.sm),
+                        Expanded(child: Text(b, style: text.bodyMedium)),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: NamatSpace.sm),
-                  Expanded(child: Text(b, style: text.bodyMedium)),
-                ],
-              ),
+              ],
             ),
-          const Spacer(),
+          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(context.n(price), style: text.displayLarge),
+              Text(
+                context.n(package.monthlyPrice),
+                style: text.displayLarge,
+              ),
               const SizedBox(width: 6),
-              Text('ر.ع · ${l.perMonth}', style: text.bodySmall),
+              Text('${l.omr} · ${l.perMonth}', style: text.bodySmall),
             ],
           ),
           const SizedBox(height: NamatSpace.lg),
           SizedBox(
             width: double.infinity,
             child: FilledButton(
-              onPressed: current ? null : () {},
+              onPressed: current ? null : onChoose,
               style: FilledButton.styleFrom(backgroundColor: accent),
-              child: Text(current ? l.currentPackage : l.choosePackage),
+              child: Text(
+                current
+                    ? l.currentPackage
+                    : hasOther
+                        ? l.upgradeMembership
+                        : l.startPackage,
+              ),
             ),
           ),
         ],

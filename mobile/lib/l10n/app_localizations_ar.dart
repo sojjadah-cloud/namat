@@ -1249,4 +1249,245 @@ class LAr extends L {
 
   @override
   String get unavailableBody => 'انحجزت قبل شوي. اختر موعداً أو خدمة ثانية.';
+
+  @override
+  String get todayTitle => 'اليوم';
+
+  @override
+  String get habitWater => 'ماء';
+
+  @override
+  String get habitSteps => 'مشي';
+
+  @override
+  String get habitWorkout => 'تمرين';
+
+  @override
+  String get habitMeal => 'وجبة صحية';
+
+  @override
+  String get habitSleep => 'نوم';
+
+  @override
+  String get habitsHint => 'اضغط عشان تسجّل. اضغط مرة ثانية لو غلط.';
+
+  @override
+  String glassesOf(String done, String total) {
+    return '$done من $total';
+  }
+
+  @override
+  String streakDays(String count) {
+    return '$count يوم متواصل';
+  }
+
+  @override
+  String get streakNone => 'ابدأ اليوم';
+
+  @override
+  String get upcomingTitle => 'القادم';
+
+  @override
+  String get nothingUpcoming => 'ما فيه شي مجدول';
+
+  @override
+  String get lastSevenDays => 'آخر سبعة أيام';
+
+  @override
+  String get membershipTitle => 'اشتراكك';
+
+  @override
+  String get noMembership => 'ما عندك باقة';
+
+  @override
+  String get noMembershipBody => 'الباقة تغطي وجباتك وحصصك واستشاراتك بسعر واحد';
+
+  @override
+  String get allowanceMeals => 'وجبات';
+
+  @override
+  String get allowanceSessions => 'حصص';
+
+  @override
+  String get allowanceConsults => 'استشارات';
+
+  @override
+  String usedOf(String used, String total) {
+    return '$used من $total';
+  }
+
+  @override
+  String renewsIn(String days) {
+    return 'يتجدد بعد $days يوم';
+  }
+
+  @override
+  String get pauseMembership => 'أوقف مؤقتاً';
+
+  @override
+  String get resumeMembership => 'استأنف';
+
+  @override
+  String get cancelMembership => 'إلغاء الاشتراك';
+
+  @override
+  String get cancelConfirm => 'تلغي الاشتراك؟';
+
+  @override
+  String get cancelConfirmBody => 'ينتهي فوراً، وتقدر ترجع أي وقت. الإيقاف المؤقت يحفظ لك مكانك.';
+
+  @override
+  String get cancelKeep => 'خلّه';
+
+  @override
+  String get membershipPaused => 'موقوف مؤقتاً';
+
+  @override
+  String get startPackage => 'ابدأ الباقة';
+
+  @override
+  String get upgradeMembership => 'غيّر الباقة';
+
+  @override
+  String get allowanceSpent => 'استهلكت هذه الباقة';
+
+  @override
+  String savedThisMonth(String amount, String currency) {
+    return 'وفّرت $amount $currency هذا الشهر';
+  }
+
+  @override
+  String get settingsTitle => 'الإعدادات';
+
+  @override
+  String get account => 'الحساب';
+
+  @override
+  String get preferences => 'التفضيلات';
+
+  @override
+  String get notificationPrefs => 'الإشعارات';
+
+  @override
+  String get notifyBookings => 'الحجوزات والطلبات';
+
+  @override
+  String get notifyJourney => 'رحلتي والعادات';
+
+  @override
+  String get notifyChallenges => 'التحديات';
+
+  @override
+  String get notifyOffers => 'العروض';
+
+  @override
+  String get notifyOffersNote => 'نرسل أقل ما يمكن. تقدر توقفها كلها.';
+
+  @override
+  String get privacyTitle => 'الخصوصية';
+
+  @override
+  String get privacyLocation => 'الموقع';
+
+  @override
+  String get privacyLocationNote => 'نستخدمه عشان نرتب النتائج بالقرب. تقدر تختار مدينتك يدوياً.';
+
+  @override
+  String get privacyPersonalisation => 'التخصيص';
+
+  @override
+  String get privacyPersonalisationNote => 'نرتب الاقتراحات حسب هدفك ونشاطك داخل نمط.';
+
+  @override
+  String get privacyChallengeVisibility => 'ظهورك في التحديات';
+
+  @override
+  String get privacyChallengeNote => 'لما توقفه، ما يقدر أحد يتحداك باسم المستخدم.';
+
+  @override
+  String get privacyData => 'بياناتك';
+
+  @override
+  String get privacyDataNote => 'تقدر تطلب نسخة أو تحذف حسابك.';
+
+  @override
+  String get downloadData => 'اطلب نسخة';
+
+  @override
+  String get deleteAccount => 'احذف حسابي';
+
+  @override
+  String get deleteAccountBody => 'يُحذف حسابك وكل بياناتك. ما ينرجع.';
+
+  @override
+  String get supportTitle => 'المساعدة';
+
+  @override
+  String get supportOrder => 'مشكلة في طلب';
+
+  @override
+  String get supportBooking => 'مشكلة في حجز';
+
+  @override
+  String get supportPayment => 'مشكلة في الدفع';
+
+  @override
+  String get supportAccount => 'مشكلة في الحساب';
+
+  @override
+  String get supportOther => 'شي ثاني';
+
+  @override
+  String get supportChat => 'محادثة';
+
+  @override
+  String get supportWhatsapp => 'واتساب';
+
+  @override
+  String get supportFaq => 'أسئلة شائعة';
+
+  @override
+  String get languageTitle => 'اللغة';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageNote => 'نمط مصمّم بالعربية أولاً، والإنجليزية كاملة.';
+
+  @override
+  String get signOut => 'تسجيل الخروج';
+
+  @override
+  String get notConnectedYet => 'ما ربطناها بعد';
+
+  @override
+  String get addressesTitle => 'العناوين';
+
+  @override
+  String get addAddress => 'أضف عنواناً';
+
+  @override
+  String get addressLabel => 'الاسم';
+
+  @override
+  String get addressLabelHint => 'البيت، الشغل';
+
+  @override
+  String get addressDetail => 'التفاصيل';
+
+  @override
+  String get noAddresses => 'ما عندك عناوين محفوظة';
+
+  @override
+  String get useThisAddress => 'استخدم هذا';
+
+  @override
+  String get saveAddress => 'احفظ';
+
+  @override
+  String get deleteAddress => 'احذف';
 }

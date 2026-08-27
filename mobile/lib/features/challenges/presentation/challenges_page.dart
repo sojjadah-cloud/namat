@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/numbers.dart';
@@ -7,6 +8,7 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../l10n/app_localizations.dart';
+import '../domain/duels_provider.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 /// Challenges.
@@ -52,7 +54,7 @@ class ChallengesPage extends StatelessWidget {
             const SizedBox(height: NamatSpace.xxl),
             Text(l.yourChallenges, style: text.labelMedium),
             const SizedBox(height: NamatSpace.md),
-            const _VersusCard(),
+            const _CurrentDuel(),
             const SizedBox(height: NamatSpace.section),
             Text(l.officialChallenges, style: text.labelMedium),
             const SizedBox(height: NamatSpace.md),
@@ -64,17 +66,47 @@ class ChallengesPage extends StatelessWidget {
   }
 }
 
-class _VersusCard extends StatelessWidget {
-  const _VersusCard();
-
-  static const _mine = 8420;
-  static const _theirs = 7950;
+/// The duel the member is actually in, or an invitation to start one.
+///
+/// A fixture duel used to live here — خالد on 8,420 against أحمد on 7,950 —
+/// so a brand-new account opened onto a competition it had never entered. On
+/// the first screen a member sees, sample data does not read as a placeholder;
+/// it reads as the app being wrong about them.
+class _CurrentDuel extends ConsumerWidget {
+  const _CurrentDuel();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
-    const total = _mine + _theirs;
+    final duel = ref.watch(currentDuelProvider);
+
+    if (duel == null) {
+      return NamatCard(
+        padding: const EdgeInsets.all(NamatSpace.xl),
+        onTap: () => context.go('/journey/challenges/find'),
+        child: Row(
+          children: [
+            const NamatIcon(
+              NamatIcons.challenge,
+              size: 22,
+              color: NamatColors.inkSoft,
+            ),
+            const SizedBox(width: NamatSpace.md),
+            Expanded(child: Text(l.noChallenges, style: text.bodySmall)),
+            const Icon(
+              Icons.chevron_left,
+              size: 18,
+              color: NamatColors.inkSoft,
+            ),
+          ],
+        ),
+      );
+    }
+
+    final total = duel.myScore + duel.theirScore;
+    final share = total == 0 ? 0.5 : duel.myScore / total;
+    final lead = duel.myScore - duel.theirScore;
 
     return NamatCard(
       organic: true,
@@ -83,7 +115,7 @@ class _VersusCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(child: _Side(name: 'خالد', score: _mine)),
+              Expanded(child: _Side(name: '', score: duel.myScore)),
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
@@ -98,7 +130,9 @@ class _VersusCard extends StatelessWidget {
                   style: text.labelMedium?.copyWith(color: Colors.white),
                 ),
               ),
-              const Expanded(child: _Side(name: 'أحمد', score: _theirs)),
+              Expanded(
+                child: _Side(name: duel.opponent, score: duel.theirScore),
+              ),
             ],
           ),
           const SizedBox(height: NamatSpace.xl),
@@ -107,7 +141,7 @@ class _VersusCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
             child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0.5, end: _mine / total),
+              tween: Tween(begin: 0.5, end: share),
               duration: NamatMotion.reveal,
               curve: NamatMotion.curve,
               builder: (context, v, _) => Row(
@@ -126,8 +160,16 @@ class _VersusCard extends StatelessWidget {
           ),
           const SizedBox(height: NamatSpace.md),
           Text(
-            l.youLeadBy('٤٧٠'),
-            style: text.labelMedium?.copyWith(color: NamatColors.accent),
+            // All three states, because "you lead by 0" is not a sentence and
+            // a member who is behind should be told so plainly.
+            lead == 0
+                ? l.drawSoFar
+                : lead > 0
+                    ? l.youLeadBy(context.n(lead))
+                    : l.behindBy(context.n(-lead)),
+            style: text.labelMedium?.copyWith(
+              color: lead >= 0 ? NamatColors.accent : NamatColors.inkSoft,
+            ),
           ),
         ],
       ),
