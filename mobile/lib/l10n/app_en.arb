@@ -622,5 +622,10 @@
   "claimed": "Claimed",
   "duelPending": "Waiting for {name} to accept",
   "duelPendingBody": "We cannot show their progress until they accept",
-  "yourProgress": "Your progress"
+  "yourProgress": "Your progress",
+
+  "statStreak": "Streak",
+  "statChallengesDone": "Challenges",
+  "guestProfile": "Browsing as a guest",
+  "guestProfileBody": "Sign in to keep your journey and your points"
 }

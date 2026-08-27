@@ -2956,6 +2956,30 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'تقدّمك'**
   String get yourProgress;
+
+  /// No description provided for @statStreak.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلسلة'**
+  String get statStreak;
+
+  /// No description provided for @statChallengesDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديات'**
+  String get statChallengesDone;
+
+  /// No description provided for @guestProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتصفح كزائر'**
+  String get guestProfile;
+
+  /// No description provided for @guestProfileBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دخولك عشان تحفظ رحلتك ونقاطك'**
+  String get guestProfileBody;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

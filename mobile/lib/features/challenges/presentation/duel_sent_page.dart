@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../account/domain/session.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 /// Confirmation that the invitation went.
@@ -11,16 +13,16 @@ import '../../home/presentation/home_page.dart' show NamatAvatar;
 /// The pulse travels from you to them and stops — it does not loop. A looping
 /// animation on a confirmation screen reads as "still sending"; one pass reads
 /// as "sent", which is what happened.
-class DuelSentPage extends StatefulWidget {
+class DuelSentPage extends ConsumerStatefulWidget {
   const DuelSentPage({super.key, required this.username});
 
   final String username;
 
   @override
-  State<DuelSentPage> createState() => _DuelSentPageState();
+  ConsumerState<DuelSentPage> createState() => _DuelSentPageState();
 }
 
-class _DuelSentPageState extends State<DuelSentPage>
+class _DuelSentPageState extends ConsumerState<DuelSentPage>
     with SingleTickerProviderStateMixin {
   late final _c = AnimationController(
     vsync: this,
@@ -54,7 +56,12 @@ class _DuelSentPageState extends State<DuelSentPage>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const NamatAvatar(name: 'سارة', size: 58),
+                        // The member, not a fixture called سارة. This is
+                        // their own side of the challenge they just sent.
+                        NamatAvatar(
+                          name: ref.watch(greetingNameProvider),
+                          size: 58,
+                        ),
                         SizedBox(
                           width: 96,
                           child: CustomPaint(

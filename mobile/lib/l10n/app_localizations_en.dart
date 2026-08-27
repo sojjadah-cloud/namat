@@ -1532,4 +1532,16 @@ class LEn extends L {
 
   @override
   String get yourProgress => 'Your progress';
+
+  @override
+  String get statStreak => 'Streak';
+
+  @override
+  String get statChallengesDone => 'Challenges';
+
+  @override
+  String get guestProfile => 'Browsing as a guest';
+
+  @override
+  String get guestProfileBody => 'Sign in to keep your journey and your points';
 }

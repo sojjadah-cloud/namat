@@ -1532,4 +1532,16 @@ class LAr extends L {
 
   @override
   String get yourProgress => 'تقدّمك';
+
+  @override
+  String get statStreak => 'السلسلة';
+
+  @override
+  String get statChallengesDone => 'تحديات';
+
+  @override
+  String get guestProfile => 'تتصفح كزائر';
+
+  @override
+  String get guestProfileBody => 'سجّل دخولك عشان تحفظ رحلتك ونقاطك';
 }

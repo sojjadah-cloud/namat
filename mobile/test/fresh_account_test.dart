@@ -92,6 +92,23 @@ void main() {
     expect(find.text('استشارة تغذية'), findsNothing);
   });
 
+  testWidgets('the profile counters all read zero', (tester) async {
+    tester.view.physicalSize = const Size(1200, 3000);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+
+    await _pump(tester, '/profile');
+
+    // The card used to show ١٬٢٨٠ points, ٢٤ challenges and ١٥ wins as Arabic
+    // string literals — on the one screen where a stranger's numbers are
+    // unmissable, because it is the screen that claims to be about you.
+    expect(find.text('١٬٢٨٠'), findsNothing);
+    expect(find.text('٢٤'), findsNothing);
+    expect(find.text('١٥'), findsNothing);
+    // Three zeros, one per column.
+    expect(find.text('٠'), findsNWidgets(3));
+  });
+
   testWidgets('challenges opens onto an invitation, not a fixture duel',
       (tester) async {
     tester.view.physicalSize = const Size(1200, 3000);

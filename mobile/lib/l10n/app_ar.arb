@@ -859,5 +859,10 @@
       }
   },
   "duelPendingBody": "ما نقدر نعرض تقدّمه قبل ما يقبل التحدي",
-  "yourProgress": "تقدّمك"
+  "yourProgress": "تقدّمك",
+
+  "statStreak": "السلسلة",
+  "statChallengesDone": "تحديات",
+  "guestProfile": "تتصفح كزائر",
+  "guestProfileBody": "سجّل دخولك عشان تحفظ رحلتك ونقاطك"
 }

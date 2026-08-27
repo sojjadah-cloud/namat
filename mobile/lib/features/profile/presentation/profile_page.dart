@@ -8,7 +8,10 @@ import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../account/domain/session.dart';
-import '../../favorites/domain/favorites.dart';
+import '../../../core/widgets/namat_nav.dart';
+import '../../challenges/domain/duels_provider.dart';
+import '../../challenges/domain/personal_challenges.dart';
+import '../../journey/domain/habits.dart';
 import '../../rewards/domain/points.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
@@ -20,8 +23,14 @@ class ProfilePage extends ConsumerWidget {
     final l = L.of(context)!;
     final text = Theme.of(context).textTheme;
     final name = ref.watch(greetingNameProvider);
+    final session = ref.watch(sessionProvider);
     final points = ref.watch(pointsBalanceProvider);
-    final saved = ref.watch(favouritesCountProvider);
+    final streak = ref.watch(streakProvider);
+    // Challenges the member actually finished, plus any duel they started.
+    // A count that includes challenges they only looked at is not a count of
+    // anything.
+    final challenges =
+        ref.watch(claimedProvider).length + ref.watch(duelsProvider).length;
 
     // Things the member has, then one door to everything they can change.
     //
@@ -66,12 +75,23 @@ class ProfilePage extends ConsumerWidget {
                         style: text.titleLarge,
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        '${context.n(points)} ${l.pointsTitle} · '
-                        '${context.n(saved)} ${l.saved}',
-                        style: text.labelSmall?.copyWith(
-                          color: NamatColors.accent,
-                        ),
+                      // The city, not a second copy of the numbers that sit
+                      // in the card directly below. Two zeros stacked above
+                      // three more read as an error rather than as an empty
+                      // account.
+                      Row(
+                        children: [
+                          const NamatIcon(
+                            NamatIcons.location,
+                            size: 13,
+                            color: NamatColors.inkSoft,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            session.city.label(l),
+                            style: text.labelSmall,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -83,18 +103,68 @@ class ProfilePage extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: NamatSpace.lg),
               child: Row(
                 children: [
-                  const Expanded(
-                    child: _Stat(value: '١٬٢٨٠', labelKey: 'points'),
+                  // All three read zero for a new account, because all three
+                  // are read from what the member has done. They used to be
+                  // Arabic string literals — ١٬٢٨٠ points, ٢٤ challenges, ١٥
+                  // wins — on the one screen where a stranger's numbers are
+                  // unmissable.
+                  Expanded(
+                    child: _Stat(
+                      value: context.n(points),
+                      labelKey: 'points',
+                    ),
                   ),
                   Container(width: 1, height: 34, color: NamatColors.line),
-                  const Expanded(
-                    child: _Stat(value: '٢٤', labelKey: 'challenges'),
+                  Expanded(
+                    child: _Stat(
+                      value: context.n(challenges),
+                      labelKey: 'challenges',
+                    ),
                   ),
                   Container(width: 1, height: 34, color: NamatColors.line),
-                  const Expanded(child: _Stat(value: '١٥', labelKey: 'wins')),
+                  // Streak rather than wins: there is no server to settle a
+                  // duel, so a win is not a thing the app can know. A streak
+                  // is, and it is the number this product is about.
+                  Expanded(
+                    child: _Stat(
+                      value: context.n(streak),
+                      labelKey: 'streak',
+                    ),
+                  ),
                 ],
               ),
             ),
+            if (session.isGuest) ...[
+              const SizedBox(height: NamatSpace.lg),
+              NamatCard(
+                color: NamatColors.greenSoft,
+                elevated: false,
+                padding: const EdgeInsets.all(NamatSpace.lg),
+                onTap: () => context.go('/login'),
+                child: Row(
+                  children: [
+                    const NamatIcon(
+                      NamatIcons.leaf,
+                      size: 20,
+                      color: NamatColors.accent,
+                      filled: true,
+                    ),
+                    const SizedBox(width: NamatSpace.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(l.guestProfile, style: text.bodyMedium),
+                          const SizedBox(height: 2),
+                          Text(l.guestProfileBody, style: text.labelSmall),
+                        ],
+                      ),
+                    ),
+                    const NamatChevron(),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: NamatSpace.xl),
             for (final (icon, label, route) in rows)
               ListTile(
@@ -129,8 +199,8 @@ class _Stat extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final label = switch (labelKey) {
       'points' => l.namatPoints,
-      'challenges' => l.challengesTitle,
-      _ => l.challenge,
+      'challenges' => l.statChallengesDone,
+      _ => l.statStreak,
     };
 
     return Column(
