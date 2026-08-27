@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => context.go('/home/notifications'),
                   icon: const NamatIcon(NamatIcons.bell, size: 22),
                 ),
               ],

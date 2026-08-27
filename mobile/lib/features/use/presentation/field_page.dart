@@ -169,7 +169,7 @@ class _FieldPageState extends State<FieldPage> {
                   Text(l.resultCount(context.n(results.length)), style: text.bodySmall),
                   const SizedBox(height: NamatSpace.md),
                   for (final r in results) ...[
-                    _ResultCard(result: r, field: field),
+                    _ResultCard(result: r, field: field, fieldKey: widget.fieldKey),
                     const SizedBox(height: NamatSpace.md),
                   ],
                 ],
@@ -180,10 +180,15 @@ class _FieldPageState extends State<FieldPage> {
 }
 
 class _ResultCard extends StatelessWidget {
-  const _ResultCard({required this.result, required this.field});
+  const _ResultCard({
+    required this.result,
+    required this.field,
+    required this.fieldKey,
+  });
 
   final _Result result;
   final NamatField field;
+  final String fieldKey;
 
   /// Initials stand in for a logo. A partner's trademark is theirs to give,
   /// and a stock photo pretending to be their shopfront is a false claim.
@@ -212,7 +217,7 @@ class _ResultCard extends StatelessWidget {
 
     return NamatCard(
       padding: const EdgeInsets.all(NamatSpace.md),
-      onTap: () {},
+      onTap: () => context.go('/use/$fieldKey/partner/${_slug(name)}'),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -283,3 +288,11 @@ class _ResultCard extends StatelessWidget {
     );
   }
 }
+
+/// Until the API supplies real identifiers, the slug is derived from the name
+/// so a tap still lands on the right partner.
+String _slug(String name) => switch (name) {
+      'مطعم المعمل الصحي' => 'healthy-lab',
+      'Nourish Kitchen' => 'nourish-kitchen',
+      _ => 'healthy-lab',
+    };

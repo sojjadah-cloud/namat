@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:namat/core/routing/router.dart';
@@ -7,7 +6,9 @@ import 'package:namat/features/challenges/presentation/create_duel_page.dart';
 import 'package:namat/features/challenges/presentation/duel_room_page.dart';
 import 'package:namat/features/challenges/presentation/duel_sent_page.dart';
 import 'package:namat/features/challenges/presentation/find_opponent_page.dart';
+import 'package:namat/features/notifications/presentation/notifications_page.dart';
 import 'package:namat/features/packages/presentation/packages_page.dart';
+import 'package:namat/features/partners/presentation/partner_page.dart';
 import 'package:namat/features/use/presentation/field_page.dart';
 import 'package:namat/main.dart';
 
@@ -68,5 +69,18 @@ void main() {
     await _pumpAt(tester, '/challenges/new/maryam');
     final page = tester.widget<CreateDuelPage>(find.byType(CreateDuelPage));
     expect(page.username, 'maryam');
+  });
+
+  testWidgets('notifications and partner pages resolve', (tester) async {
+    await _pumpAt(tester, '/home/notifications');
+    expect(find.byType(NotificationsPage), findsOneWidget);
+
+    await _pumpAt(tester, '/use/meals/partner/healthy-lab');
+    expect(find.byType(PartnerPage), findsOneWidget);
+
+    // An unknown slug falls back rather than throwing — a stale link should
+    // not crash the app.
+    await _pumpAt(tester, '/use/meals/partner/does-not-exist');
+    expect(find.byType(PartnerPage), findsOneWidget);
   });
 }

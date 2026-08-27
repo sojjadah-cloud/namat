@@ -6,7 +6,9 @@ import '../../features/challenges/presentation/create_duel_page.dart';
 import '../../features/challenges/presentation/duel_room_page.dart';
 import '../../features/challenges/presentation/duel_sent_page.dart';
 import '../../features/challenges/presentation/find_opponent_page.dart';
+import '../../features/notifications/presentation/notifications_page.dart';
 import '../../features/packages/presentation/packages_page.dart';
+import '../../features/partners/presentation/partner_page.dart';
 import '../../features/home/presentation/home_page.dart';
 import '../../features/journey/presentation/journey_page.dart';
 import '../../features/onboarding/presentation/splash_page.dart';
@@ -35,7 +37,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state, shell) => AppShell(shell: shell),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: '/home', builder: (_, __) => const HomePage())],
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (_, __) => const HomePage(),
+                routes: [
+                  GoRoute(
+                    path: 'notifications',
+                    builder: (_, __) => const NotificationsPage(),
+                  ),
+                ],
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [
@@ -47,6 +60,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: ':field',
                     builder: (_, state) =>
                         FieldPage(fieldKey: state.pathParameters['field']!),
+                    routes: [
+                      GoRoute(
+                        path: 'partner/:slug',
+                        builder: (_, state) => PartnerPage(
+                          slug: state.pathParameters['slug']!,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

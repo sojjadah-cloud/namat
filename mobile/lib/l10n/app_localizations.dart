@@ -862,6 +862,132 @@ abstract class L {
   /// In ar, this message translates to:
   /// **'ما زوّدنا الشريك بوصف بعد.'**
   String get noDescription;
+
+  /// No description provided for @notifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notifications;
+
+  /// No description provided for @markAllRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم الكل كمقروء'**
+  String get markAllRead;
+
+  /// No description provided for @noNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فيه إشعارات'**
+  String get noNotifications;
+
+  /// No description provided for @noNotificationsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بننبهك أول ما يصير شي يستاهل.'**
+  String get noNotificationsBody;
+
+  /// No description provided for @today.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get today;
+
+  /// No description provided for @earlier.
+  ///
+  /// In ar, this message translates to:
+  /// **'سابقاً'**
+  String get earlier;
+
+  /// No description provided for @officialChallenges.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديات نمط'**
+  String get officialChallenges;
+
+  /// No description provided for @yourChallenges.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحدياتك الحالية'**
+  String get yourChallenges;
+
+  /// No description provided for @joinChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضم للتحدي'**
+  String get joinChallenge;
+
+  /// No description provided for @participants.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} مشارك'**
+  String participants(String count);
+
+  /// No description provided for @rewardPoints.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{points} نقطة'**
+  String rewardPoints(String points);
+
+  /// No description provided for @openChallenge.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح التحدي'**
+  String get openChallenge;
+
+  /// No description provided for @journeyTimeline.
+  ///
+  /// In ar, this message translates to:
+  /// **'خط رحلتك'**
+  String get journeyTimeline;
+
+  /// No description provided for @timelineToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get timelineToday;
+
+  /// No description provided for @timelineYesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس'**
+  String get timelineYesterday;
+
+  /// No description provided for @bookAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز مرة ثانية'**
+  String get bookAgain;
+
+  /// No description provided for @callPartner.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصل'**
+  String get callPartner;
+
+  /// No description provided for @directions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتجاهات'**
+  String get directions;
+
+  /// No description provided for @partnerNoRating.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فيه تقييمات بعد'**
+  String get partnerNoRating;
+
+  /// No description provided for @from.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبدأ من'**
+  String get from;
+
+  /// No description provided for @omr.
+  ///
+  /// In ar, this message translates to:
+  /// **'ر.ع'**
+  String get omr;
 }
 
 class _LDelegate extends LocalizationsDelegate<L> {

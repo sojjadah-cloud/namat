@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/l10n/numbers.dart';
 import '../../../core/theme/namat_colors.dart';
 import '../../../core/widgets/namat_icon.dart';
 import '../../../core/widgets/namat_scaffold.dart';
 import '../../../core/widgets/namat_motion.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../../core/l10n/numbers.dart';
 import '../../home/presentation/home_page.dart' show NamatAvatar;
 
 /// Challenges.
@@ -50,7 +50,13 @@ class ChallengesPage extends StatelessWidget {
               label: Text(l.challengeSomeone),
             ),
             const SizedBox(height: NamatSpace.xxl),
+            Text(l.yourChallenges, style: text.labelMedium),
+            const SizedBox(height: NamatSpace.md),
             const _VersusCard(),
+            const SizedBox(height: NamatSpace.section),
+            Text(l.officialChallenges, style: text.labelMedium),
+            const SizedBox(height: NamatSpace.md),
+            const _OfficialChallenges(),
           ]),
         ),
       ),
@@ -153,6 +159,103 @@ class _Side extends StatelessWidget {
           builder: (context, v, _) =>
               Text(context.n(v), style: text.titleLarge),
         ),
+      ],
+    );
+  }
+}
+
+/// Challenges NAMAT runs itself, alongside the peer duels.
+///
+/// These are open to everyone, subscriber or not. Putting basic competition
+/// behind a package would make the social half of the product a paid feature,
+/// which is the opposite of why it exists.
+class _OfficialChallenges extends StatelessWidget {
+  const _OfficialChallenges();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = L.of(context)!;
+
+    const items = [
+      (
+        title: 'تحدي نمط الأسبوعي',
+        detail: 'امشِ ٥٠٬٠٠٠ خطوة هذا الأسبوع',
+        people: 1248,
+        points: 250,
+        icon: NamatIcons.fitness,
+        accent: NamatColors.fitness,
+        tint: NamatColors.fitnessSoft,
+      ),
+      (
+        title: 'ثمانية أكواب',
+        detail: 'اشرب ٨ أكواب يومياً لمدة أسبوع',
+        people: 2130,
+        points: 150,
+        icon: NamatIcons.leaf,
+        accent: NamatColors.nutrition,
+        tint: NamatColors.nutritionSoft,
+      ),
+      (
+        title: 'شهر بلا انقطاع',
+        detail: 'نشاط واحد كل يوم لمدة ٣٠ يوم',
+        people: 310,
+        points: 900,
+        icon: NamatIcons.journey,
+        accent: NamatColors.products,
+        tint: NamatColors.productsSoft,
+      ),
+    ];
+
+    return Column(
+      children: [
+        for (final c in items)
+          Padding(
+            padding: const EdgeInsets.only(bottom: NamatSpace.md),
+            child: NamatCard(
+              color: c.tint,
+              elevated: false,
+              onTap: () {},
+              child: Row(
+                children: [
+                  NamatIcon(c.icon, size: 30, color: c.accent),
+                  const SizedBox(width: NamatSpace.lg),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          c.title,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          c.detail,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Text(
+                              l.participants(context.n(c.people)),
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              l.rewardPoints(context.n(c.points)),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(color: c.accent),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

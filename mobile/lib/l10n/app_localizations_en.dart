@@ -419,4 +419,71 @@ class LEn extends L {
 
   @override
   String get noDescription => 'This partner has not supplied a description yet.';
+
+  @override
+  String get notifications => 'Notifications';
+
+  @override
+  String get markAllRead => 'Mark all read';
+
+  @override
+  String get noNotifications => 'Nothing here';
+
+  @override
+  String get noNotificationsBody => 'We will tell you when something matters.';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get earlier => 'Earlier';
+
+  @override
+  String get officialChallenges => 'NAMAT challenges';
+
+  @override
+  String get yourChallenges => 'Your challenges';
+
+  @override
+  String get joinChallenge => 'Join challenge';
+
+  @override
+  String participants(String count) {
+    return '$count taking part';
+  }
+
+  @override
+  String rewardPoints(String points) {
+    return '+$points points';
+  }
+
+  @override
+  String get openChallenge => 'Open challenge';
+
+  @override
+  String get journeyTimeline => 'Your timeline';
+
+  @override
+  String get timelineToday => 'Today';
+
+  @override
+  String get timelineYesterday => 'Yesterday';
+
+  @override
+  String get bookAgain => 'Book again';
+
+  @override
+  String get callPartner => 'Call';
+
+  @override
+  String get directions => 'Directions';
+
+  @override
+  String get partnerNoRating => 'No ratings yet';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get omr => 'OMR';
 }

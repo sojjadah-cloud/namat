@@ -238,5 +238,40 @@
         "type": "String"
       }
     }
+  },
+  "notifications": "الإشعارات",
+  "markAllRead": "علّم الكل كمقروء",
+  "noNotifications": "ما فيه إشعارات",
+  "noNotificationsBody": "بننبهك أول ما يصير شي يستاهل.",
+  "today": "اليوم",
+  "earlier": "سابقاً",
+  "officialChallenges": "تحديات نمط",
+  "yourChallenges": "تحدياتك الحالية",
+  "joinChallenge": "انضم للتحدي",
+  "participants": "{count} مشارك",
+  "rewardPoints": "+{points} نقطة",
+  "openChallenge": "فتح التحدي",
+  "journeyTimeline": "خط رحلتك",
+  "timelineToday": "اليوم",
+  "timelineYesterday": "أمس",
+  "bookAgain": "احجز مرة ثانية",
+  "callPartner": "اتصل",
+  "directions": "الاتجاهات",
+  "partnerNoRating": "ما فيه تقييمات بعد",
+  "from": "تبدأ من",
+  "omr": "ر.ع",
+  "@participants": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@rewardPoints": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
   }
 }

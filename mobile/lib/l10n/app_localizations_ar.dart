@@ -419,4 +419,71 @@ class LAr extends L {
 
   @override
   String get noDescription => 'ما زوّدنا الشريك بوصف بعد.';
+
+  @override
+  String get notifications => 'الإشعارات';
+
+  @override
+  String get markAllRead => 'علّم الكل كمقروء';
+
+  @override
+  String get noNotifications => 'ما فيه إشعارات';
+
+  @override
+  String get noNotificationsBody => 'بننبهك أول ما يصير شي يستاهل.';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String get earlier => 'سابقاً';
+
+  @override
+  String get officialChallenges => 'تحديات نمط';
+
+  @override
+  String get yourChallenges => 'تحدياتك الحالية';
+
+  @override
+  String get joinChallenge => 'انضم للتحدي';
+
+  @override
+  String participants(String count) {
+    return '$count مشارك';
+  }
+
+  @override
+  String rewardPoints(String points) {
+    return '+$points نقطة';
+  }
+
+  @override
+  String get openChallenge => 'فتح التحدي';
+
+  @override
+  String get journeyTimeline => 'خط رحلتك';
+
+  @override
+  String get timelineToday => 'اليوم';
+
+  @override
+  String get timelineYesterday => 'أمس';
+
+  @override
+  String get bookAgain => 'احجز مرة ثانية';
+
+  @override
+  String get callPartner => 'اتصل';
+
+  @override
+  String get directions => 'الاتجاهات';
+
+  @override
+  String get partnerNoRating => 'ما فيه تقييمات بعد';
+
+  @override
+  String get from => 'تبدأ من';
+
+  @override
+  String get omr => 'ر.ع';
 }

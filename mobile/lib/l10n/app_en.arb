@@ -217,5 +217,40 @@
         "type": "String"
       }
     }
+  },
+  "notifications": "Notifications",
+  "markAllRead": "Mark all read",
+  "noNotifications": "Nothing here",
+  "noNotificationsBody": "We will tell you when something matters.",
+  "today": "Today",
+  "earlier": "Earlier",
+  "officialChallenges": "NAMAT challenges",
+  "yourChallenges": "Your challenges",
+  "joinChallenge": "Join challenge",
+  "participants": "{count} taking part",
+  "rewardPoints": "+{points} points",
+  "openChallenge": "Open challenge",
+  "journeyTimeline": "Your timeline",
+  "timelineToday": "Today",
+  "timelineYesterday": "Yesterday",
+  "bookAgain": "Book again",
+  "callPartner": "Call",
+  "directions": "Directions",
+  "partnerNoRating": "No ratings yet",
+  "from": "From",
+  "omr": "OMR",
+  "@participants": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@rewardPoints": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
   }
 }
